@@ -9,7 +9,8 @@ import {
   MatFormFieldModule,
   MatCardModule,
   MatSnackBarModule,
-  MatInputModule
+  MatInputModule,
+  MatAutocompleteModule
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -27,6 +28,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { AddMealComponent } from './add-meal/add-meal.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     CalendarComponent,
     ToolbarComponent,
     ProfileComponent,
-    SignInComponent
+    SignInComponent,
+    AddMealComponent
   ],
   imports: [
     BrowserModule,
@@ -53,6 +56,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     MatButtonModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatAutocompleteModule,
     MatIconModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],

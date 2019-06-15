@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatCalendar } from '@angular/material';
-import { Moment } from 'moment';
 
 @Component({
   selector: 'app-calendar',
@@ -8,12 +7,13 @@ import { Moment } from 'moment';
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent implements OnInit {
-  @ViewChild('calendar', { static: true }) calendar: MatCalendar<Moment>;
-  selectedDate: Moment;
+  @ViewChild('calendar', { static: true }) calendar: MatCalendar<Date>;
+  selectedDate: Date;
 
   constructor() { }
 
   ngOnInit() {
+    this.selectedDate = new Date();
   }
 
 }

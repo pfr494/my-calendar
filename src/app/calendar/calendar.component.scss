@@ -1,12 +1,41 @@
-
+@import "~src/styles/variables.scss";
 
 .calendar-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  overflow: auto;
+  width: 100%;
   .calendar {
     width: 100%;
   }
+  .fab-add {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 10;
+    background-color: $accent;
+    color: white;
+  }
+}
+
+.today {
+  padding-top: 16px;
+}
+
+div.snap-container {
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  max-height: 100vh;
+  background-color: beige;
+}
+
+section.snap-panel {
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 100%;
+  min-height: 100vh;
 }

@@ -1,4 +1,13 @@
-<div class="calendar-wrapper">
-  <mat-calendar class="calendar" #calendar [(selected)]="selectedDate"></mat-calendar>
-  <h3>Valgte dato: {{selectedDate | date:'dd-MM-yyyy'}}</h3>
+
+<div class="snap-container" id="snap-container">
+  <section class='snap-panel'>
+    <div class="calendar-wrapper">
+      <mat-calendar class="calendar" #calendar [(selected)]="selectedDate"></mat-calendar>
+      <h3>Valgte dato: {{selectedDate | date:'dd-MM-yyyy'}}</h3>
+      <button class="fab-add" mat-fab routerLink="/meal"><mat-icon>add</mat-icon></button>
+    </div>
+  </section>
+  <section class='snap-panel today'>
+    <h3 class="mat-display-1">Dagens måltider</h3>
+  </section>
 </div>

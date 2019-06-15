@@ -31,6 +31,11 @@ export class AuthService {
     return this.authenticated ? this.authState : null;
   }
 
+  // Returns current user data
+  get currentUser$(): Observable<firebase.User> {
+    return this.afAuth.authState;
+  }
+
   // Returns
   get currentUserObservable(): any {
     return this.afAuth.authState;
