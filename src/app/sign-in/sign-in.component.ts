@@ -33,11 +33,13 @@ export class SignInComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.authService.authenticated) {
-      this.ngZone.run(() => {
-        this.router.navigate(['calendar']);
-      });
-    }
+    this.authService.loggedIn$.subscribe((isLoggedIn: boolean) => {
+      if (isLoggedIn) {
+        this.ngZone.run(() => {
+          this.router.navigate(['calendar']);
+        });
+      }
+    });
   }
 
   signUp() {

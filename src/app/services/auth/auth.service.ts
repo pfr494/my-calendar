@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import * as firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +15,10 @@ export class AuthService {
     this.afAuth.authState.subscribe((auth) => {
       this.authState = auth;
     });
+  }
+
+  get loggedIn$(): Observable<boolean> {
+    return this.afAuth.authState.pipe(map(auth => !!auth));
   }
 
   // Returns true if user is logged in
@@ -56,23 +62,8 @@ export class AuthService {
     }
   }
 
-  githubLogin() {
-    const provider = new firebase.auth.GithubAuthProvider();
-    return this.socialSignIn(provider);
-  }
-
   googleLogin() {
     const provider = new firebase.auth.GoogleAuthProvider();
-    return this.socialSignIn(provider);
-  }
-
-  facebookLogin() {
-    const provider = new firebase.auth.FacebookAuthProvider();
-    return this.socialSignIn(provider);
-  }
-
-  twitterLogin() {
-    const provider = new firebase.auth.TwitterAuthProvider();
     return this.socialSignIn(provider);
   }
 

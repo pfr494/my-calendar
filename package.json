@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:prod": "http-server -p 8080 -c-1 dist/my-calendar",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -21,7 +22,9 @@
     "@angular/material": "^8.0.1",
     "@angular/platform-browser": "~8.0.1",
     "@angular/platform-browser-dynamic": "~8.0.1",
+    "@angular/pwa": "^0.800.3",
     "@angular/router": "~8.0.1",
+    "@angular/service-worker": "~8.0.1",
     "firebase": "^6.2.0",
     "moment": "^2.24.0",
     "rxjs": "~6.4.0",
