@@ -1,0 +1,4 @@
+<div class="calendar-wrapper">
+  <mat-calendar class="calendar" #calendar [(selected)]="selectedDate"></mat-calendar>
+  <h3>Valgte dato: {{selectedDate | date:'dd-MM-yyyy'}}</h3>
+</div>

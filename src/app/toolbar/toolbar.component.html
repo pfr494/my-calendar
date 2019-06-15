@@ -1,0 +1,5 @@
+<div class="toolbar">
+  <h3 *ngIf="!canGoBack">Min pkualender</h3>
+  <button *ngIf="canGoBack" mat-icon-button routerLink="calendar"><mat-icon>keyboard_arrow_left</mat-icon></button>
+  <button mat-icon-button routerLink="profile"><mat-icon>account_circle</mat-icon></button>
+</div>
