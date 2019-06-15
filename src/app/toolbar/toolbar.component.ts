@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Route, Router, ActivatedRouteSnapshot, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { AuthService } from '../services/auth/auth.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -8,16 +9,15 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent implements OnInit {
-  canGoBack: boolean;
+  canGoBack = false;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, public auth: AuthService) { }
 
   ngOnInit() {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((e: NavigationEnd) => {
       this.canGoBack = e.url && !e.url.includes('calendar');
-      console.log(e);
     });
   }
 }

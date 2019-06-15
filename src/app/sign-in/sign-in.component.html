@@ -1,0 +1,33 @@
+<div class="center-container">
+  <mat-card class="best-card card-container mat-elevation-z5">
+    <h1 class="mat-h1">Vælg login metode</h1>
+
+    <button class="btn" mat-raised-button (click)="googleSignIn()">
+      <div class="btn-container">
+        <mat-icon svgIcon="google"></mat-icon>
+        <p class="btn-text">Google Konto</p>
+      </div>
+    </button>
+
+    <form #userForm="ngForm" (ngSubmit)="login()" class="column-container">
+      <mat-form-field style="width: 100%">
+        <input matInput type="email" placeholder="Email" name="email" [(ngModel)]="userInfo.email" required>
+      </mat-form-field>
+      <mat-form-field style="width: 100%">
+        <input matInput type="password" placeholder="Password" name="password" [(ngModel)]="userInfo.password" required minlength="6">
+      </mat-form-field>
+      <div class="buttons-container">
+        <button class="add-button form-input" mat-raised-button color="primary" type="submit" [disabled]="!userForm.form.valid">
+          Login
+        </button>
+        Eller
+        <button class="add-button form-input" mat-raised-button color="primary" (click)="signUp()" type="button" [disabled]="!userForm.form.valid">
+          Opret bruger
+        </button>
+      </div>
+
+    </form>
+
+
+  </mat-card>
+</div>
