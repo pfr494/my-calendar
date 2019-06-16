@@ -36,7 +36,7 @@ export class SignInComponent implements OnInit {
     this.authService.loggedIn$.subscribe((isLoggedIn: boolean) => {
       if (isLoggedIn) {
         this.ngZone.run(() => {
-          this.router.navigate(['calendar']);
+          this.router.navigate(['overview']);
         });
       }
     });
@@ -64,7 +64,7 @@ export class SignInComponent implements OnInit {
           duration: 2000,
         });
         this.ngZone.run(() => {
-          this.router.navigate(['calendar']);
+          this.router.navigate(['overview']);
         });
       });
   }
@@ -73,7 +73,7 @@ export class SignInComponent implements OnInit {
     this.authService.googleLogin()
       .then(() => {
         this.ngZone.run(() => {
-          this.router.navigate(['calendar']);
+          this.router.navigate(['overview']);
         });
         this.snackBar.open('User with email: ' + this.authService.currentUserMail + ' logged in', 'Yay!', {
           duration: 2000,

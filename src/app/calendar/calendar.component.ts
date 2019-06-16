@@ -7,7 +7,7 @@ import { MatCalendar } from '@angular/material';
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent implements OnInit {
-  @ViewChild('calendar', { static: true }) calendar: MatCalendar<Date>;
+  @ViewChild('overview', { static: true }) calendar: MatCalendar<Date>;
   selectedDate: Date;
 
   constructor() { }

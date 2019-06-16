@@ -10,7 +10,8 @@ import {
   MatCardModule,
   MatSnackBarModule,
   MatInputModule,
-  MatAutocompleteModule
+  MatAutocompleteModule,
+  MatListModule
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -29,6 +30,11 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { AddMealComponent } from './add-meal/add-meal.component';
+import { OverviewComponent } from './overview/overview.component';
+import { MyDayComponent } from './my-day/my-day.component';
+import { MealService } from './services/meal/meal.service';
+import { IngredientService } from './services/ingredient/ingredient.service';
+import { UserService } from './services/user/user.service';
 
 @NgModule({
   declarations: [
@@ -37,14 +43,15 @@ import { AddMealComponent } from './add-meal/add-meal.component';
     ToolbarComponent,
     ProfileComponent,
     SignInComponent,
-    AddMealComponent
+    AddMealComponent,
+    OverviewComponent,
+    MyDayComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     BrowserAnimationsModule,
     MatFormFieldModule,
@@ -57,10 +64,18 @@ import { AddMealComponent } from './add-meal/add-meal.component';
     MatDatepickerModule,
     MatNativeDateModule,
     MatAutocompleteModule,
+    MatListModule,
     MatIconModule,
+    AngularFireModule.initializeApp(environment.firebase),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
-  providers: [AuthService, AuthGuard],
+  providers: [
+    AuthService,
+    AuthGuard,
+    MealService,
+    IngredientService,
+    UserService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

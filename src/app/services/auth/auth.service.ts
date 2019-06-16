@@ -8,12 +8,12 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthService {
-  authState: any = null;
+  authState: firebase.User = null;
 
   constructor(private db: AngularFireDatabase, private afAuth: AngularFireAuth, private router: Router) {
 
-    this.afAuth.authState.subscribe((auth) => {
-      this.authState = auth;
+    this.afAuth.authState.subscribe((user) => {
+      this.authState = user;
     });
   }
 
@@ -27,7 +27,7 @@ export class AuthService {
   }
 
   // Returns current user data
-  get currentUser(): any {
+  get currentUser(): firebase.User {
     return this.authenticated ? this.authState : null;
   }
 
@@ -48,7 +48,7 @@ export class AuthService {
 
   // Returns email as name
   get currentUserMail(): string {
-    return this.authState.user ? this.authState.user.email : '';
+    return this.authState ? this.authState.email : '';
   }
 
   // Anonymous User
@@ -83,8 +83,8 @@ export class AuthService {
 
   emailSignUp(email: string, password: string) {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
-      .then((user) => {
-        this.authState = user;
+      .then((credential) => {
+        this.authState = credential.user;
         this.updateUserData();
       })
       .catch(error => console.log(error));
@@ -92,19 +92,16 @@ export class AuthService {
 
   emailLogin(email: string, password: string) {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
-      .then((user) => {
-        this.authState = user;
-        // this.updateUserData();
+      .then((credential) => {
+        this.authState = credential.user;
+        this.updateUserData();
       })
       .catch(error => console.log(error));
   }
 
-  resetPassword(email: string) {
+  async resetPassword(email: string) {
     const auth = firebase.auth();
-
-    return auth.sendPasswordResetEmail(email)
-      .then(() => console.log('email sent'))
-      .catch((error) => console.log(error));
+    return auth.sendPasswordResetEmail(email);
   }
 
 

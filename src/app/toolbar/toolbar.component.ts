@@ -17,7 +17,7 @@ export class ToolbarComponent implements OnInit {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((e: NavigationEnd) => {
-      this.canGoBack = e.url && !e.url.includes('calendar');
+      this.canGoBack = e.url && !e.url.includes('overview');
     });
   }
 }

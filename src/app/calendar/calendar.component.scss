@@ -18,24 +18,3 @@
     color: white;
   }
 }
-
-.today {
-  padding-top: 16px;
-}
-
-div.snap-container {
-  scroll-snap-type: y mandatory;
-  overflow-y: scroll;
-  max-height: 100vh;
-  background-color: beige;
-}
-
-section.snap-panel {
-  scroll-snap-align: start;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  min-width: 100%;
-  min-height: 100vh;
-}

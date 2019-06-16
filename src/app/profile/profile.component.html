@@ -2,5 +2,8 @@
   <h3 class="mat-display-1">Min profil</h3>
   <p>Bruger</p>
   <p>{{(auth.currentUser$ | async)?.email}}</p>
+  <mat-form-field>
+    <input matInput type="number" [formControl]="pkuControl" placeholder="Opdater pku tollerence" [value]="pku$ | async" (blur)="updateLimit($event)">
+  </mat-form-field>
   <button mat-raised-button (click)="logout()" class="logout">Log ud</button>
 </div>
