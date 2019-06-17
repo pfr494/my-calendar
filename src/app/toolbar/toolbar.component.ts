@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AuthService } from '../services/auth/auth.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-toolbar',
@@ -11,7 +12,7 @@ import { AuthService } from '../services/auth/auth.service';
 export class ToolbarComponent implements OnInit {
   canGoBack = false;
 
-  constructor(private router: Router, public auth: AuthService) { }
+  constructor(private router: Router, public auth: AuthService, private location: Location) { }
 
   ngOnInit() {
     this.router.events.pipe(
@@ -19,5 +20,9 @@ export class ToolbarComponent implements OnInit {
     ).subscribe((e: NavigationEnd) => {
       this.canGoBack = e.url && !e.url.includes('overview');
     });
+  }
+
+  goBack() {
+    this.location.back();
   }
 }

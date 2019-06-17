@@ -11,7 +11,8 @@ import {
   MatSnackBarModule,
   MatInputModule,
   MatAutocompleteModule,
-  MatListModule
+  MatListModule,
+  MatProgressSpinnerModule
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -32,6 +33,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { AddMealComponent } from './add-meal/add-meal.component';
 import { OverviewComponent } from './overview/overview.component';
 import { MyDayComponent } from './my-day/my-day.component';
+import { AddIngredientComponent } from './add-ingredient/add-ingredient.component';
 import { MealService } from './services/meal/meal.service';
 import { IngredientService } from './services/ingredient/ingredient.service';
 import { UserService } from './services/user/user.service';
@@ -45,7 +47,8 @@ import { UserService } from './services/user/user.service';
     SignInComponent,
     AddMealComponent,
     OverviewComponent,
-    MyDayComponent
+    MyDayComponent,
+    AddIngredientComponent
   ],
   imports: [
     BrowserModule,
@@ -64,6 +67,7 @@ import { UserService } from './services/user/user.service';
     MatDatepickerModule,
     MatNativeDateModule,
     MatAutocompleteModule,
+    MatProgressSpinnerModule,
     MatListModule,
     MatIconModule,
     AngularFireModule.initializeApp(environment.firebase),

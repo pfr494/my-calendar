@@ -5,11 +5,13 @@ import { AuthGuard } from './services/auth/auth-guard.service';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { AddMealComponent } from './add-meal/add-meal.component';
 import { OverviewComponent } from './overview/overview.component';
+import { AddIngredientComponent } from './add-ingredient/add-ingredient.component';
 
 const routes: Routes = [
   { path: 'overview', pathMatch: 'full', component: OverviewComponent, canActivate: [AuthGuard], data: { state: 'home' } },
   { path: 'profile', pathMatch: 'full', component: ProfileComponent, canActivate: [AuthGuard], data: { state: 'away' } },
   { path: 'meal', pathMatch: 'full', component: AddMealComponent, canActivate: [AuthGuard], data: { state: 'away' } },
+  { path: 'ingredient', pathMatch: 'full', component: AddIngredientComponent, canActivate: [AuthGuard], data: { state: 'away'} },
   { path: 'login', pathMatch: 'full', component: SignInComponent },
   { path: '**', redirectTo: 'overview' },
 ];

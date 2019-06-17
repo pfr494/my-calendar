@@ -1,0 +1,12 @@
+<div class="ingredient-wrap">
+  <h3>Opret madvare</h3>
+  <mat-form-field>
+    <input type="text" matInput [formControl]="nameControl" placeholder="Navn">
+  </mat-form-field>
+  <mat-form-field>
+    <input type="text" matInput [formControl]="proteinControl" placeholder="Protein">
+  </mat-form-field>
+  <p>Phe: {{phenyl}}</p>
+
+  <button mat-raised-button (click)="createIngredient()">Opret</button>
+</div>

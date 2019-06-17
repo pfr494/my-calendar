@@ -1,6 +1,12 @@
 <div class="my-day-wrap">
-  <h3 class="mat-display-1">Dagens måltider</h3>
-  <mat-list>
-    <mat-list-item *ngFor="let l of meals">{{l.name}}</mat-list-item>
-  </mat-list>
+  <div>
+    <h3 class="mat-display-1">Dagens måltider</h3>
+    <mat-list>
+      <mat-list-item *ngFor="let l of meals">{{l.name}}</mat-list-item>
+    </mat-list>
+  </div>
+  <div class="remaining">
+    <h3>Resterende phenylalanin: {{remainingPhenyl}}</h3>
+    <mat-icon style="color: red;" *ngIf="remainingPhenyl <= 0">warning</mat-icon>
+  </div>
 </div>

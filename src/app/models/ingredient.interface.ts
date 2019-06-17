@@ -1,4 +1,5 @@
 export interface Ingredient {
-  fat: number;
+  name: string;
   protein: number;
+  phenyl: number;
 }

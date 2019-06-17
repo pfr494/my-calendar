@@ -20,15 +20,10 @@ export class ProfileComponent implements OnInit {
     this.user$ = this.user.getUser();
   }
 
-  async updateLimit(limit: number) {
+  async updateLimit() {
     try {
       this.loading = true;
-      const toUpdate = {
-        name: this.auth.currentUser.displayName,
-        email: this.auth.currentUser.email,
-        pkuLimit: limit
-      };
-      await this.user.updateUser(toUpdate);
+      await this.user.updateUserPku(this.pkuControl.value);
     } finally {
       this.loading = false;
     }

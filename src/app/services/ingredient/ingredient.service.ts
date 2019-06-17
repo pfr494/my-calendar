@@ -1,27 +1,20 @@
-import { Injectable } from '@angular/core';
+import { Ingredient } from 'src/app/models/ingredient.interface';
 import { AngularFireDatabase } from '@angular/fire/database';
-import { AuthService } from '../auth/auth.service';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Meal } from 'src/app/models/meal.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IngredientService {
 
-  constructor(private db: AngularFireDatabase, private auth: AuthService) { }
+  constructor(private db: AngularFireDatabase) { }
 
-  getMeals(): Observable<Meal[]> {
-    return this.db.list(`meals`).valueChanges() as Observable<Meal[]>;
+  getIngredients(): Observable<Ingredient[]> {
+    return this.db.list('ingredients').valueChanges() as Observable<Ingredient[]>;
   }
 
-  getMyMealsOnDate(date: Date): Observable<Meal[]> {
-    const user: any = this.auth.currentUser;
-    return this.db.list(`users/${user.$key}/meals`).valueChanges() as Observable<Meal[]>;
-  }
-
-  async addMealOnDate(meal: Meal, date: Date): Promise<any> {
-    const user: any = this.auth.currentUser;
-    return this.db.list(`users/${user.$key}/meals/${date}/${meal.name}`).push(meal);
+  async createIngredient(i: Ingredient): Promise<any> {
+    return this.db.list('ingredients/').push(i);
   }
 }

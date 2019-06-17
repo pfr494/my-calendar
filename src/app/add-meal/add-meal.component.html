@@ -1,12 +1,25 @@
 <div class="meal-wrap">
   <h3 class="mat-diaplay-1">Tilføj måltid</h3>
-  <mat-form-field>
-    <input type="text" matInput [formControl]="foodControl" [matAutocomplete]="auto" placeholder="Indtast madvare">
-  </mat-form-field>
+  <div *ngFor="let i of ingredients; let i = index">
+    <p>{{i.name}}</p>
+    <p>{{i.quantity}}</p>
+    <button mat-icon-button (click)="removeIngredient(i)"><mat-icon>times</mat-icon></button>
+  </div>
+  <form #form="ngForm" class="meal-form">
+    <mat-form-field>
+      <input type="text" matInput [formControl]="foodControl" [matAutocomplete]="auto" placeholder="Indtast madvare">
+    </mat-form-field>
+    <mat-form-field style="margin-left: 8px;" suffix="g">
+      <input type="number" matInput [formControl]="quantityControl" placeholder="Mængde">
+    </mat-form-field>
+    <button mat-icon-button (click)="addIngredient()"><mat-icon>check</mat-icon></button>
+  </form>
 
   <mat-autocomplete #auto="matAutocomplete">
     <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-      {{option}}
+      {{option.name}}
     </mat-option>
   </mat-autocomplete>
+
+  <button class="add-button" mat-raised-button routerLink="/ingredient" color="primary">Opret madvare</button>
 </div>

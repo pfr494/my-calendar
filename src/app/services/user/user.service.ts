@@ -17,10 +17,10 @@ export class UserService {
   constructor(private db: AngularFireDatabase, private auth: AuthService) {}
 
   getUser(): Observable<SimpleUser> {
-    return this.db.object(`users/${this.auth.currentUser.uid}/pkuLimit`).valueChanges() as Observable<any>;
+    return this.db.object(`users/${this.auth.currentUser.uid}`).valueChanges() as Observable<any>;
   }
 
-  async updateUser(user: SimpleUser): Promise<any> {
-    return this.db.object(`users/${this.auth.currentUser.uid}`).set(user);
+  async updateUserPku(pku: number): Promise<any> {
+    return this.db.object(`users/${this.auth.currentUser.uid}`).update({ pkuLimit: pku});
   }
 }
