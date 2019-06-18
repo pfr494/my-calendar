@@ -12,7 +12,8 @@ import {
   MatInputModule,
   MatAutocompleteModule,
   MatListModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatSelectModule
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -70,6 +71,7 @@ import { UserService } from './services/user/user.service';
     MatProgressSpinnerModule,
     MatListModule,
     MatIconModule,
+    MatSelectModule,
     AngularFireModule.initializeApp(environment.firebase),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],

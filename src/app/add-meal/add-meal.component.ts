@@ -15,14 +15,16 @@ import { IngredientService } from '../services/ingredient/ingredient.service';
 })
 export class AddMealComponent implements OnInit, OnDestroy {
   private subs: Subscription[];
-  foodControl = new FormControl();
-  quantityControl = new FormControl();
   ingredientOptions: Ingredient[] = [];
-  filteredIngredientOptions: Observable<Ingredient[]>;
+
+  quantity: number;
+  ingredient: Ingredient;
+
+  loading: boolean;
 
   meal = {
-    name: "",
-    ingredients: []
+    name: '',
+    ingredients: [],
   } as Meal;
 
   constructor(private mealService: MealService, private ingredientService: IngredientService) { }
@@ -31,11 +33,6 @@ export class AddMealComponent implements OnInit, OnDestroy {
     this.subs = [
       this.ingredientService.getIngredients().subscribe(i => this.ingredientOptions = i)
     ];
-    this.filteredIngredientOptions = this.foodControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filter(value))
-      );
   }
 
   ngOnDestroy(): void {
@@ -45,21 +42,52 @@ export class AddMealComponent implements OnInit, OnDestroy {
   }
 
   addIngredient() {
-    const ingredient = this.foodControl.value;
+    const i = Object.assign({}, this.ingredient);
     const mi = {
-      ...ingredient,
-      quantity: this.foodControl.value
+      ...i,
+      quantity: this.quantity
     } as MealIngredient;
     this.meal.ingredients = [...this.meal.ingredients, mi];
+
+    this.ingredient = null;
+    this.quantity = null;
+  }
+
+  removeIngredient(index: number) {
+    this.meal.ingredients.splice(index, 1);
+  }
+
+  async saveMeal() {
+    try {
+      this.loading = true;
+      const m = {
+        ...this.meal,
+        totalPhenyl: this.totalPhenyl,
+        totalProtein: this.totalProtein
+      } as Meal;
+      await this.mealService.addMeal(m);
+    } finally {
+      this.loading = false;
+    }
   }
 
   get ingredients(): MealIngredient[] {
     return this.meal.ingredients;
   }
 
-  private _filter(value: string): Ingredient[] {
-    const filterValue = value.toLowerCase();
+  get totalPhenyl(): number {
+    let t = 0;
+    for (const i of this.meal.ingredients) {
+      t += (i.phenyl * (i.quantity / 100));
+    }
+    return t;
+  }
 
-    return this.ingredientOptions.filter((option: Ingredient) => option.name.toLowerCase().includes(filterValue));
+  get totalProtein(): number {
+    let t = 0;
+    for (const i of this.meal.ingredients) {
+      t += (i.protein * (i.quantity / 100));
+    }
+    return t;
   }
 }

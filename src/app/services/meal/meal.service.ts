@@ -20,6 +20,11 @@ export class MealService {
     return this.db.list(`users/${user.$key}/meals`).valueChanges() as Observable<Meal[]>;
   }
 
+  async addMeal(meal: Meal): Promise<any> {
+    const user: any = this.auth.currentUser;
+    return this.db.list(`meals`).push(meal);
+  }
+
   async addMealOnDate(meal: Meal, date: Date): Promise<any> {
     const user: any = this.auth.currentUser;
     return this.db.list(`users/${user.$key}/meals/${date}/${meal.name}`).push(meal);
