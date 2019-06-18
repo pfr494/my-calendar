@@ -17,10 +17,11 @@ export class AddMealComponent implements OnInit, OnDestroy {
   private subs: Subscription[];
   foodControl = new FormControl();
   quantityControl = new FormControl();
-  options: Ingredient[] = [];
-  filteredOptions: Observable<Ingredient[]>;
+  ingredientOptions: Ingredient[] = [];
+  filteredIngredientOptions: Observable<Ingredient[]>;
 
   meal = {
+    name: "",
     ingredients: []
   } as Meal;
 
@@ -28,9 +29,9 @@ export class AddMealComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subs = [
-      this.ingredientService.getIngredients().subscribe(i => this.options = i)
+      this.ingredientService.getIngredients().subscribe(i => this.ingredientOptions = i)
     ];
-    this.filteredOptions = this.foodControl.valueChanges
+    this.filteredIngredientOptions = this.foodControl.valueChanges
       .pipe(
         startWith(''),
         map(value => this._filter(value))
@@ -44,10 +45,12 @@ export class AddMealComponent implements OnInit, OnDestroy {
   }
 
   addIngredient() {
-    const i = {
-      
+    const ingredient = this.foodControl.value;
+    const mi = {
+      ...ingredient,
+      quantity: this.foodControl.value
     } as MealIngredient;
-    this.meal.ingredients = [...this.meal.ingredients, i];
+    this.meal.ingredients = [...this.meal.ingredients, mi];
   }
 
   get ingredients(): MealIngredient[] {
@@ -57,6 +60,6 @@ export class AddMealComponent implements OnInit, OnDestroy {
   private _filter(value: string): Ingredient[] {
     const filterValue = value.toLowerCase();
 
-    return this.options.filter((option: Ingredient) => option.name.toLowerCase().includes(filterValue));
+    return this.ingredientOptions.filter((option: Ingredient) => option.name.toLowerCase().includes(filterValue));
   }
 }
