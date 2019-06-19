@@ -3,15 +3,15 @@
 .profile-wrap {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  align-items: flex-start;
   padding: 16px;
   h3 {
     width: 100%;
   }
   .logout {
     position: fixed;
-    bottom: 16px;
+    top: 54px;
+    right: 8px;
     background-color: $primary;
     color: white;
   }

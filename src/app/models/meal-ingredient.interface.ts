@@ -1,5 +1,6 @@
 import { Ingredient } from './ingredient.interface';
 
-export interface MealIngredient extends Ingredient {
+export interface MealIngredient {
+  ingredient: Ingredient;
   quantity: number;
 }

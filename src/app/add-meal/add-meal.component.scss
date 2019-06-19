@@ -3,19 +3,22 @@
 .meal-wrap {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   padding: 16px;
   text-align: center;
 
-  .ingredient-line {
+  .meal-form {
     display: flex;
-    width: 100%;
-    justify-content: space-around;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  .ingredient-form {
+  .ingredient-line {
+    display: flex;
+    align-items: center;
+    max-width: 100%;
     mat-form-field {
-      max-width: 40%;
+      max-width: 35%;
     }
   }
 }

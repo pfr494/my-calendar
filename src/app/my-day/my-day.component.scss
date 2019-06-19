@@ -5,7 +5,16 @@
 }
 
 .remaining {
+  display: flex;
+  align-items: center;
   position: absolute;
+  background-color: white;
+  padding: 4px 8px 4px 8px;
+  z-index: 10;
   bottom: 0;
-  left: 16px;
+  left: 0;
+  mat-icon {
+    color: red;
+    margin-left: 8px
+  }
 }

@@ -1,10 +1,8 @@
 import { MealIngredient } from '../models/meal-ingredient.interface';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MealService } from '../services/meal/meal.service';
-import { Observable, Subscription } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { Meal } from '../models/meal.interface';
-import { FormControl } from '@angular/forms';
 import { Ingredient } from '../models/ingredient.interface';
 import { IngredientService } from '../services/ingredient/ingredient.service';
 
@@ -42,13 +40,11 @@ export class AddMealComponent implements OnInit, OnDestroy {
   }
 
   addIngredient() {
-    const i = Object.assign({}, this.ingredient);
-    const mi = {
-      ...i,
+    const i = Object.assign({}, {
+      ingredient: this.ingredient,
       quantity: this.quantity
-    } as MealIngredient;
-    this.meal.ingredients = [...this.meal.ingredients, mi];
-
+    } as MealIngredient);
+    this.meal.ingredients = [...this.meal.ingredients, i];
     this.ingredient = null;
     this.quantity = null;
   }
@@ -78,7 +74,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
   get totalPhenyl(): number {
     let t = 0;
     for (const i of this.meal.ingredients) {
-      t += (i.phenyl * (i.quantity / 100));
+      t += (i.ingredient.phenyl * (i.quantity / 100));
     }
     return t;
   }
@@ -86,8 +82,12 @@ export class AddMealComponent implements OnInit, OnDestroy {
   get totalProtein(): number {
     let t = 0;
     for (const i of this.meal.ingredients) {
-      t += (i.protein * (i.quantity / 100));
+      t += (i.ingredient.protein * (i.quantity / 100));
     }
     return t;
+  }
+
+  get canAdd(): boolean {
+    return this.ingredient && !!this.quantity;
   }
 }

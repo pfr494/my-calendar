@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Meal } from '../models/meal.interface';
 import { UserService } from '../services/user/user.service';
 import { Subscription } from 'rxjs';
+import { SimpleUser } from '../models/simple-user.interface';
 
 @Component({
   selector: 'app-my-day',
@@ -15,7 +16,7 @@ export class MyDayComponent implements OnInit, OnDestroy {
 
   constructor(private user: UserService) {
     this.subs = [
-      this.user.getUser().subscribe(u => this.userPkuLimit = u.pkuLimit)
+      this.user.getUser().subscribe((u: SimpleUser) => this.userPkuLimit = u.pkuLimit)
     ];
   }
 

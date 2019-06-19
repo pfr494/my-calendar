@@ -26,6 +26,7 @@ export class ProfileComponent implements OnInit {
       await this.user.updateUserPku(this.pkuControl.value);
     } finally {
       this.loading = false;
+      this.pkuControl.markAsPristine();
     }
   }
 

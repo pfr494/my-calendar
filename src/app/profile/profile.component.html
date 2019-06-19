@@ -1,10 +1,13 @@
 <div class="profile-wrap">
-  <h3 class="mat-display-1">Min profil</h3>
+  <h3>Min profil</h3>
   <p>Bruger</p>
   <p>{{(auth.currentUser$ | async)?.email}}</p>
-  <mat-form-field>
-    <input matInput type="number" [formControl]="pkuControl" placeholder="Opdater pku tollerence" [value]="(user$ | async)?.pkuLimit" (blur)="updateLimit()">
-  </mat-form-field>
-  <mat-progress-spinner [mode]="indeterminate" *ngIf="loading"></mat-progress-spinner>
+  <div style="display: flex; align-items: center;">
+    <mat-form-field>
+      <input matInput type="tel" [formControl]="pkuControl" placeholder="Opdater pku tollerence" [value]="(user$ | async)?.pkuLimit">
+    </mat-form-field>
+    <button mat-raised-button (click)="updateLimit()" [disabled]="!pkuControl.dirty" color="primary" style="margin-left: 8px">Gem</button>
+  </div>
+  <!-- <mat-progress-spinner [mode]="indeterminate" *ngIf="loading"></mat-progress-spinner> -->
   <button mat-raised-button (click)="logout()" class="logout">Log ud</button>
 </div>

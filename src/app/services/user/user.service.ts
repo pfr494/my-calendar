@@ -2,12 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AuthService } from '../auth/auth.service';
 import { Observable } from 'rxjs';
-
-class SimpleUser {
-  name: string;
-  email: string;
-  pkuLimit: number;
-}
+import { SimpleUser } from 'src/app/models/simple-user.interface';
 
 @Injectable({
   providedIn: 'root'
