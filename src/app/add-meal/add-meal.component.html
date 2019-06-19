@@ -46,5 +46,10 @@
 
   <p>Phe i alt: {{ totalPhenyl }}</p>
   <p>Protein i alt: {{ totalProtein }}</p>
-  <button class="add-button" mat-raised-button color="primary" (click)="saveMeal()" [disabled]="!mealForm.valid">Gem måltid</button>
+  <button class="add-button" mat-raised-button 
+    color="primary"
+    (click)="saveMeal()"
+    [disabled]="!mealForm.valid || !meal.ingredients.length">
+    Gem måltid
+  </button>
 </div>

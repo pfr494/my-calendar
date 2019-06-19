@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { Meal } from '../models/meal.interface';
 import { Ingredient } from '../models/ingredient.interface';
 import { IngredientService } from '../services/ingredient/ingredient.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-add-meal',
@@ -25,7 +26,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
     ingredients: [],
   } as Meal;
 
-  constructor(private mealService: MealService, private ingredientService: IngredientService) { }
+  constructor(private mealService: MealService, private ingredientService: IngredientService, private snack: MatSnackBar) { }
 
   ngOnInit() {
     this.subs = [
@@ -62,6 +63,12 @@ export class AddMealComponent implements OnInit, OnDestroy {
         totalProtein: this.totalProtein
       } as Meal;
       await this.mealService.addMeal(m);
+      this.meal.ingredients = [];
+      this.ingredient = null;
+      this.quantity = null;
+      this.snack.open('Måltid oprettet, yay! :p', 'OK');
+    } catch (err) {
+      this.snack.open(`Hovsa, noget gik galt der: ${err}`, 'ØV');
     } finally {
       this.loading = false;
     }
@@ -76,7 +83,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
     for (const i of this.meal.ingredients) {
       t += (i.ingredient.phenyl * (i.quantity / 100));
     }
-    return t;
+    return Math.round(t);
   }
 
   get totalProtein(): number {
@@ -84,7 +91,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
     for (const i of this.meal.ingredients) {
       t += (i.ingredient.protein * (i.quantity / 100));
     }
-    return t;
+    return Math.round(t);
   }
 
   get canAdd(): boolean {

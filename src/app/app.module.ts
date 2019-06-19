@@ -72,6 +72,7 @@ import { UserService } from './services/user/user.service';
     MatListModule,
     MatIconModule,
     MatSelectModule,
+    MatSnackBarModule,
     AngularFireModule.initializeApp(environment.firebase),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],

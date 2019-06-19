@@ -6,6 +6,9 @@
   align-items: flex-start;
   padding: 16px;
   text-align: center;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: calc(100vh - 48px);
 
   .meal-form {
     display: flex;

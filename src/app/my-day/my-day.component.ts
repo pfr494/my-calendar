@@ -3,6 +3,7 @@ import { Meal } from '../models/meal.interface';
 import { UserService } from '../services/user/user.service';
 import { Subscription } from 'rxjs';
 import { SimpleUser } from '../models/simple-user.interface';
+import { MealService } from '../services/meal/meal.service';
 
 @Component({
   selector: 'app-my-day',
@@ -14,13 +15,13 @@ export class MyDayComponent implements OnInit, OnDestroy {
   userPkuLimit: number;
   meals: Meal[] = [];
 
-  constructor(private user: UserService) {
-    this.subs = [
-      this.user.getUser().subscribe((u: SimpleUser) => this.userPkuLimit = u.pkuLimit)
-    ];
-  }
+  constructor(private user: UserService, private mealService: MealService) { }
 
   ngOnInit() {
+    this.subs = [
+      this.user.getUser().subscribe((u: SimpleUser) => this.userPkuLimit = u.pkuLimit),
+      this.mealService.getMeals().subscribe((m: Meal[]) => this.meals = m)
+    ];
   }
 
   ngOnDestroy() {

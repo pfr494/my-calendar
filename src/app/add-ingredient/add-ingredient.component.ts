@@ -1,7 +1,8 @@
 import { IngredientService } from '../services/ingredient/ingredient.service';
 import { Ingredient } from '../models/ingredient.interface';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-add-ingredient',
@@ -13,7 +14,7 @@ export class AddIngredientComponent implements OnInit {
   proteinControl = new FormControl();
   loading: boolean;
   // 1g protein = 50mg phenyl
-  constructor(private ingredient: IngredientService) { }
+  constructor(private ingredient: IngredientService, private snack: MatSnackBar) { }
 
   ngOnInit() {
   }
@@ -31,6 +32,12 @@ export class AddIngredientComponent implements OnInit {
         phenyl: this.phenyl
       } as Ingredient;
       await this.ingredient.createIngredient(toAdd);
+      this.snack.open('Madvare oprettet! :D', 'OK');
+      this.nameControl.setValue(null);
+      this.nameControl.markAsPristine();
+      this.proteinControl.setValue(null);
+    } catch (err) {
+      this.snack.open(`Hovsa, noget gik galt der: ${err}`, 'ØV');
     } finally {
       this.loading = false;
     }
