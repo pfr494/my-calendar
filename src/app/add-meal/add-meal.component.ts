@@ -1,11 +1,12 @@
 import { MealIngredient } from '../models/meal-ingredient.interface';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MealService } from '../services/meal/meal.service';
 import { Subscription } from 'rxjs';
 import { Meal } from '../models/meal.interface';
 import { Ingredient } from '../models/ingredient.interface';
 import { IngredientService } from '../services/ingredient/ingredient.service';
 import { MatSnackBar } from '@angular/material';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-add-meal',
@@ -13,6 +14,7 @@ import { MatSnackBar } from '@angular/material';
   styleUrls: ['./add-meal.component.scss']
 })
 export class AddMealComponent implements OnInit, OnDestroy {
+  @ViewChild('mealForm', { static: true }) form: NgForm;
   private subs: Subscription[];
   ingredientOptions: Ingredient[] = [];
 
@@ -64,8 +66,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
       } as Meal;
       await this.mealService.addMeal(m);
       this.meal.ingredients = [];
-      this.ingredient = null;
-      this.quantity = null;
+      this.form.resetForm();
       this.snack.open('Måltid oprettet, yay! :p', 'OK');
     } catch (err) {
       this.snack.open(`Hovsa, noget gik galt der: ${err}`, 'ØV');

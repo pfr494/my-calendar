@@ -1,7 +1,22 @@
 
 
 .my-day-wrap {
+  width: 100vw;
   padding: 16px;
+
+  .meal-form {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    mat-form-field {
+      flex: 1 1 auto;
+      min-width: 80px;
+    }
+    button {
+      margin-right: 16px;
+    }
+  }
 }
 
 .remaining {
@@ -9,10 +24,13 @@
   align-items: center;
   position: absolute;
   background-color: white;
-  padding: 4px 8px 4px 8px;
+  padding: 8px 8px;
   z-index: 10;
   bottom: 0;
   left: 0;
+  h3 {
+    margin: 0;
+  }
   mat-icon {
     color: red;
     margin-left: 8px

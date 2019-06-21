@@ -38,6 +38,7 @@ import { AddIngredientComponent } from './add-ingredient/add-ingredient.componen
 import { MealService } from './services/meal/meal.service';
 import { IngredientService } from './services/ingredient/ingredient.service';
 import { UserService } from './services/user/user.service';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,8 @@ import { UserService } from './services/user/user.service';
     AuthGuard,
     MealService,
     IngredientService,
-    UserService
+    UserService,
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })
