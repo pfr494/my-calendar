@@ -26,7 +26,7 @@ export class MyDayComponent implements OnInit, OnDestroy {
   loading: boolean;
   mSub: Subscription;
 
-  constructor(private user: UserService, private mealService: MealService, private snack: MatSnackBar) { }
+  constructor(private user: UserService, public mealService: MealService, private snack: MatSnackBar) { }
 
   ngOnInit() {
     this.subs = [
@@ -52,6 +52,18 @@ export class MyDayComponent implements OnInit, OnDestroy {
       } as DayMeal;
       this.mealService.addMealOnDate(m);
       this.snack.open('Måltid tilføjet', 'OK');
+    } catch (err) {
+      this.snack.open('Hovsa, der gik noget gal´', 'ØV');
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  removeMealOnDate(meal: DayMeal) {
+    try {
+      this.loading = true;
+      this.mealService.removeMealOnDate(meal);
+      this.snack.open('Måltid fjernet', 'OK');
     } catch (err) {
       this.snack.open('Hovsa, der gik noget gal´', 'ØV');
     } finally {

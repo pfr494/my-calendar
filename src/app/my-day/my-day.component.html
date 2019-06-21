@@ -1,9 +1,25 @@
+<h1>Dagens måltider - {{mealService.selectedDate | date:'dd-MM-yyy'}}</h1>
 <div class="my-day-wrap">
   <div>
-    <h1>Dagens måltider</h1>
-    <mat-list>
-      <mat-list-item *ngFor="let l of dailyMeals">{{l.meal.name}}: {{l.quantity}}g</mat-list-item>
-    </mat-list>
+    <mat-expansion-panel *ngFor="let m of dailyMeals" #panel>
+      <mat-expansion-panel-header>
+        <button mat-icon-button (click)="removeMealOnDate(m)" style="margin-right: 8px">
+          <mat-icon>clear</mat-icon>
+        </button>
+        <p>{{m.meal.name}}</p>
+      </mat-expansion-panel-header>
+      <div class="panel-content">
+        <div *ngFor="let in of m.meal.ingredients" style="display: flex;">
+          <p>{{in.ingredient.name}}:</p>
+          <p style="margin-left: 16px">{{in.quantity}}g</p>
+        </div>
+        <mat-divider style="width: 100%"></mat-divider>
+        <h4>Måltid: {{m.quantity}}g, Phe: {{m.meal.totalPhenyl}}mg</h4>
+      </div>
+      <mat-action-row>
+        <button mat-raised-button (click)="panel.close()" color="primary">Det er super!</button>
+      </mat-action-row>
+    </mat-expansion-panel>
     <form #form="ngForm" class="meal-form">
       <mat-form-field>
         <mat-label>Vælg måltid</mat-label>
@@ -23,7 +39,7 @@
     </form>
   </div>
   <div class="remaining mat-elevation-z4">
-    <h3>Resterende Phe: {{remainingPhenyl}}</h3>
+    <h3>Resterende Phe: {{remainingPhenyl}}mg</h3>
     <mat-icon *ngIf="remainingPhenyl <= 100">warning</mat-icon>
   </div>
 </div>

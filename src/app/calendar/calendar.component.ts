@@ -14,7 +14,7 @@ export class CalendarComponent implements OnInit {
   constructor(private mealService: MealService) { }
 
   ngOnInit() {
-    this.selectedDate = new Date();
+    this.selectedDate = this.mealService.selectedDate;
   }
 
   setSelectedDate(d: Date) {

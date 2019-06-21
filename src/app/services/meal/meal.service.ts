@@ -38,12 +38,20 @@ export class MealService {
   }
 
   async addMeal(meal: Meal): Promise<any> {
-    const user: any = this.auth.currentUser;
     return this.db.list(`users/${this.auth.currentUser.uid}/meals`).push(meal);
   }
 
   async addMealOnDate(meal: DayMeal, date: Date = this.selectedDate): Promise<any> {
     const d = this.datePipe.transform(date, 'dd-MM-yyyy');
-    return this.db.list(`users/${this.auth.currentUser.uid}/daymeals/${d}`).push(meal);
+    const m = {
+      ...meal,
+      uid: this.db.createPushId()
+    };
+    return this.db.object(`users/${this.auth.currentUser.uid}/daymeals/${d}/${m.uid}`).set(m);
+  }
+
+  async removeMealOnDate(meal: DayMeal, date: Date = this.selectedDate): Promise<any> {
+    const d = this.datePipe.transform(date, 'dd-MM-yyyy');
+    return this.db.object(`users/${this.auth.currentUser.uid}/daymeals/${d}/${meal.uid}`).remove();
   }
 }

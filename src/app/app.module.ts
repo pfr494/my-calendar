@@ -13,7 +13,8 @@ import {
   MatAutocompleteModule,
   MatListModule,
   MatProgressSpinnerModule,
-  MatSelectModule
+  MatSelectModule,
+  MatExpansionModule
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -74,6 +75,7 @@ import { DatePipe } from '@angular/common';
     MatIconModule,
     MatSelectModule,
     MatSnackBarModule,
+    MatExpansionModule,
     AngularFireModule.initializeApp(environment.firebase),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],

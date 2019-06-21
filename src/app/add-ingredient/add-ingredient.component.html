@@ -8,6 +8,6 @@
       <input type="tel" matInput [(ngModel)]="protein" name="protein" placeholder="Protein" required>
     </mat-form-field>
   </form>
-  <p *ngIf="protein">Phe: {{phenyl}}</p>
+  <p *ngIf="protein">Phe: {{phenyl}}mg</p>
   <button mat-raised-button color="primary" (click)="createIngredient()" [disabled]="!ingredientForm.valid">Opret</button>
 </div>
