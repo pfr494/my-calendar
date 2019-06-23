@@ -1,12 +1,14 @@
 import { MealIngredient } from '../models/meal-ingredient.interface';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MealService } from '../services/meal/meal.service';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { Meal } from '../models/meal.interface';
 import { Ingredient } from '../models/ingredient.interface';
 import { IngredientService } from '../services/ingredient/ingredient.service';
 import { MatSnackBar } from '@angular/material';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormControl } from '@angular/forms';
+import { startWith, map } from 'rxjs/operators';
+import { stringify } from 'querystring';
 
 @Component({
   selector: 'app-add-meal',
@@ -15,14 +17,17 @@ import { NgForm } from '@angular/forms';
 })
 export class AddMealComponent implements OnInit, OnDestroy {
   @ViewChild('mealForm', { static: true }) form: NgForm;
+  ingredientControl = new FormControl();
   private subs: Subscription[];
   ingredientOptions: Ingredient[] = [];
+  filteredIngredientOptions: Observable<Ingredient[]>;
+
 
   quantity: number;
   ingredient: Ingredient;
 
   loading: boolean;
-
+  createIngredient = false;
   meal = {
     name: '',
     ingredients: [],
@@ -34,6 +39,15 @@ export class AddMealComponent implements OnInit, OnDestroy {
     this.subs = [
       this.ingredientService.getIngredients().subscribe(i => this.ingredientOptions = i)
     ];
+    this.filteredIngredientOptions = this.ingredientControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
+  }
+
+  private _filter(value: string): Ingredient[] {
+    const filterValue = typeof value === 'string' ? value.toLowerCase() : '';
+    return this.ingredientOptions.filter((ingredient: Ingredient) => ingredient.name.toLowerCase().indexOf(filterValue) === 0);
   }
 
   ngOnDestroy(): void {
@@ -42,13 +56,13 @@ export class AddMealComponent implements OnInit, OnDestroy {
     }
   }
 
-  addIngredient() {
+  addIngredient(ingredient?: Ingredient) {
     const i = Object.assign({}, {
-      ingredient: this.ingredient,
+      ingredient: ingredient ? ingredient : this.selectedIngredient,
       quantity: this.quantity
     } as MealIngredient);
     this.meal.ingredients = [...this.meal.ingredients, i];
-    this.ingredient = null;
+    this.ingredientControl.reset();
     this.quantity = null;
   }
 
@@ -75,8 +89,18 @@ export class AddMealComponent implements OnInit, OnDestroy {
     }
   }
 
-  get ingredients(): MealIngredient[] {
-    return this.meal.ingredients;
+  ingredientCreated(ingredient: Ingredient) {
+    if (!!this.quantity) {
+      this.addIngredient(ingredient);
+    }
+  }
+
+  displayFn(i?: Ingredient): string | undefined {
+    return i ? i.name : undefined;
+  }
+
+  get selectedIngredient(): Ingredient | null {
+    return this.ingredientControl.value;
   }
 
   get totalPhenyl(): number {
@@ -96,6 +120,6 @@ export class AddMealComponent implements OnInit, OnDestroy {
   }
 
   get canAdd(): boolean {
-    return this.ingredient && !!this.quantity;
+    return this.selectedIngredient && typeof this.selectedIngredient !== 'string' && !!this.quantity;
   }
 }

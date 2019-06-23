@@ -1,6 +1,6 @@
 import { IngredientService } from '../services/ingredient/ingredient.service';
 import { Ingredient } from '../models/ingredient.interface';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 
@@ -11,7 +11,8 @@ import { MatSnackBar } from '@angular/material';
 })
 export class AddIngredientComponent implements OnInit {
   @ViewChild('ingredientForm', { static: true }) form: NgForm;
-  name: string;
+  @Output() ingredientCreated = new EventEmitter<void>();
+  @Input() name: string;
   protein: number;
   loading: boolean;
   // 1g protein = 50mg phenyl
@@ -35,6 +36,7 @@ export class AddIngredientComponent implements OnInit {
       await this.ingredient.createIngredient(toAdd);
       this.snack.open('Madvare oprettet! :D', 'OK');
       this.form.resetForm();
+      this.ingredientCreated.emit();
     } catch (err) {
       this.snack.open(`Hovsa, noget gik galt der: ${err}`, 'ØV');
     } finally {

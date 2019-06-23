@@ -1,13 +1,13 @@
 <div class="ingredient-wrap">
-  <h3>Opret madvare</h3>
-  <form #ingredientForm="ngForm" style="display: flex; flex-direction: column">
+  <h4>Opret madvare</h4>
+  <form #ingredientForm="ngForm" class="ingredient-form">
     <mat-form-field>
       <input type="text" matInput [(ngModel)]="name" name="name" placeholder="Navn" required>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field style="margin-left: 8px">
       <input type="tel" matInput [(ngModel)]="protein" name="protein" placeholder="Protein" required>
     </mat-form-field>
   </form>
   <p *ngIf="protein">Phe: {{phenyl}}mg</p>
-  <button mat-raised-button color="primary" (click)="createIngredient()" [disabled]="!ingredientForm.valid">Opret</button>
+  <button mat-raised-button color="primary" (click)="createIngredient()" [disabled]="!ingredientForm.valid" class="create-btn">Opret</button>
 </div>
