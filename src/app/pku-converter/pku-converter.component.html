@@ -1,0 +1,23 @@
+<div class="converter-wrap">
+  <h4>Omregn</h4>
+  <form #converterForm="ngForm" class="converter-form">
+    <div class='form-line'>
+      <mat-form-field>
+        <input type="tel" matInput [(ngModel)]="protein" name="protein" placeholder="Protein pr. 100 g">
+      </mat-form-field>
+      <mat-form-field>
+        <input type="tel" matInput [(ngModel)]="quantityPhenylalanin" name="quantity" placeholder="Mængde protein" required>
+      </mat-form-field>
+      <p *ngIf="protein">Udregnet Phe: {{calculatedPhenylalanin}}mg</p>
+    </div>
+    <div class='form-line'>
+      <mat-form-field>
+        <input type="tel" matInput [(ngModel)]="phenylalanin" name="phenylalanin" placeholder="Phe pr. 100 g" required>
+      </mat-form-field>
+      <mat-form-field>
+        <input type="tel" matInput [(ngModel)]="quantityProtein" name="quantity" placeholder="Mængde Phe" required>
+      </mat-form-field>
+      <p *ngIf="phenylalanin">Udregnet protein: {{calculatedProtein}}g</p>
+    </div>
+  </form>
+</div>

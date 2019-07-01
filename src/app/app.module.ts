@@ -40,6 +40,7 @@ import { MealService } from './services/meal/meal.service';
 import { IngredientService } from './services/ingredient/ingredient.service';
 import { UserService } from './services/user/user.service';
 import { DatePipe } from '@angular/common';
+import { PkuConverterComponent } from './pku-converter/pku-converter.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { DatePipe } from '@angular/common';
     AddMealComponent,
     OverviewComponent,
     MyDayComponent,
-    AddIngredientComponent
+    AddIngredientComponent,
+    PkuConverterComponent
   ],
   imports: [
     BrowserModule,

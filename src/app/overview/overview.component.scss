@@ -19,3 +19,10 @@ section.snap-panel {
 app-calendar {
   width: 100%;
 }
+
+.convert-button{
+  position: fixed;
+  top: 4px;
+  left: 50%;
+  z-index: 10;
+}
