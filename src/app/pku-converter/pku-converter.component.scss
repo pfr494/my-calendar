@@ -1,9 +1,32 @@
-.converter-wrap{
-    height: 100%;
+:host {
+  width: 100%;
+}
+
+.converter-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: calc(100vw - 16px);
+  max-height: calc(100vh - 160px);
+  padding: 16px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  .converter-form {
+    max-width: 100%;
     display: flex;
     flex-direction: column;
-    padding: 10px;
-}
-.form-line{
-    height: 150px;
+    align-items: flex-start;
+    .form-line {
+      display: flex;
+      margin-bottom: 16px;
+      mat-form-field {
+        min-width: 40px !important;
+        max-width: 300px !important;
+        flex: 1 1 auto;
+        &:last-child {
+          margin-left: 8px;
+        }
+      }
+    }
+  }
 }

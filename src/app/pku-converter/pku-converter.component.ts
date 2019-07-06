@@ -12,10 +12,10 @@ export class PkuConverterComponent implements OnInit {
   quantityPhenylalanin = 1;
 
   get calculatedProtein(): number {
-    return (this.phenylalanin * this.quantityProtein) / 50
+    return (this.phenylalanin * this.quantityProtein) / 50;
   }
   get calculatedPhenylalanin(): number {
-    return (this.protein * this.quantityPhenylalanin) * 50
+    return (this.protein * this.quantityPhenylalanin) * 50;
   }
   constructor() { }
 

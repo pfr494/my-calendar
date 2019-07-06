@@ -82,4 +82,8 @@ export class MyDayComponent implements OnInit, OnDestroy {
     }
     return tot;
   }
+
+  get dayVisible(): boolean {
+    return document.getElementById('snap-container').scrollTop < 10;
+  }
 }

@@ -1,7 +1,5 @@
 <div class="calendar-wrapper">
-  <mat-calendar class="calendar" #calendar [(selected)]="selectedDate" (selectedChange)="setSelectedDate($event)"></mat-calendar>
-  <h3>Valgte dato: {{selectedDate | date:'dd-MM-yyyy'}}</h3>
-  <button class="fab-add" mat-fab routerLink="/meal">
-    <mat-icon>add</mat-icon>
-  </button>
+  <input [hidden]="true" matInput [matDatepicker]="picker">
+  <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker class="calendar"></mat-datepicker>
 </div>
