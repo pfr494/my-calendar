@@ -7,6 +7,7 @@ import { MealService } from '../services/meal/meal.service';
 import { NgForm } from '@angular/forms';
 import { DayMeal } from '../models/day-meal.interface';
 import { MatSnackBar } from '@angular/material';
+import { Unit } from '../models/unit.enum';
 
 @Component({
   selector: 'app-my-day',
@@ -21,10 +22,12 @@ export class MyDayComponent implements OnInit, OnDestroy {
   mealOptions: Meal[] = [];
 
   quantity: number;
+  unit = Unit.STK;
   selectedMeal: Meal;
 
   loading: boolean;
   mSub: Subscription;
+  units = [Unit.STK, Unit.G, Unit.ML];
 
   constructor(private user: UserService, public mealService: MealService, private snack: MatSnackBar) { }
 
@@ -48,12 +51,15 @@ export class MyDayComponent implements OnInit, OnDestroy {
       const m = {
         meal: this.selectedMeal,
         date: this.mealService.selectedDate,
+        totalPhenyl: this.phenylInMeal,
+        totalProtein: this.proteinInMeal,
+        unit: this.unit,
         quantity: this.quantity,
       } as DayMeal;
       this.mealService.addMealOnDate(m);
-      this.snack.open('Måltid tilføjet', 'OK');
+      this.snack.open('Måltid tilføjet', 'OK', { duration: 3000 });
     } catch (err) {
-      this.snack.open('Hovsa, der gik noget gal´', 'ØV');
+      this.snack.open('Hovsa, der gik noget gal´', 'ØV', { duration: 3000 });
     } finally {
       this.loading = false;
     }
@@ -63,12 +69,24 @@ export class MyDayComponent implements OnInit, OnDestroy {
     try {
       this.loading = true;
       this.mealService.removeMealOnDate(meal);
-      this.snack.open('Måltid fjernet', 'OK');
+      this.snack.open('Måltid fjernet', 'OK', { duration: 3000 });
     } catch (err) {
-      this.snack.open('Hovsa, der gik noget gal´', 'ØV');
+      this.snack.open('Hovsa, der gik noget gal´', 'ØV', { duration: 3000 });
     } finally {
       this.loading = false;
     }
+  }
+
+  get phenylInMeal(): number {
+    return this.unit === Unit.STK ?
+      this.selectedMeal.totalPhenyl * this.quantity :
+      this.selectedMeal.phenylPer100 * (this.quantity / 100);
+  }
+
+  get proteinInMeal(): number {
+    return this.unit === Unit.STK ?
+      this.selectedMeal.totalProtein * this.quantity :
+      this.selectedMeal.proteinPer100 * (this.quantity / 100);
   }
 
   get remainingPhenyl(): number {
@@ -78,7 +96,7 @@ export class MyDayComponent implements OnInit, OnDestroy {
   get totalPhenylInMeals(): number {
     let tot = 0;
     for (const m of this.dailyMeals) {
-      tot += m.quantity * (m.meal.totalPhenyl / 100);
+      tot += m.totalPhenyl;
     }
     return tot;
   }

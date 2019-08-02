@@ -3,6 +3,7 @@ import { Ingredient } from '../models/ingredient.interface';
 import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
+import { Unit } from '../models/unit.enum';
 
 @Component({
   selector: 'app-add-ingredient',
@@ -14,14 +15,17 @@ export class AddIngredientComponent implements OnInit {
   @Output() ingredientCreated = new EventEmitter<void>();
   @Input() name: string;
   protein: number;
+  unit: Unit = Unit.G;
   loading: boolean;
-  // 1g protein = 50mg phenyl
-  constructor(private ingredient: IngredientService, private snack: MatSnackBar) { }
 
+  units = [Unit.G, Unit.ML];
+  constructor(private ingredient: IngredientService, private snack: MatSnackBar) { }
+  
   ngOnInit() {
   }
-
+  
   get phenyl(): number {
+    // 1g protein = 50mg phenyl
     return this.protein * 50;
   }
 
@@ -31,14 +35,15 @@ export class AddIngredientComponent implements OnInit {
       const toAdd = {
         name: this.name,
         protein: this.protein,
-        phenyl: this.phenyl
+        phenyl: this.phenyl,
+        unit: this.unit
       } as Ingredient;
       await this.ingredient.createIngredient(toAdd);
-      this.snack.open('Madvare oprettet! :D', 'OK');
+      this.snack.open('Madvare oprettet! :D', 'OK', { duration: 3000 });
       this.form.resetForm();
       this.ingredientCreated.emit();
     } catch (err) {
-      this.snack.open(`Hovsa, noget gik galt der: ${err}`, 'ØV');
+      this.snack.open(`Hovsa, noget gik galt der: ${err}`, 'ØV!', { duration: 3000 });
     } finally {
       this.loading = false;
     }

@@ -8,15 +8,20 @@ import { Component, OnInit } from '@angular/core';
 export class PkuConverterComponent implements OnInit {
   protein: number;
   phenylalanin: number;
-  quantityProtein = 1;
-  quantityPhenylalanin = 1;
+  list: number; 
 
   get calculatedProtein(): number {
-    return (this.phenylalanin * this.quantityProtein) / 50;
+    return this.phenylalanin / 50;
   }
+
   get calculatedPhenylalanin(): number {
-    return (this.protein * this.quantityPhenylalanin) * 50;
+    return this.protein * 50;
   }
+  
+  get calculatedLists(): number {
+    return (25 / this.calculatedPhenylalanin) * 100;
+  }
+
   constructor() { }
 
   ngOnInit() {

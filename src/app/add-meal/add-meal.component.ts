@@ -8,7 +8,7 @@ import { IngredientService } from '../services/ingredient/ingredient.service';
 import { MatSnackBar } from '@angular/material';
 import { NgForm, FormControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
-import { stringify } from 'querystring';
+import { Unit } from '../models/unit.enum';
 
 @Component({
   selector: 'app-add-meal',
@@ -25,12 +25,14 @@ export class AddMealComponent implements OnInit, OnDestroy {
 
   quantity: number;
   ingredient: Ingredient;
+  units = [Unit.G, Unit.ML];
 
   loading: boolean;
   createIngredient = false;
   meal = {
     name: '',
     ingredients: [],
+    unit: Unit.G
   } as Meal;
 
   constructor(private mealService: MealService, private ingredientService: IngredientService, private snack: MatSnackBar) { }
@@ -76,23 +78,23 @@ export class AddMealComponent implements OnInit, OnDestroy {
       const m = {
         ...this.meal,
         totalPhenyl: this.totalPhenyl,
-        totalProtein: this.totalProtein
+        totalProtein: this.totalProtein,
+        phenylPer100: this.phenylPer100,
+        proteinPer100: this.proteinPer100
       } as Meal;
       await this.mealService.addMeal(m);
       this.meal.ingredients = [];
       this.form.resetForm();
-      this.snack.open('Måltid oprettet, yay! :p', 'OK');
+      this.snack.open('Måltid oprettet, yay! :p', 'OK', { duration: 3000 });
     } catch (err) {
-      this.snack.open(`Hovsa, noget gik galt der: ${err}`, 'ØV');
+      this.snack.open(`Hovsa, noget gik galt der: ${err}`, 'ØV', { duration: 3000 });
     } finally {
       this.loading = false;
     }
   }
 
   ingredientCreated(ingredient: Ingredient) {
-    if (!!this.quantity) {
-      this.addIngredient(ingredient);
-    }
+    this.createIngredient = false;
   }
 
   displayFn(i?: Ingredient): string | undefined {
@@ -103,6 +105,26 @@ export class AddMealComponent implements OnInit, OnDestroy {
     return this.ingredientControl.value;
   }
 
+  get phenylPer100(): number {
+    let phe = 0;
+    let quan = 0;
+    for (const p of this.meal.ingredients) {
+      phe =+ p.ingredient.phenyl;
+      quan =+ p.quantity;
+    }
+    return Math.round((phe/quan) * 100);
+  }
+
+  get proteinPer100(): number {
+    let pro = 0;
+    let quan = 0;
+    for (const p of this.meal.ingredients) {
+      pro =+ p.ingredient.protein;
+      quan =+ p.quantity;
+    }
+    return Math.round((pro/quan) * 100);
+  }
+ 
   get totalPhenyl(): number {
     let t = 0;
     for (const i of this.meal.ingredients) {

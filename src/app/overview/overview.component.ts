@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-overview',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OverviewComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router:Router) { }
 
   ngOnInit() {
   }
 
+  @HostListener('document:keydown', ['$event'])
+  onkeydown(e: KeyboardEvent){
+    if (e.key==='+'){
+      this.router.navigate(['meal']);
+    }
+  }
 }

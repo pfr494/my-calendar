@@ -1,9 +1,18 @@
 <div class="meal-wrap">
   <h3>Opret måltid</h3>
   <form #mealForm="ngForm" class="meal-form">
-    <mat-form-field>
-      <input type="text" name="mealName" [(ngModel)]="meal.name" matInput placeholder="Navn" required>
-    </mat-form-field>
+    <div style='display: flex; align-items: center'>
+      <mat-form-field>
+        <input type="text" name="mealName" [(ngModel)]="meal.name" matInput placeholder="Navn" required>
+      </mat-form-field>
+      <mat-form-field style="max-width: 45px; margin-left: 8px">
+        <mat-select [(ngModel)]="meal.unit" name="unit" required>
+          <mat-option *ngFor="let u of units" [value]="u">
+            {{u}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
     <div style="display: flex; align-items: center">
       <h5>Tilføj madvarer</h5>
       <!-- <button class="add-button" style="margin-left: 16px; height: 34px" mat-raised-button routerLink="/ingredient" color="warn">Opret ny</button> -->
@@ -14,10 +23,10 @@
       </mat-form-field>
       <mat-form-field style="margin-left: 8px;">
         <input type="number" [(ngModel)]="ing.quantity" name="quantity-{{i}}" matInput>
-        <span matSuffix>g</span>
+        <span matSuffix>{{ing.ingredient.unit}}</span>
       </mat-form-field>
       <button mat-icon-button (click)="removeIngredient(i)">
-        <mat-icon>clear</mat-icon>
+        <mat-icon>delete</mat-icon>
       </button>
     </div>
     <div class="ingredient-line">
@@ -31,7 +40,7 @@
       </mat-form-field>
       <mat-form-field style="margin-left: 8px;">
         <input type="number" matInput placeholder="Mængde" name="quantity" [(ngModel)]="quantity">
-        <span matSuffix>g</span>
+        <span matSuffix>{{selectedIngredient?.unit}}</span>
       </mat-form-field>
       <button *ngIf="canAdd" mat-icon-button (click)="addIngredient()" [disabled]="!canAdd">
         <mat-icon>check</mat-icon>

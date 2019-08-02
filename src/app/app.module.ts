@@ -41,6 +41,7 @@ import { IngredientService } from './services/ingredient/ingredient.service';
 import { UserService } from './services/user/user.service';
 import { DatePipe } from '@angular/common';
 import { PkuConverterComponent } from './pku-converter/pku-converter.component';
+import { UpdaterService } from './services/updater/updater.service';
 
 @NgModule({
   declarations: [
@@ -87,7 +88,8 @@ import { PkuConverterComponent } from './pku-converter/pku-converter.component';
     MealService,
     IngredientService,
     UserService,
-    DatePipe
+    DatePipe,
+    UpdaterService
   ],
   bootstrap: [AppComponent]
 })

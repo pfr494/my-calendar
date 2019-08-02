@@ -1,45 +1,56 @@
 <div class="my-day-wrap">
-  <div class="header-calendar">
-    <h3>Dagens måltider - {{mealService.selectedDate | date:'dd-MM-yyy'}}</h3>
-    <app-calendar></app-calendar>
-  </div>
   <div>
-    <mat-expansion-panel *ngFor="let m of dailyMeals" #panel>
-      <mat-expansion-panel-header>
-        <button mat-icon-button (click)="removeMealOnDate(m)" style="margin-right: 8px">
-          <mat-icon>clear</mat-icon>
-        </button>
-        <p>{{m.meal.name}}</p>
-      </mat-expansion-panel-header>
-      <div class="panel-content">
-        <div *ngFor="let in of m.meal.ingredients" style="display: flex;">
-          <p>{{in.ingredient.name}}:</p>
-          <p style="margin-left: 16px">{{in.quantity}}g</p>
+
+    <div class="header-calendar">
+      <h3>Dagens måltider - {{mealService.selectedDate | date:'dd-MM-yyy'}}</h3>
+      <app-calendar></app-calendar>
+    </div>
+    <div>
+      <mat-expansion-panel *ngFor="let m of dailyMeals" #panel>
+        <mat-expansion-panel-header>
+          <button mat-icon-button (click)="removeMealOnDate(m)" style="margin-right: 8px">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <p>{{m.meal.name}}</p>
+        </mat-expansion-panel-header>
+        <div class="panel-content">
+          <div *ngFor="let in of m.meal.ingredients" style="display: flex;">
+            <p>{{in.ingredient.name}}:</p>
+            <p style="margin-left: 16px">{{in.quantity}}g</p>
+          </div>
+          <mat-divider style="width: 100%"></mat-divider>
+          <h4>Måltid: Phe: {{m.meal.phenylPer100 * (m.quantity / 100)}}mg</h4>
+          <p>protein pr. 100g * 50 = mg Phe</p>
+          <p>1 Liste = {{(25/m.meal?.phenylPer100)*100 | number:'0.0'}}g {{m.meal.name}}</p>
         </div>
-        <mat-divider style="width: 100%"></mat-divider>
-        <h4>Måltid: {{m.quantity}}g, Phe: {{m.meal.totalPhenyl}}mg</h4>
-      </div>
-      <mat-action-row>
-        <button mat-raised-button (click)="panel.close()" color="primary">Det er super!</button>
-      </mat-action-row>
-    </mat-expansion-panel>
-    <form #form="ngForm" class="meal-form">
-      <mat-form-field>
-        <mat-label>Vælg måltid</mat-label>
-        <mat-select [(ngModel)]="selectedMeal" name="meal" required>
-          <mat-option *ngFor="let m of mealOptions" [value]="m">
-            {{m.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field style="margin-left: 8px;">
-        <input type="number" matInput placeholder="Mængde" name="quantity" [(ngModel)]="quantity" required>
-        <span matSuffix>g</span>
-      </mat-form-field>
-      <button mat-icon-button (click)="addMealOnDate()" [disabled]="!form.valid">
-        <mat-icon>check</mat-icon>
-      </button>
-    </form>
+        <mat-action-row>
+          <button mat-raised-button (click)="panel.close()" color="primary">Det er super!</button>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <form #form="ngForm" class="meal-form">
+        <mat-form-field>
+          <mat-label>Vælg måltid</mat-label>
+          <mat-select [(ngModel)]="selectedMeal" name="meal" required>
+            <mat-option *ngFor="let m of mealOptions" [value]="m">
+              {{m.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field style="margin-left: 8px;">
+          <input type="number" matInput placeholder="Mængde" name="quantity" [(ngModel)]="quantity" required>
+        </mat-form-field>
+        <mat-form-field style="max-width: 45px; margin-left: 8px">
+          <mat-select [(ngModel)]="unit" name="unit" required>
+            <mat-option *ngFor="let u of units" [value]="u">
+              {{u}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-icon-button (click)="addMealOnDate()" [disabled]="!form.valid">
+          <mat-icon>check</mat-icon>
+        </button>
+      </form>
+    </div>
   </div>
   <div class="remaining mat-elevation-z4" [ngClass]="dayVisible ? 'visible' : 'hidden'">
     <h3>Resterende Phe: {{remainingPhenyl}}mg</h3>
