@@ -1,15 +1,14 @@
 <div class="my-day-wrap">
   <div>
-
     <div class="header-calendar">
       <h3>Dagens måltider - {{mealService.selectedDate | date:'dd-MM-yyy'}}</h3>
       <app-calendar></app-calendar>
     </div>
-    <div>
-      <mat-expansion-panel *ngFor="let m of dailyMeals" #panel>
+    <div class="daymeals" [style.opacity]="mealsVisible ? '1' : '0'">
+      <mat-expansion-panel *ngFor="let m of mealService.selectedDateMeal$ | async" #panel>
         <mat-expansion-panel-header>
           <button mat-icon-button (click)="removeMealOnDate(m)" style="margin-right: 8px">
-            <mat-icon>delete</mat-icon>
+            <mat-icon>clear</mat-icon>
           </button>
           <p>{{m.meal.name}}</p>
         </mat-expansion-panel-header>
@@ -19,8 +18,17 @@
             <p style="margin-left: 16px">{{in.quantity}}g</p>
           </div>
           <mat-divider style="width: 100%"></mat-divider>
-          <h4>Måltid: Phe: {{m.meal.phenylPer100 * (m.quantity / 100)}}mg</h4>
-          <p>protein pr. 100g * 50 = mg Phe</p>
+          <h4 style="margin: 8px 0px">Måltid</h4>
+          <table style="text-align: left">
+            <tr>
+              <th><p class="meal">Phe:</p></th>
+              <td><p p class="meal" style="margin-left: 8px">{{getPhenylInDayMeal(m)}} mg</p></td>
+            </tr>
+            <tr>
+              <th><p p class="meal">Protein:</p></th>
+              <td><p p class="meal" style="margin-left: 8px">{{getProteinInDayMeal(m)}} g</p></td>
+            </tr>
+          </table>
           <p>1 Liste = {{(25/m.meal?.phenylPer100)*100 | number:'0.0'}}g {{m.meal.name}}</p>
         </div>
         <mat-action-row>
@@ -30,16 +38,21 @@
       <form #form="ngForm" class="meal-form">
         <mat-form-field>
           <mat-label>Vælg måltid</mat-label>
-          <mat-select [(ngModel)]="selectedMeal" name="meal" required>
+          <mat-select [(ngModel)]="selectedMeal" name="meal" required #select>
             <mat-option *ngFor="let m of mealOptions" [value]="m">
-              {{m.name}}
+              <span style="display: flex; align-items: center">
+                <button mat-icon-button (click)="deleteMeal(m)" style="margin-right: 8px" *ngIf="select.panelOpen">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                {{m.name}}
+              </span>
             </mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field style="margin-left: 8px;">
           <input type="number" matInput placeholder="Mængde" name="quantity" [(ngModel)]="quantity" required>
         </mat-form-field>
-        <mat-form-field style="max-width: 45px; margin-left: 8px">
+        <mat-form-field style="max-width: 50px; min-width: 50px; margin-left: 8px">
           <mat-select [(ngModel)]="unit" name="unit" required>
             <mat-option *ngFor="let u of units" [value]="u">
               {{u}}
@@ -52,12 +65,12 @@
       </form>
     </div>
   </div>
-  <div class="remaining mat-elevation-z4" [ngClass]="dayVisible ? 'visible' : 'hidden'">
+  <div class="remaining mat-elevation-z4" [ngClass]="mealsVisible ? 'inside-x' : 'outside-x-left'">
     <h3>Resterende Phe: {{remainingPhenyl}}mg</h3>
     <mat-icon *ngIf="remainingPhenyl <= 100">warning</mat-icon>
   </div>
 </div>
 
-<button class="fab-add" mat-fab routerLink="/meal">
+<button class="fab-add" mat-fab routerLink="/meal" [ngClass]="mealsVisible ? 'inside-x' : 'outside-x-right'">
   <mat-icon>add</mat-icon>
 </button>

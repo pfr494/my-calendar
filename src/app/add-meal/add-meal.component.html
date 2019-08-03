@@ -1,62 +1,76 @@
 <div class="meal-wrap">
-  <h3>Opret måltid</h3>
-  <form #mealForm="ngForm" class="meal-form">
-    <div style='display: flex; align-items: center'>
-      <mat-form-field>
-        <input type="text" name="mealName" [(ngModel)]="meal.name" matInput placeholder="Navn" required>
-      </mat-form-field>
-      <mat-form-field style="max-width: 45px; margin-left: 8px">
-        <mat-select [(ngModel)]="meal.unit" name="unit" required>
-          <mat-option *ngFor="let u of units" [value]="u">
-            {{u}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div style="display: flex; align-items: center">
-      <h5>Tilføj madvarer</h5>
-      <!-- <button class="add-button" style="margin-left: 16px; height: 34px" mat-raised-button routerLink="/ingredient" color="warn">Opret ny</button> -->
-    </div>
-    <div *ngFor="let ing of meal.ingredients; let i = index" class="ingredient-line">
-      <mat-form-field>
-        <input type="text" matInput [disabled]="true" [value]="ing.ingredient.name">
-      </mat-form-field>
-      <mat-form-field style="margin-left: 8px;">
-        <input type="number" [(ngModel)]="ing.quantity" name="quantity-{{i}}" matInput>
-        <span matSuffix>{{ing.ingredient.unit}}</span>
-      </mat-form-field>
-      <button mat-icon-button (click)="removeIngredient(i)">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
-    <div class="ingredient-line">
-      <mat-form-field>
-        <input type="text" placeholder="Indtast madvare" matInput [matAutocomplete]="auto" [formControl]="ingredientControl">
-        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
-          <mat-option *ngFor="let ingredient of filteredIngredientOptions | async" [value]="ingredient">
-            {{ingredient?.name}}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
-      <mat-form-field style="margin-left: 8px;">
-        <input type="number" matInput placeholder="Mængde" name="quantity" [(ngModel)]="quantity">
-        <span matSuffix>{{selectedIngredient?.unit}}</span>
-      </mat-form-field>
-      <button *ngIf="canAdd" mat-icon-button (click)="addIngredient()" [disabled]="!canAdd">
-        <mat-icon>check</mat-icon>
-      </button>
-      <button mat-icon-button *ngIf="!canAdd" (click)="createIngredient = !createIngredient">
-        <mat-icon *ngIf="!createIngredient">keyboard_arrow_down</mat-icon>
-        <mat-icon *ngIf="createIngredient">keyboard_arrow_up</mat-icon>
-      </button>
-    </div>
-    <app-add-ingredient *ngIf="createIngredient" [name]="ingredientControl.value" (ingredientCreated)="ingredientCreated($event)"></app-add-ingredient>
-  </form>
+  <div>
+    <h3>Opret måltid</h3>
+    <form #mealForm="ngForm" class="meal-form">
+      <div style='display: flex; align-items: center'>
+        <mat-form-field>
+          <input type="text" name="mealName" [(ngModel)]="meal.name" matInput placeholder="Navn" required>
+        </mat-form-field>
+        <mat-form-field style="max-width: 50px; min-width: 50px; margin-left: 8px">
+          <mat-select [(ngModel)]="meal.unit" name="unit" required>
+            <mat-option *ngFor="let u of units" [value]="u">
+              {{u}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div style="display: flex; align-items: center">
+        <h5>Tilføj madvarer</h5>
+      </div>
+      <div *ngFor="let ing of meal.ingredients; let i = index" class="ingredient-line">
+        <mat-form-field>
+          <input type="text" matInput [disabled]="true" [value]="ing.ingredient.name">
+        </mat-form-field>
+        <mat-form-field style="margin-left: 8px;">
+          <input type="number" [(ngModel)]="ing.quantity" name="quantity-{{i}}" matInput>
+          <span matSuffix>{{ing.ingredient.unit}}</span>
+        </mat-form-field>
+        <button mat-icon-button (click)="removeIngredient(i)">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </div>
+      <div class="ingredient-line">
+        <mat-form-field>
+          <input type="text" placeholder="Indtast madvare" matInput [matAutocomplete]="auto" [formControl]="ingredientControl">
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let ingredient of filteredIngredientOptions | async" [value]="ingredient">
+              <button mat-icon-button (click)="deleteIngredient(ingredient)" style="margin-right: 8px">
+                <mat-icon>delete</mat-icon>
+              </button>
+              {{ingredient?.name}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field style="margin-left: 8px;">
+          <input type="number" matInput placeholder="Mængde" name="quantity" [(ngModel)]="quantity">
+          <span matSuffix>{{selectedIngredient?.unit}}</span>
+        </mat-form-field>
+        <button *ngIf="canAdd" mat-icon-button (click)="addIngredient()" [disabled]="!canAdd">
+          <mat-icon>check</mat-icon>
+        </button>
+        <button mat-icon-button *ngIf="!canAdd" (click)="createIngredient = !createIngredient">
+          <mat-icon *ngIf="!createIngredient">keyboard_arrow_down</mat-icon>
+          <mat-icon *ngIf="createIngredient">keyboard_arrow_up</mat-icon>
+        </button>
+      </div>
+      <app-add-ingredient *ngIf="createIngredient" [name]="ingredientControl.value" (ingredientCreated)="ingredientCreated($event)"></app-add-ingredient>
+    </form>
+  </div>
 
-  <p>Phe i alt: {{ totalPhenyl }}mg</p>
-  <p>Protein i alt: {{ totalProtein }}g</p>
-  <button class="add-button" mat-raised-button color="primary" (click)="saveMeal()"
-    [disabled]="!mealForm.valid || !meal.ingredients.length">
-    Gem måltid
-  </button>
+  <div class="meal-actions mat-elevation-z4">
+    <div>
+      <tr>
+        <th><p style="font-weight: bold">Phe i alt:</p></th>
+        <td><p style="margin-left: 8px">{{totalPhenyl}} mg</p></td>
+      </tr>
+      <tr>
+        <th><p style="font-weight: bold">Protein i alt:</p></th>
+        <td><p style="margin-left: 8px">{{totalProtein}} g</p></td>
+      </tr>
+    </div>
+    <button class="add-button" mat-raised-button color="primary" (click)="saveMeal()"
+      [disabled]="!mealForm.valid || !meal.ingredients.length">
+      Gem måltid
+    </button>
+  </div>
 </div>

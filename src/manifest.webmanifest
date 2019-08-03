@@ -1,7 +1,7 @@
 {
   "name": "Min PKUalender",
   "short_name": "Min PKUalender",
-  "theme_color": "#F44336",
+  "theme_color": "#673Ab7",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "/",

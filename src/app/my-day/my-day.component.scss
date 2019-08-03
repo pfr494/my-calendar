@@ -16,6 +16,13 @@
     justify-content: space-between;
     padding: 0px 16px;
   }
+
+  .daymeals {
+    p.meal {
+      margin: 0 0 4px 0;
+    }
+    transition: all 0.3s ease-out;
+  }
   
   mat-expansion-panel-header {
     display: flex;
@@ -48,6 +55,10 @@
       margin-right: 28px;
       margin-left: 8px;
     }
+    .option-item {
+      display: flex;
+      align-items: center;
+    }
   }
 }
 
@@ -58,9 +69,10 @@
   padding: 8px 8px;
   z-index: 10;
   width: fit-content;
-  height: 48px;
   position: sticky;
   bottom: 0px;
+  margin: 16px 16px;
+  transition: all 0.5s ease-out;
   h3 {
     margin: 0;
   }
@@ -77,13 +89,17 @@
   z-index: 10;
   background-color: $accent;
   color: white;
-  transition: all 0.3s ease-in;
+  transition: all 0.4s ease-out;
 }
 
-.visible {
-  transform: translateY(0);
+.inside-x {
+  transform: translateX(0);
 }
 
-.hidden {
-  transform: translateY(-100px);
+.outside-x-left {
+  transform: translateX(-300px);
+}
+
+.outside-x-right {
+  transform: translateX(100px);
 }

@@ -15,7 +15,15 @@ export class IngredientService {
     return this.db.list(`users/${this.authService.currentUser.uid}/ingredients`).valueChanges() as Observable<Ingredient[]>;
   }
 
-  async createIngredient(i: Ingredient): Promise<any> {
-    return this.db.list(`users/${this.authService.currentUser.uid}/ingredients`).push(i);
+  async createIngredient(ingredient: Ingredient): Promise<any> {
+    const i = {
+      ...ingredient,
+      uid: this.db.createPushId()
+    };
+    return this.db.object(`users/${this.authService.currentUser.uid}/ingredients/${i.uid}`).set(i);
+  }
+
+  async deleteIngredient(ingredient: Ingredient): Promise<any> {
+    return this.db.object(`users/${this.authService.currentUser.uid}/ingredients/${ingredient.uid}`).remove();
   }
 }

@@ -10,4 +10,5 @@ export interface Meal {
   proteinPer100: number;
   phenylPer100: number;
   unit: Unit;
+  uid: string;
 }

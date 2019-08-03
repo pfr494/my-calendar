@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start:prod": "http-server -p 8080 -c-1 dist/my-calendar",
-    "build": "ng build",
+    "start-prod": "ng build -c=production && http-server -p 8080 -c-1 dist/my-calendar",
+    "build": "ng build -c=production",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

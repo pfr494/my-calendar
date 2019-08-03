@@ -5,4 +5,5 @@ export interface Ingredient {
   protein: number;
   phenyl: number;
   unit: Unit;
+  uid: string;
 }

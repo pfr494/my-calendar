@@ -9,6 +9,7 @@ import { MatSnackBar } from '@angular/material';
 import { NgForm, FormControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
 import { Unit } from '../models/unit.enum';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-add-meal',
@@ -22,7 +23,6 @@ export class AddMealComponent implements OnInit, OnDestroy {
   ingredientOptions: Ingredient[] = [];
   filteredIngredientOptions: Observable<Ingredient[]>;
 
-
   quantity: number;
   ingredient: Ingredient;
   units = [Unit.G, Unit.ML];
@@ -35,7 +35,11 @@ export class AddMealComponent implements OnInit, OnDestroy {
     unit: Unit.G
   } as Meal;
 
-  constructor(private mealService: MealService, private ingredientService: IngredientService, private snack: MatSnackBar) { }
+  constructor(
+    private mealService: MealService,
+    private ingredientService: IngredientService,
+    private snack: MatSnackBar,
+    private location: Location) { }
 
   ngOnInit() {
     this.subs = [
@@ -86,6 +90,20 @@ export class AddMealComponent implements OnInit, OnDestroy {
       this.meal.ingredients = [];
       this.form.resetForm();
       this.snack.open('Måltid oprettet, yay! :p', 'OK', { duration: 3000 });
+      this.location.back();
+    } catch (err) {
+      this.snack.open(`Hovsa, noget gik galt der: ${err}`, 'ØV', { duration: 3000 });
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async deleteIngredient(i: Ingredient) {
+    try {
+      this.loading = true;
+      const ing: Ingredient = await this.ingredientService.deleteIngredient(i);
+      this.ingredientControl.setValue(null);
+      this.snack.open('Ingrediens blev slettet', 'OK', { duration: 3000 });
     } catch (err) {
       this.snack.open(`Hovsa, noget gik galt der: ${err}`, 'ØV', { duration: 3000 });
     } finally {
@@ -95,6 +113,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
 
   ingredientCreated(ingredient: Ingredient) {
     this.createIngredient = false;
+    this.ingredientControl.setValue(ingredient);
   }
 
   displayFn(i?: Ingredient): string | undefined {
@@ -109,22 +128,22 @@ export class AddMealComponent implements OnInit, OnDestroy {
     let phe = 0;
     let quan = 0;
     for (const p of this.meal.ingredients) {
-      phe =+ p.ingredient.phenyl;
-      quan =+ p.quantity;
+      phe += p.ingredient.phenyl;
+      quan += + p.quantity;
     }
-    return Math.round((phe/quan) * 100);
+    return Math.round((phe / quan) * 100);
   }
 
   get proteinPer100(): number {
     let pro = 0;
     let quan = 0;
     for (const p of this.meal.ingredients) {
-      pro =+ p.ingredient.protein;
-      quan =+ p.quantity;
+      pro += p.ingredient.protein;
+      quan += + p.quantity;
     }
-    return Math.round((pro/quan) * 100);
+    return Math.round((pro / quan) * 100);
   }
- 
+
   get totalPhenyl(): number {
     let t = 0;
     for (const i of this.meal.ingredients) {

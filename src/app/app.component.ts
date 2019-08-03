@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routerTransition } from './router-animations';
 import { UpdaterService } from './services/updater/updater.service';
 
@@ -8,10 +8,18 @@ import { UpdaterService } from './services/updater/updater.service';
   styleUrls: ['./app.component.scss'],
   animations: [routerTransition]
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'my-calendar';
 
-  constructor(private updater: UpdaterService) {}
+  constructor(private updater: UpdaterService) { }
+
+  ngOnInit(): void {
+    this.updater.init();
+  }
+
+  ngOnDestroy(): void {
+    this.updater.destroy();
+  }
 
   getState(outlet) {
     return outlet.activatedRouteData.state;

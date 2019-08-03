@@ -29,6 +29,8 @@ export class MyDayComponent implements OnInit, OnDestroy {
   mSub: Subscription;
   units = [Unit.STK, Unit.G, Unit.ML];
 
+  mealsVisible: boolean;
+
   constructor(private user: UserService, public mealService: MealService, private snack: MatSnackBar) { }
 
   ngOnInit() {
@@ -37,6 +39,10 @@ export class MyDayComponent implements OnInit, OnDestroy {
       this.mealService.getMeals().subscribe((m: Meal[]) => this.mealOptions = m),
       this.mealService.selectedDateMeal$.subscribe((m: DayMeal[]) => this.dailyMeals = m),
     ];
+
+    setTimeout(() => {
+      this.mealsVisible = true;
+    }, 800);
   }
 
   ngOnDestroy() {
@@ -45,7 +51,7 @@ export class MyDayComponent implements OnInit, OnDestroy {
     }
   }
 
-  addMealOnDate() {
+  async addMealOnDate() {
     try {
       this.loading = true;
       const m = {
@@ -56,7 +62,7 @@ export class MyDayComponent implements OnInit, OnDestroy {
         unit: this.unit,
         quantity: this.quantity,
       } as DayMeal;
-      this.mealService.addMealOnDate(m);
+      await this.mealService.addMealOnDate(m);
       this.snack.open('Måltid tilføjet', 'OK', { duration: 3000 });
     } catch (err) {
       this.snack.open('Hovsa, der gik noget gal´', 'ØV', { duration: 3000 });
@@ -65,16 +71,36 @@ export class MyDayComponent implements OnInit, OnDestroy {
     }
   }
 
-  removeMealOnDate(meal: DayMeal) {
+  async removeMealOnDate(meal: DayMeal) {
     try {
       this.loading = true;
-      this.mealService.removeMealOnDate(meal);
+      await this.mealService.removeMealOnDate(meal);
       this.snack.open('Måltid fjernet', 'OK', { duration: 3000 });
     } catch (err) {
       this.snack.open('Hovsa, der gik noget gal´', 'ØV', { duration: 3000 });
     } finally {
       this.loading = false;
     }
+  }
+
+  async deleteMeal(meal: Meal) {
+    try {
+      this.loading = true;
+      await this.mealService.deleteMeal(meal);
+      this.snack.open('Måltid slettet', 'OK', { duration: 3000 });
+    } catch (err) {
+      this.snack.open('Hovsa, der gik noget gal´', 'ØV', { duration: 3000 });
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  getPhenylInDayMeal(dm: DayMeal): number {
+    return dm.unit === Unit.STK ? dm.meal.totalPhenyl * dm.quantity : dm.meal.phenylPer100 * (dm.quantity / 100);
+  }
+
+  getProteinInDayMeal(dm: DayMeal): number {
+    return dm.unit === Unit.STK ? dm.meal.totalProtein * dm.quantity : dm.meal.proteinPer100 * (dm.quantity / 100);
   }
 
   get phenylInMeal(): number {
@@ -101,7 +127,7 @@ export class MyDayComponent implements OnInit, OnDestroy {
     return tot;
   }
 
-  get dayVisible(): boolean {
-    return document.getElementById('snap-container').scrollTop < 10;
-  }
+  // get dayVisible(): boolean {
+  //   return document.getElementById('snap-container').scrollTop < 10;
+  // }
 }

@@ -12,7 +12,7 @@ import { Unit } from '../models/unit.enum';
 })
 export class AddIngredientComponent implements OnInit {
   @ViewChild('ingredientForm', { static: true }) form: NgForm;
-  @Output() ingredientCreated = new EventEmitter<void>();
+  @Output() ingredientCreated = new EventEmitter<Ingredient>();
   @Input() name: string;
   protein: number;
   unit: Unit = Unit.G;
@@ -20,10 +20,10 @@ export class AddIngredientComponent implements OnInit {
 
   units = [Unit.G, Unit.ML];
   constructor(private ingredient: IngredientService, private snack: MatSnackBar) { }
-  
+
   ngOnInit() {
   }
-  
+
   get phenyl(): number {
     // 1g protein = 50mg phenyl
     return this.protein * 50;
@@ -41,7 +41,7 @@ export class AddIngredientComponent implements OnInit {
       await this.ingredient.createIngredient(toAdd);
       this.snack.open('Madvare oprettet! :D', 'OK', { duration: 3000 });
       this.form.resetForm();
-      this.ingredientCreated.emit();
+      this.ingredientCreated.emit(toAdd);
     } catch (err) {
       this.snack.open(`Hovsa, noget gik galt der: ${err}`, 'ØV!', { duration: 3000 });
     } finally {
