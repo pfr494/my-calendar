@@ -2,10 +2,20 @@
   <h4>Opret madvare</h4>
   <form #ingredientForm="ngForm" class="ingredient-form">
     <mat-form-field>
-      <input type="text" matInput [(ngModel)]="name" name="name" placeholder="Navn" required>
+      <input type="text" matInput
+        [(ngModel)]="name"
+        name="name"
+        placeholder="Navn"
+        required
+        (click)="inputClicked.emit()">
     </mat-form-field>
     <mat-form-field style="margin-left: 8px">
-      <input type="tel" matInput [(ngModel)]="protein" name="protein" placeholder="Protein pr. 100 {{unit}}" required>
+      <input type="tel" matInput
+        [(ngModel)]="protein"
+        name="protein"
+        placeholder="Protein pr. 100 {{unit}}"
+        required
+        (click)="inputClicked.emit()">
     </mat-form-field>
     <mat-form-field style="max-width: 50px; min-width: 50px; margin-left: 8px">
       <mat-select [(ngModel)]="unit" name="unit" required>
@@ -14,7 +24,11 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
+    <button mat-icon-button class="create-btn"
+      (click)="createIngredient()"
+      [disabled]="!ingredientForm.valid">
+      <mat-icon>add</mat-icon>
+    </button>
   </form>
   <p *ngIf="protein">Phe: {{phenyl}}mg</p>
-  <button mat-raised-button color="primary" (click)="createIngredient()" [disabled]="!ingredientForm.valid" class="create-btn">Opret</button>
 </div>

@@ -1,4 +1,4 @@
-<div class="meal-wrap">
+<div class="meal-wrap" id="meal-wrap">
   <div>
     <form #mealForm="ngForm" class="meal-form">
       <div style='display: flex; align-items: center'>
@@ -52,7 +52,11 @@
           <mat-icon *ngIf="createIngredient">keyboard_arrow_up</mat-icon>
         </button>
       </div>
-      <app-add-ingredient *ngIf="createIngredient" [name]="ingredientControl.value" (ingredientCreated)="ingredientCreated($event)"></app-add-ingredient>
+      <app-add-ingredient *ngIf="createIngredient"
+        [name]="ingredientControl.value"
+        (inputClicked)="scrollToBottom()"
+        (ingredientCreated)="ingredientCreated($event)">
+      </app-add-ingredient>
     </form>
   </div>
 

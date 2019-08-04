@@ -5,7 +5,7 @@
   text-align: left;
   padding: 8px 0px;
   width: 100vw;
-  max-width: calc(100vw - 86px);
+  max-width: calc(100vw - 24px);
 
   .ingredient-form {
     display: flex;
@@ -19,8 +19,7 @@
     }
 
     .create-btn {
-      max-height: 38px;
-      margin-left: 16px;
+      margin-left: 8px;
     }
   }
 }

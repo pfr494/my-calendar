@@ -116,6 +116,10 @@ export class AddMealComponent implements OnInit, OnDestroy {
     this.ingredientControl.setValue(ingredient);
   }
 
+  scrollToBottom() {
+    document.getElementById('meal-wrap').scrollTo(0,document.body.scrollHeight);
+  }
+
   displayFn(i?: Ingredient): string | undefined {
     return i ? i.name : undefined;
   }

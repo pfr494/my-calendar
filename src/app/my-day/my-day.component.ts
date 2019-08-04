@@ -61,6 +61,7 @@ export class MyDayComponent implements OnInit, OnDestroy {
         totalProtein: this.proteinInMeal,
         unit: this.unit,
         quantity: this.roundedQuantity,
+        consumedOn: new Date()
       } as DayMeal;
       await this.mealService.addMealOnDate(m);
       this.snack.open('Måltid tilføjet', 'OK', { duration: 3000 });

@@ -13,6 +13,7 @@ import { Unit } from '../models/unit.enum';
 export class AddIngredientComponent implements OnInit {
   @ViewChild('ingredientForm', { static: true }) form: NgForm;
   @Output() ingredientCreated = new EventEmitter<Ingredient>();
+  @Output() inputClicked = new EventEmitter<void>();
   @Input() name: string;
   protein: number;
   unit: Unit = Unit.G;

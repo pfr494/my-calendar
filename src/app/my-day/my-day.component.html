@@ -10,12 +10,16 @@
           <button mat-icon-button (click)="removeMealOnDate(m)" style="margin-right: 8px">
             <mat-icon>clear</mat-icon>
           </button>
-          <p>{{m.meal.name}}</p>
+          <p>{{m.meal.name}} {{m.consumedOn | date:'shortTime'}}</p>
         </mat-expansion-panel-header>
         <div class="panel-content">
           <div *ngFor="let in of m.meal.ingredients" style="display: flex;">
-            <p>{{in.ingredient.name}}:</p>
-            <p style="margin-left: 16px">{{in.quantity}}g</p>
+            <table style="text-align: left">
+            <tr>
+              <th><p class="meal">{{in.ingredient.name}}</p></th>
+              <td><p p class="meal" style="margin-left: 8px">{{in.quantity}} {{in.unit}}</p></td>
+            </tr>
+            </table>
           </div>
           <mat-divider style="width: 100%"></mat-divider>
           <h4 style="margin: 8px 0px">Måltid</h4>
@@ -29,7 +33,7 @@
               <td><p p class="meal" style="margin-left: 8px">{{getProteinInDayMeal(m) | number:'0.0-2'}} g</p></td>
             </tr>
           </table>
-          <p>1 Liste = {{(25/m.meal?.phenylPer100)*100 | number:'0.0-0'}} g {{m.meal.name}}</p>
+          <p>1 Liste = {{(25/m.meal?.phenylPer100)*100 | number:'0.0-0'}} {{m.meal.unit}} {{m.meal.name}}</p>
         </div>
         <mat-action-row>
           <button mat-raised-button (click)="panel.close()" color="primary">Det er super!</button>

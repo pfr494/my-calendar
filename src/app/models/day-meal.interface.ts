@@ -9,4 +9,5 @@ export interface DayMeal {
   totalProtein: number;
   quantity: number;
   unit: Unit;
+  consumedOn: Date;
 }
