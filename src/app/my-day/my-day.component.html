@@ -22,14 +22,14 @@
           <table style="text-align: left">
             <tr>
               <th><p class="meal">Phe:</p></th>
-              <td><p p class="meal" style="margin-left: 8px">{{getPhenylInDayMeal(m)}} mg</p></td>
+              <td><p p class="meal" style="margin-left: 8px">{{getPhenylInDayMeal(m) | number:'0.0-2'}} mg</p></td>
             </tr>
             <tr>
               <th><p p class="meal">Protein:</p></th>
-              <td><p p class="meal" style="margin-left: 8px">{{getProteinInDayMeal(m)}} g</p></td>
+              <td><p p class="meal" style="margin-left: 8px">{{getProteinInDayMeal(m) | number:'0.0-2'}} g</p></td>
             </tr>
           </table>
-          <p>1 Liste = {{(25/m.meal?.phenylPer100)*100 | number:'0.0'}}g {{m.meal.name}}</p>
+          <p>1 Liste = {{(25/m.meal?.phenylPer100)*100 | number:'0.0-0'}} g {{m.meal.name}}</p>
         </div>
         <mat-action-row>
           <button mat-raised-button (click)="panel.close()" color="primary">Det er super!</button>
@@ -50,7 +50,7 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field style="margin-left: 8px;">
-          <input type="number" matInput placeholder="Mængde" name="quantity" [(ngModel)]="quantity" required>
+          <input type="tel" matInput placeholder="Mængde" name="quantity" [(ngModel)]="quantity" required>
         </mat-form-field>
         <mat-form-field style="max-width: 50px; min-width: 50px; margin-left: 8px">
           <mat-select [(ngModel)]="unit" name="unit" required>

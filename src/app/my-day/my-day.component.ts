@@ -60,7 +60,7 @@ export class MyDayComponent implements OnInit, OnDestroy {
         totalPhenyl: this.phenylInMeal,
         totalProtein: this.proteinInMeal,
         unit: this.unit,
-        quantity: this.quantity,
+        quantity: this.roundedQuantity,
       } as DayMeal;
       await this.mealService.addMealOnDate(m);
       this.snack.open('Måltid tilføjet', 'OK', { duration: 3000 });
@@ -105,18 +105,18 @@ export class MyDayComponent implements OnInit, OnDestroy {
 
   get phenylInMeal(): number {
     return this.unit === Unit.STK ?
-      this.selectedMeal.totalPhenyl * this.quantity :
-      this.selectedMeal.phenylPer100 * (this.quantity / 100);
+      this.selectedMeal.totalPhenyl * this.roundedQuantity :
+      this.selectedMeal.phenylPer100 * (this.roundedQuantity / 100);
   }
 
   get proteinInMeal(): number {
     return this.unit === Unit.STK ?
-      this.selectedMeal.totalProtein * this.quantity :
-      this.selectedMeal.proteinPer100 * (this.quantity / 100);
+      this.selectedMeal.totalProtein * this.roundedQuantity :
+      this.selectedMeal.proteinPer100 * (this.roundedQuantity / 100);
   }
 
   get remainingPhenyl(): number {
-    return this.userPkuLimit - this.totalPhenylInMeals;
+    return Math.round(this.userPkuLimit - this.totalPhenylInMeals);
   }
 
   get totalPhenylInMeals(): number {
@@ -125,6 +125,10 @@ export class MyDayComponent implements OnInit, OnDestroy {
       tot += m.totalPhenyl;
     }
     return tot;
+  }
+
+  get roundedQuantity(): number {
+    return Number(String(this.quantity).replace(',', '.'));
   }
 
   // get dayVisible(): boolean {

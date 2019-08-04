@@ -25,4 +25,15 @@ export class ToolbarComponent implements OnInit {
   goBack() {
     this.location.back();
   }
+
+  get headerText(): string {
+    const url = this.location.path();
+    if (url.includes('meal')) {
+      return 'Opret Måltid';
+    } else if (url.includes('profile')) {
+      return 'Min Profil';
+    } else {
+      return 'Min PKUalender';
+    }
+  }
 }

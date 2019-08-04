@@ -65,7 +65,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
   addIngredient(ingredient?: Ingredient) {
     const i = Object.assign({}, {
       ingredient: ingredient ? ingredient : this.selectedIngredient,
-      quantity: this.quantity
+      quantity: this.roundedQuantity
     } as MealIngredient);
     this.meal.ingredients = [...this.meal.ingredients, i];
     this.ingredientControl.reset();
@@ -131,7 +131,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
       phe += p.ingredient.phenyl;
       quan += + p.quantity;
     }
-    return Math.round((phe / quan) * 100);
+    return (phe / quan) * 100;
   }
 
   get proteinPer100(): number {
@@ -141,7 +141,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
       pro += p.ingredient.protein;
       quan += + p.quantity;
     }
-    return Math.round((pro / quan) * 100);
+    return (pro / quan) * 100;
   }
 
   get totalPhenyl(): number {
@@ -149,7 +149,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
     for (const i of this.meal.ingredients) {
       t += (i.ingredient.phenyl * (i.quantity / 100));
     }
-    return Math.round(t);
+    return t;
   }
 
   get totalProtein(): number {
@@ -157,10 +157,14 @@ export class AddMealComponent implements OnInit, OnDestroy {
     for (const i of this.meal.ingredients) {
       t += (i.ingredient.protein * (i.quantity / 100));
     }
-    return Math.round(t);
+    return t;
   }
 
   get canAdd(): boolean {
     return this.selectedIngredient && typeof this.selectedIngredient !== 'string' && !!this.quantity;
+  }
+
+  get roundedQuantity(): number {
+    return Number(String(this.quantity).replace(',', '.'));
   }
 }

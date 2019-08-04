@@ -8,16 +8,16 @@ import { Component, OnInit } from '@angular/core';
 export class PkuConverterComponent implements OnInit {
   protein: number;
   phenylalanin: number;
-  list: number; 
+  list: number;
 
   get calculatedProtein(): number {
-    return this.phenylalanin / 50;
+    return this.roundedPhenyl / 50;
   }
 
   get calculatedPhenylalanin(): number {
-    return this.protein * 50;
+    return this.roundedProtein * 50;
   }
-  
+
   get calculatedLists(): number {
     return (25 / this.calculatedPhenylalanin) * 100;
   }
@@ -25,6 +25,14 @@ export class PkuConverterComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  get roundedProtein(): number {
+    return Number(String(this.protein).replace(',', '.'));
+  }
+
+  get roundedPhenyl(): number {
+    return Number(String(this.phenylalanin).replace(',', '.'));
   }
 
 }

@@ -1,6 +1,5 @@
 <div class="meal-wrap">
   <div>
-    <h3>Opret måltid</h3>
     <form #mealForm="ngForm" class="meal-form">
       <div style='display: flex; align-items: center'>
         <mat-form-field>
@@ -42,7 +41,7 @@
           </mat-autocomplete>
         </mat-form-field>
         <mat-form-field style="margin-left: 8px;">
-          <input type="number" matInput placeholder="Mængde" name="quantity" [(ngModel)]="quantity">
+          <input type="tel" matInput placeholder="Mængde" name="quantity" [(ngModel)]="quantity">
           <span matSuffix>{{selectedIngredient?.unit}}</span>
         </mat-form-field>
         <button *ngIf="canAdd" mat-icon-button (click)="addIngredient()" [disabled]="!canAdd">
@@ -61,11 +60,11 @@
     <div>
       <tr>
         <th><p style="font-weight: bold">Phe i alt:</p></th>
-        <td><p style="margin-left: 8px">{{totalPhenyl}} mg</p></td>
+        <td><p style="margin-left: 8px">{{totalPhenyl | number:'0.00'}} mg</p></td>
       </tr>
       <tr>
         <th><p style="font-weight: bold">Protein i alt:</p></th>
-        <td><p style="margin-left: 8px">{{totalProtein}} g</p></td>
+        <td><p style="margin-left: 8px">{{totalProtein | number:'0.00'}} g</p></td>
       </tr>
     </div>
     <button class="add-button" mat-raised-button color="primary" (click)="saveMeal()"

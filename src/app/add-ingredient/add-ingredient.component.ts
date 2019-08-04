@@ -26,7 +26,7 @@ export class AddIngredientComponent implements OnInit {
 
   get phenyl(): number {
     // 1g protein = 50mg phenyl
-    return this.protein * 50;
+    return this.roundedProtein * 50;
   }
 
   async createIngredient() {
@@ -34,7 +34,7 @@ export class AddIngredientComponent implements OnInit {
       this.loading = true;
       const toAdd = {
         name: this.name,
-        protein: this.protein,
+        protein: this.roundedProtein,
         phenyl: this.phenyl,
         unit: this.unit
       } as Ingredient;
@@ -48,5 +48,9 @@ export class AddIngredientComponent implements OnInit {
       this.loading = false;
     }
 
+  }
+
+  get roundedProtein(): number {
+    return Number(String(this.protein).replace(',', '.'));
   }
 }

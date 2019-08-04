@@ -1,5 +1,4 @@
 <div class="profile-wrap">
-  <h3>Min profil</h3>
   <p>Bruger</p>
   <p>{{(auth.currentUser$ | async)?.email}}</p>
   <div style="display: flex; align-items: center;">
@@ -8,6 +7,8 @@
     </mat-form-field>
     <button mat-raised-button (click)="updateLimit()" [disabled]="!pkuControl.dirty" color="primary" style="margin-left: 8px">Gem</button>
   </div>
+  <a href="https://www.rigshospitalet.dk/afdelinger-og-klinikker/julianemarie/boerne-unge-klinikken/center-for-pku/inspiration/opskrifter/Sider/default.aspx?rhKeywords=Pku"
+  >Se opskrifter fra rigshospitalet her</a>
   <!-- <mat-progress-spinner [mode]="indeterminate" *ngIf="loading"></mat-progress-spinner> -->
   <button mat-raised-button (click)="logout()" class="logout">Log ud</button>
 </div>
