@@ -14,7 +14,7 @@
         </mat-form-field>
       </div>
       <div style="display: flex; align-items: center">
-        <h5>Tilføj madvarer</h5>
+        <h4>Tilføj madvarer</h4>
       </div>
       <div *ngFor="let ing of meal.ingredients; let i = index" class="ingredient-line">
         <mat-form-field>
@@ -30,8 +30,8 @@
       </div>
       <div class="ingredient-line">
         <mat-form-field>
-          <input type="text" placeholder="Indtast madvare" matInput [matAutocomplete]="auto" [formControl]="ingredientControl">
-          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+          <input type="text" placeholder="Indtast madvare" matInput [matAutocomplete]="auto" [formControl]="ingredientControl" (click)="togglePanelIfEmpty()">
+          <mat-autocomplete [panelWidth]="300" autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
             <mat-option *ngFor="let ingredient of filteredIngredientOptions | async" [value]="ingredient">
               <button mat-icon-button (click)="deleteIngredient(ingredient)" style="margin-right: 8px">
                 <mat-icon>delete</mat-icon>
@@ -60,7 +60,7 @@
     </form>
   </div>
 
-  <div class="meal-actions mat-elevation-z4">
+  <div class="meal-actions mat-elevation-z2" [ngClass]="actionsVisible ? 'inside-y' : 'outside-y-bottom'">
     <div>
       <tr>
         <th><p style="font-weight: bold">Phe i alt:</p></th>

@@ -4,6 +4,7 @@ import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angu
 import { FormControl, NgForm } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Unit } from '../models/unit.enum';
+import { SnackService } from '../services/snack.service';
 
 @Component({
   selector: 'app-add-ingredient',
@@ -20,7 +21,7 @@ export class AddIngredientComponent implements OnInit {
   loading: boolean;
 
   units = [Unit.G, Unit.ML];
-  constructor(private ingredient: IngredientService, private snack: MatSnackBar) { }
+  constructor(private ingredient: IngredientService, private snack: SnackService) { }
 
   ngOnInit() {
   }
@@ -40,11 +41,11 @@ export class AddIngredientComponent implements OnInit {
         unit: this.unit
       } as Ingredient;
       await this.ingredient.createIngredient(toAdd);
-      this.snack.open('Madvare oprettet! :D', 'OK', { duration: 3000 });
+      this.snack.showInfo('Madvare oprettet! :D', 'OK');
       this.form.resetForm();
       this.ingredientCreated.emit(toAdd);
     } catch (err) {
-      this.snack.open(`Hovsa, noget gik galt der: ${err}`, 'ØV!', { duration: 3000 });
+      this.snack.showError(`Hovsa, noget gik galt der: ${err}`, 'ØV!');
     } finally {
       this.loading = false;
     }

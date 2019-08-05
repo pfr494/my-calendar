@@ -1,13 +1,13 @@
+import { IngredientService } from '../services/ingredient/ingredient.service';
 import { MealIngredient } from '../models/meal-ingredient.interface';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MealService } from '../services/meal/meal.service';
-import { Subscription, Observable } from 'rxjs';
-import { Meal } from '../models/meal.interface';
 import { Ingredient } from '../models/ingredient.interface';
-import { IngredientService } from '../services/ingredient/ingredient.service';
-import { MatSnackBar } from '@angular/material';
+import { SnackService } from '../services/snack.service';
 import { NgForm, FormControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
+import { Subscription, Observable } from 'rxjs';
+import { Meal } from '../models/meal.interface';
 import { Unit } from '../models/unit.enum';
 import { Location } from '@angular/common';
 
@@ -22,6 +22,8 @@ export class AddMealComponent implements OnInit, OnDestroy {
   private subs: Subscription[];
   ingredientOptions: Ingredient[] = [];
   filteredIngredientOptions: Observable<Ingredient[]>;
+  actionsVisible: boolean;
+
 
   quantity: number;
   ingredient: Ingredient;
@@ -38,7 +40,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
   constructor(
     private mealService: MealService,
     private ingredientService: IngredientService,
-    private snack: MatSnackBar,
+    private snack: SnackService,
     private location: Location) { }
 
   ngOnInit() {
@@ -49,10 +51,15 @@ export class AddMealComponent implements OnInit, OnDestroy {
       startWith(''),
       map(value => this._filter(value))
     );
+
+    setTimeout(() => {
+      this.actionsVisible = true;
+    }, 200);
+
   }
 
   private _filter(value: string): Ingredient[] {
-    const filterValue = typeof value === 'string' ? value.toLowerCase() : '';
+    const filterValue = value.toLowerCase();
     return this.ingredientOptions.filter((ingredient: Ingredient) => ingredient.name.toLowerCase().indexOf(filterValue) === 0);
   }
 
@@ -89,10 +96,10 @@ export class AddMealComponent implements OnInit, OnDestroy {
       await this.mealService.addMeal(m);
       this.meal.ingredients = [];
       this.form.resetForm();
-      this.snack.open('Måltid oprettet, yay! :p', 'OK', { duration: 3000 });
+      this.snack.showInfo('Måltid oprettet, yay! :p', 'OK');
       this.location.back();
     } catch (err) {
-      this.snack.open(`Hovsa, noget gik galt der: ${err}`, 'ØV', { duration: 3000 });
+      this.snack.showError(`Hovsa, noget gik galt der: ${err}`, 'ØV');
     } finally {
       this.loading = false;
     }
@@ -103,9 +110,9 @@ export class AddMealComponent implements OnInit, OnDestroy {
       this.loading = true;
       const ing: Ingredient = await this.ingredientService.deleteIngredient(i);
       this.ingredientControl.setValue(null);
-      this.snack.open('Ingrediens blev slettet', 'OK', { duration: 3000 });
+      this.snack.showInfo('Ingrediens blev slettet', 'OK');
     } catch (err) {
-      this.snack.open(`Hovsa, noget gik galt der: ${err}`, 'ØV', { duration: 3000 });
+      this.snack.showError(`Hovsa, noget gik galt der: ${err}`, 'ØV');
     } finally {
       this.loading = false;
     }
@@ -114,6 +121,10 @@ export class AddMealComponent implements OnInit, OnDestroy {
   ingredientCreated(ingredient: Ingredient) {
     this.createIngredient = false;
     this.ingredientControl.setValue(ingredient);
+  }
+
+  togglePanelIfEmpty() {
+    if (!this.ingredientControl.value) { this.ingredientControl.setValue(''); }
   }
 
   scrollToBottom() {

@@ -3,6 +3,7 @@ import { SwUpdate } from '@angular/service-worker';
 import { MatSnackBar } from '@angular/material';
 import { Subscription, interval, concat } from 'rxjs';
 import { first } from 'rxjs/operators';
+import { SnackService } from '../snack.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,23 +11,27 @@ import { first } from 'rxjs/operators';
 export class UpdaterService {
   sub: Subscription;
 
-  constructor(appRef: ApplicationRef, private swUpdate: SwUpdate, private snack: MatSnackBar) {
+  constructor(appRef: ApplicationRef, private swUpdate: SwUpdate, private snack: SnackService) {
     // Allow the app to stabilize first, before starting polling for updates with `interval()`.
-    const appIsStable$ = appRef.isStable.pipe(first(isStable => isStable === true));
-    const everySixHours$ = interval(6 * 60 * 60 * 1000);
-    const everySixHoursOnceAppIsStable$ = concat(appIsStable$, everySixHours$);
 
-    everySixHoursOnceAppIsStable$.subscribe(() => swUpdate.checkForUpdate());
+    if (this.swUpdate.isEnabled) {
+      const appIsStable$ = appRef.isStable.pipe(first(isStable => isStable === true));
+      const everySixHours$ = interval(6 * 60 * 60 * 1000);
+      const everySixHoursOnceAppIsStable$ = concat(appIsStable$, everySixHours$);
+      everySixHoursOnceAppIsStable$.subscribe(() => swUpdate.checkForUpdate());
+    }
   }
 
   init() {
-    this.sub = this.swUpdate.available.subscribe(() => {
-      this.snack.open('Der er en ny version tilgængelig', 'Opdatér', { verticalPosition: 'top' })
+    if (this.swUpdate.isEnabled) {
+      this.sub = this.swUpdate.available.subscribe(() => {
+      this.snack.showInfo('Der er en ny version tilgængelig', 'Opdatér')
       .onAction().subscribe(async () => {
         await this.swUpdate.activateUpdate();
         location.reload();
       });
-  });
+    });
+    }
 }
 
   destroy() {

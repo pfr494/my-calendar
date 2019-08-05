@@ -8,6 +8,7 @@ import { NgForm } from '@angular/forms';
 import { DayMeal } from '../models/day-meal.interface';
 import { MatSnackBar } from '@angular/material';
 import { Unit } from '../models/unit.enum';
+import { SnackService } from '../services/snack.service';
 
 @Component({
   selector: 'app-my-day',
@@ -31,7 +32,7 @@ export class MyDayComponent implements OnInit, OnDestroy {
 
   mealsVisible: boolean;
 
-  constructor(private user: UserService, public mealService: MealService, private snack: MatSnackBar) { }
+  constructor(private user: UserService, public mealService: MealService, private snack: SnackService) { }
 
   ngOnInit() {
     this.subs = [
@@ -42,7 +43,7 @@ export class MyDayComponent implements OnInit, OnDestroy {
 
     setTimeout(() => {
       this.mealsVisible = true;
-    }, 800);
+    }, 100);
   }
 
   ngOnDestroy() {
@@ -61,12 +62,12 @@ export class MyDayComponent implements OnInit, OnDestroy {
         totalProtein: this.proteinInMeal,
         unit: this.unit,
         quantity: this.roundedQuantity,
-        consumedOn: new Date()
+        consumedOnTime: new Date().toTimeString().split(' ')[0]
       } as DayMeal;
       await this.mealService.addMealOnDate(m);
-      this.snack.open('Måltid tilføjet', 'OK', { duration: 3000 });
+      this.snack.showInfo('Måltid tilføjet', 'OK');
     } catch (err) {
-      this.snack.open('Hovsa, der gik noget gal´', 'ØV', { duration: 3000 });
+      this.snack.showError(`Hovsa, noget gik galt der: ${err}`, 'ØV');
     } finally {
       this.loading = false;
     }
@@ -76,9 +77,9 @@ export class MyDayComponent implements OnInit, OnDestroy {
     try {
       this.loading = true;
       await this.mealService.removeMealOnDate(meal);
-      this.snack.open('Måltid fjernet', 'OK', { duration: 3000 });
+      this.snack.showInfo('Måltid fjernet', 'OK');
     } catch (err) {
-      this.snack.open('Hovsa, der gik noget gal´', 'ØV', { duration: 3000 });
+      this.snack.showError(`Hovsa, noget gik galt der: ${err}`, 'ØV');
     } finally {
       this.loading = false;
     }
@@ -88,12 +89,16 @@ export class MyDayComponent implements OnInit, OnDestroy {
     try {
       this.loading = true;
       await this.mealService.deleteMeal(meal);
-      this.snack.open('Måltid slettet', 'OK', { duration: 3000 });
+      this.snack.showInfo('Måltid slettet', 'OK');
     } catch (err) {
-      this.snack.open('Hovsa, der gik noget gal´', 'ØV', { duration: 3000 });
+      this.snack.showError(`Hovsa, noget gik galt der: ${err}`, 'ØV');
     } finally {
       this.loading = false;
     }
+  }
+
+  showInfo(i: string) {
+    this.snack.showInfo(i);
   }
 
   getPhenylInDayMeal(dm: DayMeal): number {

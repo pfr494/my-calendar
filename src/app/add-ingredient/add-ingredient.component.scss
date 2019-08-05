@@ -7,6 +7,10 @@
   width: 100vw;
   max-width: calc(100vw - 24px);
 
+  h4 {
+    margin: 0 0 8px 0;
+  }
+
   .ingredient-form {
     display: flex;
     align-items: center;

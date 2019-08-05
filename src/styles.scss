@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import 'styles/variables.scss';
 
 html {
   height: 100%;
@@ -11,9 +12,22 @@ body {
   margin: 0px;
   height: 100%;
   overflow: hidden;
+    // Prevent screen from flashing blue on tap android
+  -webkit-tap-highlight-color: transparent;
 }
 
 
 h1, h2, h3, h4, h5, p, a {
   font-family: 'Roboto';
+}
+
+.info-snack {
+  .mat-simple-snackbar-action {
+    color: $primary;
+  }
+}
+.error-snack {
+  .mat-simple-snackbar-action {
+    color: $warn;
+  }
 }

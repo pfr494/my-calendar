@@ -9,11 +9,11 @@ import { AddIngredientComponent } from './add-ingredient/add-ingredient.componen
 import { PkuConverterComponent } from './pku-converter/pku-converter.component';
 
 const routes: Routes = [
-  { path: 'overview', pathMatch: 'full', component: OverviewComponent, canActivate: [AuthGuard], data: { state: 'home' } },
-  { path: 'convert', pathMatch: 'full', component: PkuConverterComponent, canActivate: [AuthGuard], data: { state: 'home' } },
-  { path: 'profile', pathMatch: 'full', component: ProfileComponent, canActivate: [AuthGuard], data: { state: 'away' } },
-  { path: 'meal', pathMatch: 'full', component: AddMealComponent, canActivate: [AuthGuard], data: { state: 'away' } },
-  { path: 'ingredient', pathMatch: 'full', component: AddIngredientComponent, canActivate: [AuthGuard], data: { state: 'away'} },
+  { path: 'overview', pathMatch: 'full', component: OverviewComponent, canActivate: [AuthGuard] },
+  { path: 'convert', pathMatch: 'full', component: PkuConverterComponent, canActivate: [AuthGuard] },
+  { path: 'profile', pathMatch: 'full', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'meal', pathMatch: 'full', component: AddMealComponent, canActivate: [AuthGuard] },
+  { path: 'ingredient', pathMatch: 'full', component: AddIngredientComponent, canActivate: [AuthGuard] },
   { path: 'login', pathMatch: 'full', component: SignInComponent },
   { path: '**', redirectTo: 'overview' },
 ];

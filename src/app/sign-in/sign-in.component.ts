@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
+import { SnackService } from '../services/snack.service';
 
 class UserInfo {
   email: string;
@@ -24,7 +25,7 @@ export class SignInComponent implements OnInit {
     private ngZone: NgZone,
     iconRegistry: MatIconRegistry,
     sanitizer: DomSanitizer,
-    private snackBar: MatSnackBar) {
+    private snackBar: SnackService) {
     iconRegistry.addSvgIcon(
       'google',
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/googleLogo.svg')
@@ -45,14 +46,10 @@ export class SignInComponent implements OnInit {
   signUp() {
     this.authService.emailSignUp(this.userInfo.email, this.userInfo.password)
       .then(() => {
-        this.snackBar.open('Created user with email: ' + this.userInfo.email, 'Yay!', {
-          duration: 2000,
-        });
+        this.snackBar.showInfo('Created user with email: ' + this.userInfo.email, 'Yay!');
         this.router.navigate(['/login']);
       }).catch((err) => {
-        this.snackBar.open(err.message, 'Nay!', {
-          duration: 2000,
-        });
+        this.snackBar.showError(err.message, 'Nay!');
       });
   }
 
@@ -60,9 +57,7 @@ export class SignInComponent implements OnInit {
     this.authService.emailLogin(this.userInfo.email, this.userInfo.password)
       .then(() => {
         console.log('Sign in: ' + this.userInfo.email + ' ' + this.userInfo.password);
-        this.snackBar.open('User with email: ' + this.authService.currentUserMail + ' logged in', 'Yay!', {
-          duration: 2000,
-        });
+        this.snackBar.showInfo('User with email: ' + this.authService.currentUserMail + ' logged in', 'Yay!');
         this.ngZone.run(() => {
           this.router.navigate(['overview']);
         });
@@ -75,9 +70,7 @@ export class SignInComponent implements OnInit {
         this.ngZone.run(() => {
           this.router.navigate(['overview']);
         });
-        this.snackBar.open('User with email: ' + this.authService.currentUserMail + ' logged in', 'Yay!', {
-          duration: 2000,
-        });
+        this.snackBar.showInfo('User with email: ' + this.authService.currentUserMail + ' logged in', 'Yay!');
       }).catch((error) => {
         console.log(error);
         this.router.navigate(['/login']);
