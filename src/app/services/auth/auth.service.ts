@@ -5,6 +5,8 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { browser } from 'protractor';
+import { Location } from '@angular/common';
 
 @Injectable()
 export class AuthService {
@@ -108,6 +110,7 @@ export class AuthService {
   async signOut() {
     await this.afAuth.auth.signOut();
     this.router.navigate(['/login']);
+    location.reload();
   }
 
   private updateUserData(): void {

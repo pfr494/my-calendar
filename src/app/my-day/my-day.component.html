@@ -9,17 +9,16 @@
         <mat-expansion-panel-header>
           <p class="time">{{m?.consumedOnTime}}</p>
           <p class="name">{{m.meal.name}}</p>
+          <p class="name">{{m.quantity}} {{m.unit}}</p>
         </mat-expansion-panel-header>
         <div class="panel-content">
           <h4 style="margin: 8px 0px">Måltidet består af:</h4>
-          <div *ngFor="let in of m.meal.ingredients" style="display: flex;">
-            <table style="text-align: left">
-              <tr>
-                <th><p class="meal">{{in.ingredient.name}}</p></th>
-                <td><p p class="meal" style="margin-left: 8px">{{in.quantity}} {{in.unit}}</p></td>
-              </tr>
-            </table>
-          </div>
+          <table style="text-align: left">
+            <tr *ngFor="let in of m.meal.ingredients">
+              <th><p class="meal">{{in.ingredient.name}}</p></th>
+              <td><p p class="meal" style="margin-left: 8px">{{in.quantity}} {{in?.ingredient.unit}}</p></td>
+            </tr>
+          </table>
           <mat-divider style="width: 100%"></mat-divider>
           <h4 style="margin: 8px 0px">Protein og Phe indhold</h4>
           <table style="text-align: left">

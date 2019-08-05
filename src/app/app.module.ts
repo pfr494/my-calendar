@@ -39,9 +39,12 @@ import { AddIngredientComponent } from './add-ingredient/add-ingredient.componen
 import { MealService } from './services/meal/meal.service';
 import { IngredientService } from './services/ingredient/ingredient.service';
 import { UserService } from './services/user/user.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, registerLocaleData } from '@angular/common';
 import { PkuConverterComponent } from './pku-converter/pku-converter.component';
 import { UpdaterService } from './services/updater/updater.service';
+import localeDa from '@angular/common/locales/da';
+
+registerLocaleData(localeDa, 'da');
 
 @NgModule({
   declarations: [
