@@ -1,6 +1,6 @@
 <div class="toolbar">
   <div style="display: flex; align-items: center">
-    <button *ngIf="canGoBack && auth.currentUser" mat-icon-button (click)="goBack()" style="margin-right: 8px"><mat-icon>keyboard_arrow_left</mat-icon></button>
+    <button *ngIf="auth.currentUser" mat-icon-button (click)="menuClicked.emit()" style="margin-right: 8px"><mat-icon>menu</mat-icon></button>
     <h3>{{headerText}}</h3>
   </div>
   <button *ngIf="auth.currentUser" mat-icon-button routerLink="profile"><mat-icon>account_circle</mat-icon></button>

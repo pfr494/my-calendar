@@ -1,0 +1,26 @@
+.print-wrap {
+  padding: 0px 16px 16px 16px;
+
+  .header-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .actions {
+      display: flex;
+    }
+  }
+
+  .table-card {
+    max-width: 100%;
+    overflow: auto;
+    .table {
+      min-width: 387px;
+      text-align: left;
+      th {
+        text-align: left;
+        min-width: 120px;
+        padding-right: 16px;
+      }
+    }
+  }
+}

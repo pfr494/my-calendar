@@ -37,7 +37,7 @@ export class SignInComponent implements OnInit {
     this.authService.loggedIn$.subscribe((isLoggedIn: boolean) => {
       if (isLoggedIn) {
         this.ngZone.run(() => {
-          this.router.navigate(['overview']);
+          this.router.navigate(['myday']);
         });
       }
     });
@@ -46,7 +46,7 @@ export class SignInComponent implements OnInit {
   signUp() {
     this.authService.emailSignUp(this.userInfo.email, this.userInfo.password)
       .then(() => {
-        this.snackBar.showInfo('Created user with email: ' + this.userInfo.email, 'Yay!');
+        this.snackBar.showInfo('Bruger oprettet med email: ' + this.userInfo.email, 'Yay!');
         this.router.navigate(['/login']);
       }).catch((err) => {
         this.snackBar.showError(err.message, 'Nay!');
@@ -57,9 +57,9 @@ export class SignInComponent implements OnInit {
     this.authService.emailLogin(this.userInfo.email, this.userInfo.password)
       .then(() => {
         console.log('Sign in: ' + this.userInfo.email + ' ' + this.userInfo.password);
-        this.snackBar.showInfo('User with email: ' + this.authService.currentUserMail + ' logged in', 'Yay!');
+        this.snackBar.showInfo('Bruger med email: ' + this.authService.currentUserMail + ' blev logget ind', 'Yay!');
         this.ngZone.run(() => {
-          this.router.navigate(['overview']);
+          this.router.navigate(['myday']);
         });
       });
   }
@@ -68,9 +68,9 @@ export class SignInComponent implements OnInit {
     this.authService.googleLogin()
       .then(() => {
         this.ngZone.run(() => {
-          this.router.navigate(['overview']);
+          this.router.navigate(['myday']);
         });
-        this.snackBar.showInfo('User with email: ' + this.authService.currentUserMail + ' logged in', 'Yay!');
+        this.snackBar.showInfo('Bruger med email: ' + this.authService.currentUserMail + ' blev logget ind', 'Yay!');
       }).catch((error) => {
         console.log(error);
         this.router.navigate(['/login']);

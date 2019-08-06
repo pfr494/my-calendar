@@ -4,8 +4,7 @@
   align-items: flex-start;
   text-align: left;
   padding: 8px 0px;
-  width: 100vw;
-  max-width: calc(100vw - 24px);
+  width: 100%;
 
   h4 {
     margin: 0 0 8px 0;
@@ -17,9 +16,8 @@
     width: 100%;
     padding: 0;
     mat-form-field {
-      display: flex 1 1 auto;
+      flex: 1 1 auto;
       min-width: 30px;
-      max-width: none;
     }
 
     .create-btn {

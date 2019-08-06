@@ -9,7 +9,7 @@ import { UpdaterService } from './services/updater/updater.service';
   animations: [routerTransition]
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'my-calendar';
+  sidenavOpen: boolean;
 
   constructor(private updater: UpdaterService) { }
 
@@ -19,9 +19,5 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.updater.destroy();
-  }
-
-  getState(outlet) {
-    return outlet.activatedRouteData.state;
   }
 }

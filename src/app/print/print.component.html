@@ -1,0 +1,31 @@
+<div class="print-wrap" id="content" #content>
+  <div class="header-action">
+    <h3>Valgte dato - {{meals.selectedDate | date:'dd-MM-yyyy'}}</h3>
+    <div class="actions">
+      <button mat-icon-button (click)="share()"><mat-icon>share</mat-icon></button>
+      <button mat-icon-button (click)="captureScreen()"><mat-icon>print</mat-icon></button>
+      <app-calendar></app-calendar>
+    </div>
+  </div>
+  <mat-card class="table-card">
+    <table class="table" id="contentToConvert">  
+        <tr>  
+          <th>Måltid</th>
+          <th>Dato</th>  
+          <th>Tidspunkt</th>  
+          <th>Mængde</th>  
+          <th>Protein indhold</th>
+          <th>Pku indhold</th>
+        </tr>  
+        <tr *ngFor="let m of meals.selectedDateMeal$ | async">  
+          <td>{{m.meal.name}}</td> 
+          <td>{{meals.selectedDate | date:'dd-MM-yyyy'}}</td>
+          <td>{{m.consumedOnTime}}</td>
+          <td>{{m.quantity}} {{m.unit}}</td>
+          <td>{{m.totalProtein}} g</td>
+          <td>{{m.totalPhenyl}} mg</td>
+        </tr>
+      </table>  
+  </mat-card>  
+</div>  
+  

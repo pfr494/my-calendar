@@ -6,6 +6,7 @@
       <input matInput type="tel" [formControl]="pkuControl" placeholder="Opdater pku tolerance" [value]="(user$ | async)?.pkuLimit">
     </mat-form-field>
     <button mat-raised-button (click)="updateLimit()" [disabled]="!pkuControl.dirty" color="primary" style="margin-left: 8px">Gem</button>
+    <mat-spinner *ngIf="loading" [diameter]="20"></mat-spinner>
   </div>
   <a href="https://www.rigshospitalet.dk/afdelinger-og-klinikker/julianemarie/boerne-unge-klinikken/center-for-pku/inspiration/opskrifter/Sider/default.aspx?rhKeywords=Pku"
   >Se opskrifter fra rigshospitalet her</a>

@@ -1,5 +1,5 @@
 <div class="meal-wrap" id="meal-wrap">
-  <div>
+  <div style="width: 100%">
     <form #mealForm="ngForm" class="meal-form">
       <div style='display: flex; align-items: center'>
         <mat-form-field>
@@ -53,6 +53,7 @@
         </button>
       </div>
       <app-add-ingredient *ngIf="createIngredient"
+        style="width: 100%"
         [name]="ingredientControl.value"
         (inputClicked)="scrollToBottom()"
         (ingredientCreated)="ingredientCreated($event)">

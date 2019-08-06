@@ -14,7 +14,8 @@ import {
   MatListModule,
   MatProgressSpinnerModule,
   MatSelectModule,
-  MatExpansionModule
+  MatExpansionModule,
+  MatSidenavModule
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -43,6 +44,7 @@ import { DatePipe, registerLocaleData } from '@angular/common';
 import { PkuConverterComponent } from './pku-converter/pku-converter.component';
 import { UpdaterService } from './services/updater/updater.service';
 import localeDa from '@angular/common/locales/da';
+import { PrintComponent } from './print/print.component';
 
 registerLocaleData(localeDa, 'da');
 
@@ -57,7 +59,8 @@ registerLocaleData(localeDa, 'da');
     OverviewComponent,
     MyDayComponent,
     AddIngredientComponent,
-    PkuConverterComponent
+    PkuConverterComponent,
+    PrintComponent
   ],
   imports: [
     BrowserModule,
@@ -82,6 +85,7 @@ registerLocaleData(localeDa, 'da');
     MatSelectModule,
     MatSnackBarModule,
     MatExpansionModule,
+    MatSidenavModule,
     AngularFireModule.initializeApp(environment.firebase),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],

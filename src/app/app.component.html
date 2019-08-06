@@ -1,4 +1,16 @@
-<app-toolbar></app-toolbar>
-<main [@routerTransition]="getState(o)">
-  <router-outlet #o="outlet"></router-outlet>
-</main>
+<app-toolbar (menuClicked)="sidenavOpen ? sidenav.close() : sidenav.open()"></app-toolbar>
+<mat-sidenav-container class="sidenav-container" #sidenav>
+  <mat-sidenav mode="over" position="start" (openedChange)="sidenavOpen = $event">
+    <div class="menu-content">
+      <h2>Menu</h2>
+      <a routerLink="myday" (click)="sidenav.close()">Min dag</a>
+      <a routerLink="profile" (click)="sidenav.close()">Min profil</a>
+      <a routerLink="meal" (click)="sidenav.close()">Opret måltid</a>
+      <a routerLink="convert" (click)="sidenav.close()">Omregner</a>
+      <a routerLink="print" (click)="sidenav.close()">Print</a>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet ></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
