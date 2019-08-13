@@ -26,7 +26,7 @@ export class MyDayComponent implements OnInit, OnDestroy {
   selectedMeal: Meal;
 
   loading: boolean;
-  editing: boolean;
+  editing: number;
   mSub: Subscription;
   units = [Unit.STK, Unit.G, Unit.ML];
 
@@ -105,7 +105,7 @@ export class MyDayComponent implements OnInit, OnDestroy {
     } catch (err) {
       this.snack.showError('Den gik ikke du...');
     } finally {
-      this.editing = false;
+      this.editing = null;
       this.loading = false;
     }
   }

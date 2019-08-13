@@ -6,13 +6,13 @@
       <app-calendar></app-calendar>
     </div>
     <div class="daymeals" [style.opacity]="mealsVisible ? '1' : '0'">
-      <mat-expansion-panel *ngFor="let m of mealService.selectedDateMeal$ | async" #panel [disabled]="editing">
-        <mat-expansion-panel-header *ngIf="!editing">
+      <mat-expansion-panel *ngFor="let m of mealService.selectedDateMeal$ | async; let i = index" #panel [disabled]="editing === i">
+        <mat-expansion-panel-header *ngIf=" editing !== i">
           <p class="time">{{m?.consumedOnTime}}</p>
           <p class="name">{{m.meal.name}}</p>
           <p class="name">{{m.quantity}} {{m.unit}}</p>
         </mat-expansion-panel-header>
-        <mat-expansion-panel-header *ngIf="editing">
+        <mat-expansion-panel-header *ngIf="editing === i">
           <app-edit-daymeal style="width: 100%" [dayMeal]="m" (updateMeal)="updateMeal($event)"></app-edit-daymeal>
         </mat-expansion-panel-header>
         <div class="panel-content">
@@ -42,11 +42,11 @@
             <mat-icon>clear</mat-icon>
             Fjern
           </button>
-          <button *ngIf="!editing" mat-raised-button class="action-btn" (click)="editing = true">
+          <button *ngIf="editing !== i" mat-raised-button class="action-btn" (click)="editing = i">
             <mat-icon>edit</mat-icon>
             Rediger
           </button>
-          <button *ngIf="editing" mat-raised-button class="action-btn" (click)="editing = false">
+          <button *ngIf="editing === i" mat-raised-button class="action-btn" (click)="editing = null">
             Annuller
           </button>
         </mat-action-row>
