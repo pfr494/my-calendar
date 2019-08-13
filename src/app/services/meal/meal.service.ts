@@ -21,7 +21,7 @@ export class MealService {
     if (this.s) {
       this.s.unsubscribe();
     }
-    this. s = this.getMyMealsOnDate(d).subscribe(v => this.selectedDateMeal$.next(v));
+    this.s = this.getMyMealsOnDate(d).subscribe(v => this.selectedDateMeal$.next(v));
   }
 
   constructor(private db: AngularFireDatabase, private auth: AuthService, private datePipe: DatePipe) {
@@ -45,8 +45,14 @@ export class MealService {
     return this.db.object(`users/${this.auth.currentUser.uid}/meals/${m.uid}`).set(m);
   }
 
+
   async deleteMeal(meal: Meal): Promise<any> {
     return this.db.object(`users/${this.auth.currentUser.uid}/meals/${meal.uid}`).remove();
+  }
+
+  async updateDayMeal(meal: DayMeal, date: Date = this.selectedDate): Promise<any> {
+    const d = this.datePipe.transform(date, 'dd-MM-yyyy');
+    return this.db.object(`users/${this.auth.currentUser.uid}/daymeals/${d}/${meal.uid}`).set(meal);
   }
 
   async addMealOnDate(meal: DayMeal, date: Date = this.selectedDate): Promise<any> {

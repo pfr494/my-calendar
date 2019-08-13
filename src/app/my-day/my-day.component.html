@@ -1,3 +1,4 @@
+<app-loading *ngIf="loading"></app-loading>
 <div class="my-day-wrap">
   <div>
     <div class="header-calendar">
@@ -5,11 +6,14 @@
       <app-calendar></app-calendar>
     </div>
     <div class="daymeals" [style.opacity]="mealsVisible ? '1' : '0'">
-      <mat-expansion-panel *ngFor="let m of mealService.selectedDateMeal$ | async" #panel>
-        <mat-expansion-panel-header>
+      <mat-expansion-panel *ngFor="let m of mealService.selectedDateMeal$ | async" #panel [disabled]="editing">
+        <mat-expansion-panel-header *ngIf="!editing">
           <p class="time">{{m?.consumedOnTime}}</p>
           <p class="name">{{m.meal.name}}</p>
           <p class="name">{{m.quantity}} {{m.unit}}</p>
+        </mat-expansion-panel-header>
+        <mat-expansion-panel-header *ngIf="editing">
+          <app-edit-daymeal style="width: 100%" [dayMeal]="m" (updateMeal)="updateMeal($event)"></app-edit-daymeal>
         </mat-expansion-panel-header>
         <div class="panel-content">
           <h4 style="margin: 8px 0px">Måltidet består af:</h4>
@@ -38,9 +42,12 @@
             <mat-icon>clear</mat-icon>
             Fjern
           </button>
-          <button mat-raised-button class="action-btn" (click)="showInfo('Denne feature er ikke bagt helt færdig endnu. Vi arbejder på det...')">
+          <button *ngIf="!editing" mat-raised-button class="action-btn" (click)="editing = true">
             <mat-icon>edit</mat-icon>
             Rediger
+          </button>
+          <button *ngIf="editing" mat-raised-button class="action-btn" (click)="editing = false">
+            Annuller
           </button>
         </mat-action-row>
       </mat-expansion-panel>

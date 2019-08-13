@@ -1,4 +1,5 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { EditDaymealComponent } from './my-day/edit-daymeal/edit-daymeal.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {
@@ -45,6 +46,8 @@ import { PkuConverterComponent } from './pku-converter/pku-converter.component';
 import { UpdaterService } from './services/updater/updater.service';
 import localeDa from '@angular/common/locales/da';
 import { PrintComponent } from './print/print.component';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { LoadingComponent } from './loading/loading.component';
 
 registerLocaleData(localeDa, 'da');
 
@@ -60,7 +63,9 @@ registerLocaleData(localeDa, 'da');
     MyDayComponent,
     AddIngredientComponent,
     PkuConverterComponent,
-    PrintComponent
+    PrintComponent,
+    EditDaymealComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,
@@ -86,6 +91,7 @@ registerLocaleData(localeDa, 'da');
     MatSnackBarModule,
     MatExpansionModule,
     MatSidenavModule,
+    NgxMaterialTimepickerModule,
     AngularFireModule.initializeApp(environment.firebase),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],

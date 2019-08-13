@@ -1,0 +1,32 @@
+@import "~src/styles/variables.scss";
+
+::ng-deep .timepicker__header {
+  background-color: $primary !important;
+}
+
+.edit-wrap {
+  display: flex;
+  flex-direction: column;
+  padding-top: 16px;
+  margin-top: 32px;
+  width: 100%;
+  form {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    mat-form-field {
+      color: black;
+      flex: 1 1 auto;
+      min-width: 80px;
+    }
+  }
+  .action-btn {
+    display: flex;
+    align-items: center;
+    color: white;
+    background-color: $primary;
+    mat-icon {
+      color: white !important;
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { Meal } from '../models/meal.interface';
 import { UserService } from '../services/user/user.service';
 import { Subscription } from 'rxjs';
@@ -6,7 +6,6 @@ import { SimpleUser } from '../models/simple-user.interface';
 import { MealService } from '../services/meal/meal.service';
 import { NgForm } from '@angular/forms';
 import { DayMeal } from '../models/day-meal.interface';
-import { MatSnackBar } from '@angular/material';
 import { Unit } from '../models/unit.enum';
 import { SnackService } from '../services/snack.service';
 
@@ -27,6 +26,7 @@ export class MyDayComponent implements OnInit, OnDestroy {
   selectedMeal: Meal;
 
   loading: boolean;
+  editing: boolean;
   mSub: Subscription;
   units = [Unit.STK, Unit.G, Unit.ML];
 
@@ -93,6 +93,19 @@ export class MyDayComponent implements OnInit, OnDestroy {
     } catch (err) {
       this.snack.showError(`Hovsa, noget gik galt der: ${err}`, 'ØV');
     } finally {
+      this.loading = false;
+    }
+  }
+
+  async updateMeal(dm: DayMeal): Promise<void> {
+    try {
+      this.loading = true;
+      await this.mealService.updateDayMeal(dm);
+      this.snack.showInfo('Måltidet blev opdateret');
+    } catch (err) {
+      this.snack.showError('Den gik ikke du...');
+    } finally {
+      this.editing = false;
       this.loading = false;
     }
   }
