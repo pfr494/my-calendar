@@ -9,8 +9,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
-  private sub: Subscription;
   @ViewChild('picker', { static: true }) picker: MatDatepicker<Date>;
+  private sub: Subscription;
   selectedDate: Date;
 
   constructor(private mealService: MealService) { }

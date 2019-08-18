@@ -5,6 +5,8 @@ import { Meal } from 'src/app/models/meal.interface';
 import { AuthService } from '../auth/auth.service';
 import { DayMeal } from 'src/app/models/day-meal.interface';
 import { DatePipe } from '@angular/common';
+import { filter } from 'minimatch';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +39,18 @@ export class MealService {
     return this.db.list(`users/${this.auth.currentUser.uid}/daymeals/${d}`).valueChanges() as Observable<DayMeal[]>;
   }
 
+  getAllDayMeals(): Observable<DayMeal[][]> {
+    return this.db.list(`users/${this.auth.currentUser.uid}/daymeals`).valueChanges() as Observable<DayMeal[][]>;
+  }
+
+  getDayMealsInPeriod(dateFrom: Date, dateTo: Date): Observable<DayMeal[]> {
+    return this.db.list(`users/${this.auth.currentUser.uid}/daymeals`).valueChanges() as Observable<DayMeal[]>;
+    // .pipe(
+    //   filter((dm: DayMeal[]) => moment(dm.date).isAfter(moment(dateFrom).subtract(1, 'days')))),
+    //   filter(dm => moment(dm.date).isBefore(moment(dateTo).add(1, 'days'))) 
+    // ) as Observable<DayMeal[]>;
+  }
+
   async addMeal(meal: Meal): Promise<any> {
     const m = {
       ...meal,
@@ -59,6 +73,7 @@ export class MealService {
     const d = this.datePipe.transform(date, 'dd-MM-yyyy');
     const m = {
       ...meal,
+      date: d,
       uid: this.db.createPushId()
     };
     return this.db.object(`users/${this.auth.currentUser.uid}/daymeals/${d}/${m.uid}`).set(m);
