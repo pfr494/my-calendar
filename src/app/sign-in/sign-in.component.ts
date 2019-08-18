@@ -3,8 +3,9 @@ import { AuthService } from '../services/auth/auth.service';
 import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material';
-import { MatSnackBar } from '@angular/material';
 import { SnackService } from '../services/snack.service';
+
+const START_PAGE = 'print';
 
 class UserInfo {
   email: string;
@@ -37,7 +38,7 @@ export class SignInComponent implements OnInit {
     this.authService.loggedIn$.subscribe((isLoggedIn: boolean) => {
       if (isLoggedIn) {
         this.ngZone.run(() => {
-          this.router.navigate(['myday']);
+          this.router.navigate([START_PAGE]);
         });
       }
     });
@@ -59,7 +60,7 @@ export class SignInComponent implements OnInit {
         console.log('Sign in: ' + this.userInfo.email + ' ' + this.userInfo.password);
         this.snackBar.showInfo('Bruger med email: ' + this.authService.currentUserMail + ' blev logget ind', 'Yay!');
         this.ngZone.run(() => {
-          this.router.navigate(['myday']);
+          this.router.navigate([START_PAGE]);
         });
       });
   }
@@ -68,7 +69,7 @@ export class SignInComponent implements OnInit {
     this.authService.googleLogin()
       .then(() => {
         this.ngZone.run(() => {
-          this.router.navigate(['myday']);
+          this.router.navigate([START_PAGE]);
         });
         this.snackBar.showInfo('Bruger med email: ' + this.authService.currentUserMail + ' blev logget ind', 'Yay!');
       }).catch((error) => {

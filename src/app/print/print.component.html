@@ -7,16 +7,14 @@
     </div>
   </div>
   <div class="select-period">
-    <mat-form-field>
-      <input matInput [matDatepicker]="pickerFrom" placeholder="Fra dato">
-      <mat-datepicker-toggle matSuffix [for]="pickerFrom" class="toggle"></mat-datepicker-toggle>
+      <input matInput [hidden]="true" [matDatepicker]="pickerFrom" placeholder="Fra dato" [value]="fromDate">
+      <p>Fra {{ fromDate | date:'dd-MM-yyyy' }}</p>
+      <mat-datepicker-toggle [for]="pickerFrom" class="toggle"></mat-datepicker-toggle>
       <mat-datepicker #pickerFrom class="calendar"></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field style="margin-left: 16px">
-      <input matInput [matDatepicker]="pickerTo" placeholder="Til dato" [value]="mealService.selectedDate">
-      <mat-datepicker-toggle matSuffix [for]="pickerTo" class="toggle"></mat-datepicker-toggle>
+      <input matInput [hidden]="true" [matDatepicker]="pickerTo" placeholder="Til dato" [value]="toDate">
+      <p> Til {{ toDate | date:'dd-MM-yyyy' }}</p>
+      <mat-datepicker-toggle [for]="pickerTo" class="toggle"></mat-datepicker-toggle>
       <mat-datepicker #pickerTo class="calendar"></mat-datepicker>
-    </mat-form-field>
   </div>
   <mat-card class="table-card">
     <table class="table" id="contentToConvert">  
@@ -30,7 +28,7 @@
         </tr>  
         <tr *ngFor="let m of mealsInPeriod">
           <td>{{m.meal?.name}}</td>
-          <td>{{m.date | date:'dd-MM-yyyy'}}</td>
+          <td>{{m.date}}</td>
           <td>{{m.consumedOnTime}}</td>
           <td>{{m.quantity}} {{m.unit}}</td>
           <td>{{m.totalProtein}} g</td>
