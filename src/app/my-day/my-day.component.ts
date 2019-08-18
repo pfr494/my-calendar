@@ -8,6 +8,9 @@ import { NgForm } from '@angular/forms';
 import { DayMeal } from '../models/day-meal.interface';
 import { Unit } from '../models/unit.enum';
 import { SnackService } from '../services/snack.service';
+import { Ingredient } from '../models/ingredient.interface';
+import * as lo from 'lodash';
+import { MealIngredient } from '../models/meal-ingredient.interface';
 
 @Component({
   selector: 'app-my-day',
@@ -28,7 +31,10 @@ export class MyDayComponent implements OnInit, OnDestroy {
   loading: boolean;
   editing: number;
   mSub: Subscription;
-  units = [Unit.STK, Unit.G, Unit.ML];
+
+  get filteredUnits(): Unit[] {
+    return this.selectedMeal && this.selectedMeal.unit === Unit.G ? [Unit.STK, Unit.G] : [Unit.STK, Unit.ML];
+  }
 
   mealsVisible: boolean;
 
@@ -49,6 +55,24 @@ export class MyDayComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     for (const s of this.subs) {
       s.unsubscribe();
+    }
+  }
+
+  ingredientQuantityInMeal(ingredient: MealIngredient, dm: DayMeal) {
+    if (dm.unit === Unit.STK) {
+      return Number(dm.quantity) * ingredient.quantity;
+    } else {
+      const totalQuantiy = lo.sum(dm.meal.ingredients.map(ing => ing.quantity));
+      return (ingredient.quantity / totalQuantiy) * dm.quantity;
+    }
+  }
+
+  totalQuantityInMeal(dm: DayMeal) {
+    if (dm.unit === Unit.STK) {
+      return lo.sum(dm.meal.ingredients.map(ing => ing.quantity)) * dm.quantity;
+    } else {
+      const totalQuantiy = lo.sum(dm.meal.ingredients.map(ing => ing.quantity));
+      return (dm.quantity / totalQuantiy) * dm.quantity;
     }
   }
 

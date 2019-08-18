@@ -1,11 +1,11 @@
-import { Component, OnInit, NgZone } from '@angular/core';
 import { AuthService } from '../services/auth/auth.service';
-import { Router } from '@angular/router';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MatIconRegistry } from '@angular/material';
 import { SnackService } from '../services/snack.service';
+import { MatIconRegistry } from '@angular/material';
+import { Router } from '@angular/router';
 
-const START_PAGE = 'print';
+const START_PAGE = 'myday';
 
 class UserInfo {
   email: string;

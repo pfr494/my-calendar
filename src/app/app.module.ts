@@ -48,6 +48,7 @@ import localeDa from '@angular/common/locales/da';
 import { PrintComponent } from './print/print.component';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { LoadingComponent } from './loading/loading.component';
+import { IngredientQuantityPipe } from './pipes/ingredient-quantity.pipe';
 
 registerLocaleData(localeDa, 'da');
 
@@ -65,7 +66,8 @@ registerLocaleData(localeDa, 'da');
     PkuConverterComponent,
     PrintComponent,
     EditDaymealComponent,
-    LoadingComponent
+    LoadingComponent,
+    IngredientQuantityPipe
   ],
   imports: [
     BrowserModule,

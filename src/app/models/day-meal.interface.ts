@@ -10,4 +10,5 @@ export interface DayMeal {
   quantity: number;
   unit: Unit;
   consumedOnTime: string;
+  totalQuantity?: number;
 }

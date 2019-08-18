@@ -59,7 +59,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
   }
 
   private _filter(value: string): Ingredient[] {
-    const filterValue = value.toLowerCase();
+    const filterValue = value ? value.toLowerCase() : '';
     return this.ingredientOptions.filter((ingredient: Ingredient) => ingredient.name.toLowerCase().indexOf(filterValue) === 0);
   }
 

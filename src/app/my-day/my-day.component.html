@@ -20,9 +20,10 @@
           <table style="text-align: left">
             <tr *ngFor="let in of m.meal.ingredients">
               <th><p class="meal">{{in.ingredient.name}}</p></th>
-              <td><p p class="meal" style="margin-left: 8px">{{in.quantity}} {{in?.ingredient.unit}}</p></td>
+              <td><p p class="meal" style="margin-left: 8px">{{ingredientQuantityInMeal(in, m)}} {{in?.ingredient.unit}}</p></td>
             </tr>
           </table>
+          <p style="font-style: italic">Total mængde {{totalQuantityInMeal(m)}} {{m.meal.unit}}</p>
           <mat-divider style="width: 100%"></mat-divider>
           <h4 style="margin: 8px 0px">Protein og Phe indhold</h4>
           <table style="text-align: left">
@@ -69,8 +70,8 @@
           <input type="tel" matInput placeholder="Mængde" name="quantity" [(ngModel)]="quantity" required>
         </mat-form-field>
         <mat-form-field style="max-width: 50px; min-width: 50px; margin-left: 8px">
-          <mat-select [(ngModel)]="unit" name="unit" required>
-            <mat-option *ngFor="let u of units" [value]="u">
+          <mat-select [(ngModel)]="unit" name="unit" [disabled]="!selectedMeal" required>
+            <mat-option *ngFor="let u of filteredUnits" [value]="u">
               {{u}}
             </mat-option>
           </mat-select>

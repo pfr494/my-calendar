@@ -11,6 +11,7 @@ import * as moment from 'moment';
 import * as jsPDF from 'jspdf';
 import * as lo from 'lodash';
 import 'jspdf-autotable';
+import { Unit } from '../models/unit.enum';
 
 @Component({
   selector: 'app-print',
@@ -81,13 +82,22 @@ export class PrintComponent implements OnDestroy, AfterViewInit {
         me.meal.name,
         me.date,
         me.consumedOnTime,
-        me.quantity.toString(),
-        me.totalProtein.toString(),
-        me.totalPhenyl.toString()
+        this.getQuantityAndUnitInMeal(me),
+        me.totalProtein.toString() + 'g',
+        me.totalPhenyl.toString() + 'mg'
       ];
       strings.push(toAdd);
     });
     return strings;
+  }
+
+  getQuantityAndUnitInMeal(me: DayMeal): string {
+    const totalQuantiy = lo.sum(me.meal.ingredients.map(i => i.quantity));
+    if (me.unit === Unit.STK) {
+      return `${me.quantity * totalQuantiy} ${me.meal.unit}`;
+    } else {
+      return `${me.quantity} ${me.meal.unit}`;
+    }
   }
 
   captureScreen() {
@@ -116,7 +126,8 @@ export class PrintComponent implements OnDestroy, AfterViewInit {
       head: [['Måltid', 'Dato', 'Tidspunkt', 'Mængde', 'Protein indhold', 'Phe indhold']],
       body: [
         ...this.mealsAsStringArrays
-      ]
+      ],
+      theme: 'grid'
     });
     return doc;
   }
