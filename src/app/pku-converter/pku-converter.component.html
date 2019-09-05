@@ -4,15 +4,15 @@
     <h5>Protein til Phe og liste</h5>
     <div class='form-line'>
       <mat-form-field>
-        <input type="tel" matInput [(ngModel)]="protein" name="protein" placeholder="Protein pr. 100 g">
+        <input type="tel" autocomplete="off" matInput [(ngModel)]="protein" name="protein" placeholder="Protein pr. 100 g">
       </mat-form-field>
     </div>
-    <p *ngIf="protein">Udregnet Phe: {{calculatedPhenylalanin | number:'0.0-0'}}mg</p>
+    <p *ngIf="protein">Udregnet Phe: {{calculatedPhenylalanin | number:'0.0-0'}} mg</p>
     <p *ngIf="protein">Liste = {{calculatedLists | number:'0.0-0'}}g</p>
     <h5>Phe til protein</h5>
     <div class='form-line'>
       <mat-form-field>
-        <input type="tel" matInput [(ngModel)]="phenylalanin" name="phenylalanin" placeholder="Phe pr. 100 g" required>
+        <input type="tel" autocomplete="off" matInput [(ngModel)]="phenylalanin" name="phenylalanin" placeholder="Phe pr. 100 g" required>
       </mat-form-field>
     </div>
     <p *ngIf="phenylalanin">Udregnet protein: {{calculatedProtein | number:'0.0-3'}}g</p>

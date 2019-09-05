@@ -150,7 +150,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
       phe += p.ingredient.phenyl;
       quan += + p.quantity;
     }
-    return (phe / quan) * 100;
+    return (phe / quan) * quan;
   }
 
   get proteinPer100(): number {
@@ -160,13 +160,13 @@ export class AddMealComponent implements OnInit, OnDestroy {
       pro += p.ingredient.protein;
       quan += + p.quantity;
     }
-    return (pro / quan) * 100;
+    return (pro / quan) * quan;
   }
 
   get totalPhenyl(): number {
     let t = 0;
     for (const i of this.meal.ingredients) {
-      t += (i.ingredient.phenyl * (i.quantity / 100));
+      t += i.ingredient.phenyl * i.quantity;
     }
     return t;
   }
@@ -174,7 +174,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
   get totalProtein(): number {
     let t = 0;
     for (const i of this.meal.ingredients) {
-      t += (i.ingredient.protein * (i.quantity / 100));
+      t += i.ingredient.protein * i.quantity;
     }
     return t;
   }

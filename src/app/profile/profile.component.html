@@ -3,7 +3,7 @@
   <p>{{(auth.currentUser$ | async)?.email}}</p>
   <div style="display: flex; align-items: center;">
     <mat-form-field>
-      <input matInput type="tel" [formControl]="pkuControl" placeholder="Opdater pku tolerance" [value]="(user$ | async)?.pkuLimit">
+      <input matInput autocomplete="off" type="tel" [formControl]="pkuControl" placeholder="Opdater pku tolerance" [value]="(user$ | async)?.pkuLimit">
     </mat-form-field>
     <button mat-raised-button (click)="updateLimit()" [disabled]="!pkuControl.dirty" color="primary" style="margin-left: 8px">Gem</button>
     <mat-spinner *ngIf="loading" [diameter]="20"></mat-spinner>

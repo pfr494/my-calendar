@@ -11,10 +11,10 @@
 
     <form #userForm="ngForm" (ngSubmit)="login()" class="column-container">
       <mat-form-field style="width: 100%">
-        <input matInput type="email" placeholder="Email" name="email" [(ngModel)]="userInfo.email" required>
+        <input matInput autocomplete="off" type="email" placeholder="Email" name="email" [(ngModel)]="userInfo.email" required>
       </mat-form-field>
       <mat-form-field style="width: 100%">
-        <input matInput type="password" placeholder="Password" name="password" [(ngModel)]="userInfo.password" required minlength="6">
+        <input matInput autocomplete="off" type="password" placeholder="Password" name="password" [(ngModel)]="userInfo.password" required minlength="6">
       </mat-form-field>
       <div class="buttons-container">
         <button class="add-button form-input" mat-raised-button color="primary" type="submit" [disabled]="!userForm.form.valid">

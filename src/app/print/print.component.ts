@@ -92,8 +92,8 @@ export class PrintComponent implements OnDestroy, AfterViewInit {
   }
 
   getQuantityAndUnitInMeal(me: DayMeal): string {
-    const totalQuantiy = lo.sum(me.meal.ingredients.map(i => i.quantity));
     if (me.unit === Unit.STK) {
+      const totalQuantiy = lo.sum(me.meal.ingredients.map(i => i.quantity));
       return `${me.quantity * totalQuantiy} ${me.meal.unit}`;
     } else {
       return `${me.quantity} ${me.meal.unit}`;
@@ -130,5 +130,9 @@ export class PrintComponent implements OnDestroy, AfterViewInit {
       theme: 'grid'
     });
     return doc;
+  }
+
+  getTime(ts: string): string {
+    return ts ? `${ts.split(':')[0]}:${ts.split(':')[0]}` : '';
   }
 }

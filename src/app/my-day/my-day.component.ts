@@ -1,16 +1,16 @@
-import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
-import { Meal } from '../models/meal.interface';
+import { MealIngredient } from '../models/meal-ingredient.interface';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { UserService } from '../services/user/user.service';
-import { Subscription } from 'rxjs';
 import { SimpleUser } from '../models/simple-user.interface';
 import { MealService } from '../services/meal/meal.service';
-import { NgForm } from '@angular/forms';
-import { DayMeal } from '../models/day-meal.interface';
-import { Unit } from '../models/unit.enum';
 import { SnackService } from '../services/snack.service';
-import { Ingredient } from '../models/ingredient.interface';
+import { DayMeal } from '../models/day-meal.interface';
+import { Subscription, Observable } from 'rxjs';
+import { startWith, map } from 'rxjs/operators';
+import { Meal } from '../models/meal.interface';
+import { FormControl, NgForm } from '@angular/forms';
+import { Unit } from '../models/unit.enum';
 import * as lo from 'lodash';
-import { MealIngredient } from '../models/meal-ingredient.interface';
 
 @Component({
   selector: 'app-my-day',
@@ -18,19 +18,19 @@ import { MealIngredient } from '../models/meal-ingredient.interface';
   styleUrls: ['./my-day.component.scss']
 })
 export class MyDayComponent implements OnInit, OnDestroy {
-  @ViewChild('mealForm', { static: true }) form: NgForm;
+  @ViewChild('form', {static: false}) form: NgForm;
+  mealControl = new FormControl();
   private subs: Subscription[];
   userPkuLimit: number;
   dailyMeals: DayMeal[] = [];
   mealOptions: Meal[] = [];
-
+  filteredMealOptions: Observable<Meal[]>;
   quantity: number;
   unit = Unit.STK;
   selectedMeal: Meal;
 
   loading: boolean;
   editing: number;
-  mSub: Subscription;
 
   get filteredUnits(): Unit[] {
     return this.selectedMeal && this.selectedMeal.unit === Unit.G ? [Unit.STK, Unit.G] : [Unit.STK, Unit.ML];
@@ -45,7 +45,14 @@ export class MyDayComponent implements OnInit, OnDestroy {
       this.user.getUser().subscribe((u: SimpleUser) => this.userPkuLimit = u.pkuLimit),
       this.mealService.getMeals().subscribe((m: Meal[]) => this.mealOptions = m),
       this.mealService.selectedDateMeal$.subscribe((m: DayMeal[]) => this.dailyMeals = m),
+      this.mealControl.valueChanges.subscribe((v) => {
+        this.selectedMeal = v && typeof v === 'object' ? v : null;
+      })
     ];
+    this.filteredMealOptions = this.mealControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
 
     setTimeout(() => {
       this.mealsVisible = true;
@@ -58,22 +65,26 @@ export class MyDayComponent implements OnInit, OnDestroy {
     }
   }
 
-  ingredientQuantityInMeal(ingredient: MealIngredient, dm: DayMeal) {
+  ingredientQuantityInMeal(ingredient: MealIngredient, dm: DayMeal): number {
     if (dm.unit === Unit.STK) {
       return Number(dm.quantity) * ingredient.quantity;
     } else {
       const totalQuantiy = lo.sum(dm.meal.ingredients.map(ing => ing.quantity));
-      return (ingredient.quantity / totalQuantiy) * dm.quantity;
+      const timesConsumed = Number(dm.quantity) / totalQuantiy;
+      return ingredient.quantity * timesConsumed;
     }
   }
 
-  totalQuantityInMeal(dm: DayMeal) {
+  totalQuantityInMeal(dm: DayMeal): number {
     if (dm.unit === Unit.STK) {
       return lo.sum(dm.meal.ingredients.map(ing => ing.quantity)) * dm.quantity;
     } else {
-      const totalQuantiy = lo.sum(dm.meal.ingredients.map(ing => ing.quantity));
-      return (dm.quantity / totalQuantiy) * dm.quantity;
+      return Number(dm.quantity);
     }
+  }
+
+  totalQuantityInMealIngredients(dm: DayMeal): number {
+    return lo.sum(dm.meal.ingredients.map(ing => ing.quantity));
   }
 
   async addMealOnDate() {
@@ -113,6 +124,8 @@ export class MyDayComponent implements OnInit, OnDestroy {
     try {
       this.loading = true;
       await this.mealService.deleteMeal(meal);
+      this.mealControl.setValue('');
+      this.form.form.markAsPristine();
       this.snack.showInfo('Måltid slettet', 'OK');
     } catch (err) {
       this.snack.showError(`Hovsa, noget gik galt der: ${err}`, 'ØV');
@@ -134,16 +147,33 @@ export class MyDayComponent implements OnInit, OnDestroy {
     }
   }
 
+  private _filter(value: string | Meal): Meal[] {
+    if (!value) {
+      return this.mealOptions;
+    } else {
+      const filterValue = typeof value === 'string' ? value.toLowerCase() : value.name;
+      return this.mealOptions.filter((meal: Meal) => meal.name.toLowerCase().indexOf(filterValue) === 0);
+    }
+  }
+
+  displayFn(m?: Meal): string | undefined {
+    return m ? m.name : '';
+  }
+
   showInfo(i: string) {
     this.snack.showInfo(i);
   }
 
+  togglePanelIfEmpty() {
+    if (!this.mealControl.value) { this.mealControl.setValue(''); }
+  }
+
   getPhenylInDayMeal(dm: DayMeal): number {
-    return dm.unit === Unit.STK ? dm.meal.totalPhenyl * dm.quantity : dm.meal.phenylPer100 * (dm.quantity / 100);
+    return dm.unit === Unit.STK ? dm.meal.totalPhenyl * dm.quantity : dm.meal.phenylPer100 * (this.totalQuantityInMealIngredients(dm) / dm.quantity);
   }
 
   getProteinInDayMeal(dm: DayMeal): number {
-    return dm.unit === Unit.STK ? dm.meal.totalProtein * dm.quantity : dm.meal.proteinPer100 * (dm.quantity / 100);
+    return dm.unit === Unit.STK ? dm.meal.totalProtein * dm.quantity : dm.meal.proteinPer100 * (this.totalQuantityInMealIngredients(dm) / dm.quantity);
   }
 
   get phenylInMeal(): number {

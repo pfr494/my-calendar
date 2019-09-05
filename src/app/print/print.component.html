@@ -7,11 +7,11 @@
     </div>
   </div>
   <div class="select-period">
-      <input matInput [hidden]="true" [matDatepicker]="pickerFrom" placeholder="Fra dato" [value]="fromDate">
+      <input matInput autocomplete="off" [hidden]="true" [matDatepicker]="pickerFrom" placeholder="Fra dato" [value]="fromDate">
       <p>Fra {{ fromDate | date:'dd-MM-yyyy' }}</p>
       <mat-datepicker-toggle [for]="pickerFrom" class="toggle"></mat-datepicker-toggle>
       <mat-datepicker #pickerFrom class="calendar"></mat-datepicker>
-      <input matInput [hidden]="true" [matDatepicker]="pickerTo" placeholder="Til dato" [value]="toDate">
+      <input matInput autocomplete="off" [hidden]="true" [matDatepicker]="pickerTo" placeholder="Til dato" [value]="toDate">
       <p> Til {{ toDate | date:'dd-MM-yyyy' }}</p>
       <mat-datepicker-toggle [for]="pickerTo" class="toggle"></mat-datepicker-toggle>
       <mat-datepicker #pickerTo class="calendar"></mat-datepicker>
@@ -29,10 +29,10 @@
         <tr *ngFor="let m of mealsInPeriod">
           <td>{{m.meal?.name}}</td>
           <td>{{m.date}}</td>
-          <td>{{m.consumedOnTime}}</td>
-          <td>{{m.quantity}} {{m.unit}}</td>
-          <td>{{m.totalProtein}} g</td>
-          <td>{{m.totalPhenyl}} mg</td>
+          <td>{{getTime(m.consumedOnTime)}}</td>
+          <td>{{m.quantity | number:'0.00'}} {{m.unit}}</td>
+          <td>{{m.totalProtein | number:'0.00'}} g</td>
+          <td>{{m.totalPhenyl | number:'0.00'}} mg</td>
         </tr>
       </table>  
   </mat-card>  

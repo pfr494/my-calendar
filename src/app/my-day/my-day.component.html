@@ -53,21 +53,19 @@
         </mat-action-row>
       </mat-expansion-panel>
       <form #form="ngForm" class="meal-form">
-        <mat-form-field>
-          <mat-label>Vælg måltid</mat-label>
-          <mat-select [(ngModel)]="selectedMeal" name="meal" required #select>
-            <mat-option *ngFor="let m of mealOptions" [value]="m">
-              <span style="display: flex; align-items: center">
-                <button mat-icon-button (click)="deleteMeal(m)" style="margin-right: 8px" *ngIf="select.panelOpen">
-                  <mat-icon>delete</mat-icon>
-                </button>
-                {{m.name}}
-              </span>
+        <mat-form-field (click)="togglePanelIfEmpty()">
+          <input  matInput type="text" autocomplete="off" placeholder="Indtast måltid" [matAutocomplete]="auto" [formControl]="mealControl">
+          <mat-autocomplete [panelWidth]="300" autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let meal of filteredMealOptions | async" [value]="meal">
+              <button mat-icon-button (click)="deleteMeal(meal)" style="margin-right: 8px">
+                <mat-icon>delete</mat-icon>
+              </button>
+              {{meal?.name}}
             </mat-option>
-          </mat-select>
+          </mat-autocomplete>
         </mat-form-field>
         <mat-form-field style="margin-left: 8px;">
-          <input type="tel" matInput placeholder="Mængde" name="quantity" [(ngModel)]="quantity" required>
+          <input matInput type="tel" autocomplete="off" placeholder="Mængde" name="quantity" [(ngModel)]="quantity" required>
         </mat-form-field>
         <mat-form-field style="max-width: 50px; min-width: 50px; margin-left: 8px">
           <mat-select [(ngModel)]="unit" name="unit" [disabled]="!selectedMeal" required>
@@ -76,14 +74,14 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <button mat-icon-button (click)="addMealOnDate()" [disabled]="!form.valid">
+        <button mat-icon-button (click)="addMealOnDate()" [disabled]="!selectedMeal || !form.valid">
           <mat-icon>check</mat-icon>
         </button>
       </form>
     </div>
   </div>
   <div class="remaining mat-elevation-z2" [ngClass]="mealsVisible ? 'inside-x' : 'outside-x-left'">
-    <h3>Resterende Phe: {{remainingPhenyl}}mg</h3>
+    <h3>Resterende Phe: {{remainingPhenyl}} mg</h3>
     <mat-icon *ngIf="remainingPhenyl <= 100">warning</mat-icon>
   </div>
 </div>

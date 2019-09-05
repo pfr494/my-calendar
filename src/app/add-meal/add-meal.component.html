@@ -3,7 +3,7 @@
     <form #mealForm="ngForm" class="meal-form">
       <div style='display: flex; align-items: center'>
         <mat-form-field>
-          <input type="text" name="mealName" [(ngModel)]="meal.name" matInput placeholder="Navn" required>
+          <input type="text" name="mealName" [(ngModel)]="meal.name" matInput placeholder="Navn" autocomplete="off" required>
         </mat-form-field>
         <mat-form-field style="max-width: 50px; min-width: 50px; margin-left: 8px">
           <mat-select [(ngModel)]="meal.unit" name="unit" required>
@@ -18,10 +18,10 @@
       </div>
       <div *ngFor="let ing of meal.ingredients; let i = index" class="ingredient-line">
         <mat-form-field>
-          <input type="text" matInput [disabled]="true" [value]="ing.ingredient.name">
+          <input type="text" autocomplete="off" matInput [disabled]="true" [value]="ing.ingredient.name">
         </mat-form-field>
         <mat-form-field style="margin-left: 8px;">
-          <input type="number" [(ngModel)]="ing.quantity" name="quantity-{{i}}" matInput>
+          <input type="number" [(ngModel)]="ing.quantity" name="quantity-{{i}}" autocomplete="off" matInput>
           <span matSuffix>{{ing.ingredient.unit}}</span>
         </mat-form-field>
         <button mat-icon-button (click)="removeIngredient(i)">
@@ -29,8 +29,8 @@
         </button>
       </div>
       <div class="ingredient-line">
-        <mat-form-field>
-          <input type="text" placeholder="Indtast madvare" matInput [matAutocomplete]="auto" [formControl]="ingredientControl" (click)="togglePanelIfEmpty()">
+        <mat-form-field (click)="togglePanelIfEmpty()">
+          <input type="text" autocomplete="off" placeholder="Indtast madvare" matInput [matAutocomplete]="auto" [formControl]="ingredientControl">
           <mat-autocomplete [panelWidth]="300" autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
             <mat-option *ngFor="let ingredient of filteredIngredientOptions | async" [value]="ingredient">
               <button mat-icon-button (click)="deleteIngredient(ingredient)" style="margin-right: 8px">
@@ -41,7 +41,7 @@
           </mat-autocomplete>
         </mat-form-field>
         <mat-form-field style="margin-left: 8px;">
-          <input type="tel" matInput placeholder="Mængde" name="quantity" [(ngModel)]="quantity">
+          <input type="tel" autocomplete="off" matInput placeholder="Mængde" name="quantity" [(ngModel)]="quantity">
           <span matSuffix>{{selectedIngredient?.unit}}</span>
         </mat-form-field>
         <button *ngIf="canAdd" mat-icon-button (click)="addIngredient()" [disabled]="!canAdd">
