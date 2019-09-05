@@ -56,7 +56,7 @@ export class MyDayComponent implements OnInit, OnDestroy {
 
     setTimeout(() => {
       this.mealsVisible = true;
-    }, 100);
+    }, 250);
   }
 
   ngOnDestroy() {
@@ -69,8 +69,7 @@ export class MyDayComponent implements OnInit, OnDestroy {
     if (dm.unit === Unit.STK) {
       return Number(dm.quantity) * ingredient.quantity;
     } else {
-      const totalQuantiy = lo.sum(dm.meal.ingredients.map(ing => ing.quantity));
-      const timesConsumed = Number(dm.quantity) / totalQuantiy;
+      const timesConsumed = Number(dm.quantity) / this.totalQuantityInMealIngredients(dm.meal);
       return ingredient.quantity * timesConsumed;
     }
   }
@@ -83,8 +82,8 @@ export class MyDayComponent implements OnInit, OnDestroy {
     }
   }
 
-  totalQuantityInMealIngredients(dm: DayMeal): number {
-    return lo.sum(dm.meal.ingredients.map(ing => ing.quantity));
+  totalQuantityInMealIngredients(meal: Meal): number {
+    return lo.sum(meal.ingredients.map(ing => ing.quantity));
   }
 
   async addMealOnDate() {
@@ -169,35 +168,31 @@ export class MyDayComponent implements OnInit, OnDestroy {
   }
 
   getPhenylInDayMeal(dm: DayMeal): number {
-    return dm.unit === Unit.STK ? dm.meal.totalPhenyl * dm.quantity : dm.meal.phenylPer100 * (this.totalQuantityInMealIngredients(dm) / dm.quantity);
+    return dm.unit === Unit.STK ? dm.meal.totalPhenyl * dm.quantity : dm.meal.phenylPer100 * (dm.quantity / 100);
   }
 
   getProteinInDayMeal(dm: DayMeal): number {
-    return dm.unit === Unit.STK ? dm.meal.totalProtein * dm.quantity : dm.meal.proteinPer100 * (this.totalQuantityInMealIngredients(dm) / dm.quantity);
+    return dm.unit === Unit.STK ? dm.meal.totalProtein * dm.quantity : dm.meal.proteinPer100 * (dm.quantity / 100);
   }
 
   get phenylInMeal(): number {
     return this.unit === Unit.STK ?
       this.selectedMeal.totalPhenyl * this.roundedQuantity :
-      this.selectedMeal.phenylPer100 * (this.roundedQuantity / 100);
+      this.selectedMeal.phenylPer100 * (this.totalQuantityInMealIngredients(this.selectedMeal) / 100);
   }
 
   get proteinInMeal(): number {
     return this.unit === Unit.STK ?
       this.selectedMeal.totalProtein * this.roundedQuantity :
-      this.selectedMeal.proteinPer100 * (this.roundedQuantity / 100);
+      this.selectedMeal.proteinPer100 * (this.totalQuantityInMealIngredients(this.selectedMeal) / 100);
   }
 
   get remainingPhenyl(): number {
-    return Math.round(this.userPkuLimit - this.totalPhenylInMeals);
+    return this.totalPhenylInMeals ? +Math.round(this.userPkuLimit - this.totalPhenylInMeals) : this.userPkuLimit;
   }
 
   get totalPhenylInMeals(): number {
-    let tot = 0;
-    for (const m of this.dailyMeals) {
-      tot += m.totalPhenyl;
-    }
-    return tot;
+    return lo.sum(this.dailyMeals.map(m => m.totalPhenyl));
   }
 
   get roundedQuantity(): number {

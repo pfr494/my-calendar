@@ -10,6 +10,7 @@ import { Subscription, Observable } from 'rxjs';
 import { Meal } from '../models/meal.interface';
 import { Unit } from '../models/unit.enum';
 import { Location } from '@angular/common';
+import * as lo from 'lodash';
 
 @Component({
   selector: 'app-add-meal',
@@ -144,39 +145,19 @@ export class AddMealComponent implements OnInit, OnDestroy {
   }
 
   get phenylPer100(): number {
-    let phe = 0;
-    let quan = 0;
-    for (const p of this.meal.ingredients) {
-      phe += p.ingredient.phenyl;
-      quan += + p.quantity;
-    }
-    return (phe / quan) * quan;
+    return this.totalPhenyl / (this.totalQuantityInMealIngredients(this.meal) / 100);
   }
 
   get proteinPer100(): number {
-    let pro = 0;
-    let quan = 0;
-    for (const p of this.meal.ingredients) {
-      pro += p.ingredient.protein;
-      quan += + p.quantity;
-    }
-    return (pro / quan) * quan;
+    return this.totalProtein / (this.totalQuantityInMealIngredients(this.meal) / 100);
   }
 
   get totalPhenyl(): number {
-    let t = 0;
-    for (const i of this.meal.ingredients) {
-      t += i.ingredient.phenyl * i.quantity;
-    }
-    return t;
+    return lo.sum(this.meal.ingredients.map(i =>  i.ingredient.phenyl * (i.quantity / 100)));
   }
 
   get totalProtein(): number {
-    let t = 0;
-    for (const i of this.meal.ingredients) {
-      t += i.ingredient.protein * i.quantity;
-    }
-    return t;
+    return lo.sum(this.meal.ingredients.map(i => i.ingredient.protein * (i.quantity / 100)));
   }
 
   get canAdd(): boolean {
@@ -185,5 +166,9 @@ export class AddMealComponent implements OnInit, OnDestroy {
 
   get roundedQuantity(): number {
     return Number(String(this.quantity).replace(',', '.'));
+  }
+
+  totalQuantityInMealIngredients(meal: Meal): number {
+    return lo.sum(meal.ingredients.map(ing => ing.quantity));
   }
 }
