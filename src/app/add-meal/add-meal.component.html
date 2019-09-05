@@ -54,7 +54,7 @@
       </div>
       <app-add-ingredient *ngIf="createIngredient"
         style="width: 100%"
-        [name]="ingredientControl.value"
+        [initialValue]="ingredientControl.value"
         (inputClicked)="scrollToBottom()"
         (ingredientCreated)="ingredientCreated($event)">
       </app-add-ingredient>

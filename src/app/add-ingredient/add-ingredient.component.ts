@@ -1,21 +1,21 @@
+import { Component, ViewChild, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { IngredientService } from '../services/ingredient/ingredient.service';
 import { Ingredient } from '../models/ingredient.interface';
-import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
-import { FormControl, NgForm } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
-import { Unit } from '../models/unit.enum';
 import { SnackService } from '../services/snack.service';
+import { Unit } from '../models/unit.enum';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-add-ingredient',
   templateUrl: './add-ingredient.component.html',
   styleUrls: ['./add-ingredient.component.scss']
 })
-export class AddIngredientComponent implements OnInit {
+export class AddIngredientComponent implements OnChanges {
   @ViewChild('ingredientForm', { static: true }) form: NgForm;
   @Output() ingredientCreated = new EventEmitter<Ingredient>();
   @Output() inputClicked = new EventEmitter<void>();
-  @Input() name: string;
+  @Input() initialValue: string | Ingredient;
+  name: string;
   protein: number;
   unit: Unit = Unit.G;
   loading: boolean;
@@ -23,7 +23,10 @@ export class AddIngredientComponent implements OnInit {
   units = [Unit.G, Unit.ML];
   constructor(private ingredient: IngredientService, private snack: SnackService) { }
 
-  ngOnInit() {
+  ngOnChanges(c: SimpleChanges) {
+    if (c.initialValue && c.initialValue.currentValue) {
+      this.name = typeof this.initialValue === 'string' ? this.initialValue : this.initialValue.name;
+    }
   }
 
   get phenyl(): number {

@@ -58,9 +58,13 @@ export class AddMealComponent implements OnInit, OnDestroy {
 
   }
 
-  private _filter(value: string): Ingredient[] {
-    const filterValue = value ? value.toLowerCase() : '';
-    return this.ingredientOptions.filter((ingredient: Ingredient) => ingredient.name.toLowerCase().indexOf(filterValue) === 0);
+  private _filter(value: string | Ingredient): Ingredient[] {
+    if (!value) {
+      return this.ingredientOptions;
+    } else {
+      const filterValue = typeof value === 'string' ? value.toLowerCase() : value.name;
+      return this.ingredientOptions.filter((ingredient: Ingredient) => ingredient.name.toLowerCase().indexOf(filterValue) === 0);
+    }
   }
 
   ngOnDestroy(): void {
@@ -128,11 +132,11 @@ export class AddMealComponent implements OnInit, OnDestroy {
   }
 
   scrollToBottom() {
-    document.getElementById('meal-wrap').scrollTo(0,document.body.scrollHeight);
+    document.getElementById('meal-wrap').scrollTo(0, document.body.scrollHeight);
   }
 
   displayFn(i?: Ingredient): string | undefined {
-    return i ? i.name : undefined;
+    return i ? i.name : '';
   }
 
   get selectedIngredient(): Ingredient | null {
