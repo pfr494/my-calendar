@@ -20,7 +20,7 @@
           <table style="text-align: left">
             <tr *ngFor="let in of m.meal.ingredients">
               <th><p class="meal">{{in.ingredient.name}}</p></th>
-              <td><p p class="meal" style="margin-left: 8px">{{ingredientQuantityInMeal(in, m)}} {{in?.ingredient.unit}}</p></td>
+              <td><p p class="meal" style="margin-left: 8px">{{ingredientQuantityInMeal(in, m) | number:'0.0-2'}} {{in?.ingredient.unit}}</p></td>
             </tr>
           </table>
           <p style="font-style: italic">Total mængde {{totalQuantityInMeal(m)}} {{m.meal.unit}}</p>
