@@ -7,14 +7,14 @@
     </div>
   </div>
   <div class="select-period">
-      <input matInput autocomplete="off" [hidden]="true" [matDatepicker]="pickerFrom" placeholder="Fra dato" [value]="fromDate">
-      <p>Fra {{ fromDate | date:'dd-MM-yyyy' }}</p>
-      <mat-datepicker-toggle [for]="pickerFrom" class="toggle"></mat-datepicker-toggle>
-      <mat-datepicker #pickerFrom class="calendar"></mat-datepicker>
-      <input matInput autocomplete="off" [hidden]="true" [matDatepicker]="pickerTo" placeholder="Til dato" [value]="toDate">
-      <p> Til {{ toDate | date:'dd-MM-yyyy' }}</p>
-      <mat-datepicker-toggle [for]="pickerTo" class="toggle"></mat-datepicker-toggle>
-      <mat-datepicker #pickerTo class="calendar"></mat-datepicker>
+    <input matInput autocomplete="off" [hidden]="true" [matDatepicker]="pickerFrom" placeholder="Fra dato" [value]="fromDate">
+    <p>Fra {{ fromDate | date:'dd-MM-yyyy' }}</p>
+    <mat-datepicker-toggle [for]="pickerFrom" class="toggle"></mat-datepicker-toggle>
+    <mat-datepicker #pickerFrom class="calendar"></mat-datepicker>
+    <input matInput autocomplete="off" [hidden]="true" [matDatepicker]="pickerTo" placeholder="Til dato" [value]="toDate">
+    <p> Til {{ toDate | date:'dd-MM-yyyy' }}</p>
+    <mat-datepicker-toggle [for]="pickerTo" class="toggle"></mat-datepicker-toggle>
+    <mat-datepicker #pickerTo class="calendar"></mat-datepicker>
   </div>
   <mat-card class="table-card">
     <table class="table" id="contentToConvert">  

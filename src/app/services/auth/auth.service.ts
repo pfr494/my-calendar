@@ -5,15 +5,14 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { browser } from 'protractor';
-import { Location } from '@angular/common';
+
+const START_PAGE = 'myday';
 
 @Injectable()
 export class AuthService {
   authState: firebase.User = null;
 
   constructor(private db: AngularFireDatabase, private afAuth: AngularFireAuth, private router: Router) {
-
     this.afAuth.authState.subscribe((user) => {
       this.authState = user;
     });

@@ -1,17 +1,17 @@
-import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 
 
 import { MealService } from '../services/meal/meal.service';
 import { DayMeal } from '../models/day-meal.interface';
 import { MatDatepicker } from '@angular/material';
 import { DatePipe } from '@angular/common';
+import { Unit } from '../models/unit.enum';
 import { isNullOrUndefined } from 'util';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
 import * as jsPDF from 'jspdf';
 import * as lo from 'lodash';
 import 'jspdf-autotable';
-import { Unit } from '../models/unit.enum';
 
 @Component({
   selector: 'app-print',
@@ -66,7 +66,6 @@ export class PrintComponent implements OnDestroy, AfterViewInit {
     const to = moment(this.toDate).add(1, 'days');
     this.mealsInPeriod = this.fromDate && this.toDate ?
     this.dayMeals.filter(dm => this.stringToDate(String(dm.date)).isAfter(from) && this.stringToDate(String(dm.date)).isBefore(to)) : [];
-    console.log(this.mealsInPeriod);
   }
 
   stringToDate(dateString: string /*dd-MM-yyyy*/): moment.Moment {
@@ -77,7 +76,6 @@ export class PrintComponent implements OnDestroy, AfterViewInit {
   get mealsAsStringArrays(): string[][] {
     const strings = [];
     this.mealsInPeriod.forEach(me => {
-      // const toAdd = Object.values(me).map((v: string | number) => v.toString());
       const toAdd = [
         me.meal.name,
         me.date,
@@ -115,8 +113,8 @@ export class PrintComponent implements OnDestroy, AfterViewInit {
         text: `pku-udskrift${this.datePipe.transform(this.mealService.selectedDate, 'dd-MM-yyyy')}.pdf`,
         url,
       })
-        .then(() => console.log('Successful share'))
-        .catch((error) => console.log('Error sharing', error));
+      .then(() => console.log('Successful share'))
+      .catch((error) => console.log('Error sharing', error));
     }
   }
 

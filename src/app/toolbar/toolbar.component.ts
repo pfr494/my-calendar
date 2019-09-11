@@ -29,7 +29,9 @@ export class ToolbarComponent implements OnInit {
 
   get headerText(): string {
     const url = this.location.path();
-    if (url.includes('meal')) {
+    if (url.includes('returnUrl')) {
+      return 'Login';
+    } else if (url.includes('meal')) {
       return 'Opret Måltid';
     } else if (url.includes('profile')) {
       return 'Min Profil';

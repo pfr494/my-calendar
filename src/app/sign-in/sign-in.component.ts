@@ -3,7 +3,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SnackService } from '../services/snack.service';
 import { MatIconRegistry } from '@angular/material';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 const START_PAGE = 'myday';
 
@@ -24,6 +24,7 @@ export class SignInComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private ngZone: NgZone,
+    private route: ActivatedRoute,
     iconRegistry: MatIconRegistry,
     sanitizer: DomSanitizer,
     private snackBar: SnackService) {
@@ -38,7 +39,8 @@ export class SignInComponent implements OnInit {
     this.authService.loggedIn$.subscribe((isLoggedIn: boolean) => {
       if (isLoggedIn) {
         this.ngZone.run(() => {
-          this.router.navigate([START_PAGE]);
+          const route = this.route.snapshot.queryParams.returnUrl;
+          this.router.navigate([route]);
         });
       }
     });
