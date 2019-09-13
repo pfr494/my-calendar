@@ -92,11 +92,11 @@ export class MyDayComponent implements OnInit, OnDestroy {
       const m = {
         meal: this.selectedMeal,
         date: this.mealService.selectedDate,
-        totalPhenyl: this.phenylInMeal,
-        totalProtein: this.proteinInMeal,
+        totalPhenyl: this.getPhenylInMeal(this.selectedMeal, this.getRundedQuantity(this.quantity)),
+        totalProtein: this.getProteinInMeal(this.selectedMeal, this.getRundedQuantity(this.quantity)),
         unit: this.unit,
-        quantity: this.roundedQuantity,
-        consumedOnTime: new Date().toTimeString().split(' ')[0]
+        quantity: this.getRundedQuantity(this.quantity),
+        consumedOnTime: new Date().toTimeString().split(' ')[0],
       } as DayMeal;
       await this.mealService.addMealOnDate(m);
       this.snack.showInfo('Måltid tilføjet', 'OK');
@@ -136,7 +136,17 @@ export class MyDayComponent implements OnInit, OnDestroy {
   async updateMeal(dm: DayMeal): Promise<void> {
     try {
       this.loading = true;
-      await this.mealService.updateDayMeal(dm);
+      const m = {
+        meal: dm.meal,
+        date: dm.date,
+        totalPhenyl: this.getPhenylInMeal(dm.meal, this.getRundedQuantity(dm.quantity)),
+        totalProtein: this.getProteinInMeal(dm.meal, this.getRundedQuantity(dm.quantity)),
+        unit: this.unit,
+        quantity: this.getRundedQuantity(dm.quantity),
+        consumedOnTime: new Date().toTimeString().split(' ')[0],
+        uid: dm.uid
+      } as DayMeal;
+      await this.mealService.updateDayMeal(m);
       this.snack.showInfo('Måltidet blev opdateret');
     } catch (err) {
       this.snack.showError('Den gik ikke du...');
@@ -175,16 +185,16 @@ export class MyDayComponent implements OnInit, OnDestroy {
     return dm.unit === Unit.STK ? dm.meal.totalProtein * dm.quantity : dm.meal.proteinPer100 * (dm.quantity / 100);
   }
 
-  get phenylInMeal(): number {
+  getPhenylInMeal(meal: Meal, quantity: number): number {
     return this.unit === Unit.STK ?
-      this.selectedMeal.totalPhenyl * this.roundedQuantity :
-      this.selectedMeal.phenylPer100 * (this.totalQuantityInMealIngredients(this.selectedMeal) / 100);
+      meal.totalPhenyl * quantity :
+      meal.phenylPer100 * (this.totalQuantityInMealIngredients(meal) / 100);
   }
 
-  get proteinInMeal(): number {
+  getProteinInMeal(meal: Meal, quantity: number): number {
     return this.unit === Unit.STK ?
-      this.selectedMeal.totalProtein * this.roundedQuantity :
-      this.selectedMeal.proteinPer100 * (this.totalQuantityInMealIngredients(this.selectedMeal) / 100);
+      meal.totalProtein * quantity :
+      meal.proteinPer100 * (this.totalQuantityInMealIngredients(meal) / 100);
   }
 
   get remainingPhenyl(): number {
@@ -195,8 +205,8 @@ export class MyDayComponent implements OnInit, OnDestroy {
     return lo.sum(this.dailyMeals.map(m => m.totalPhenyl));
   }
 
-  get roundedQuantity(): number {
-    return Number(String(this.quantity).replace(',', '.'));
+  getRundedQuantity(q: number | string): number {
+    return Number(String(q).replace(',', '.'));
   }
 
   // get dayVisible(): boolean {
