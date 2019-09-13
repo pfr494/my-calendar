@@ -16,7 +16,8 @@ import {
   MatProgressSpinnerModule,
   MatSelectModule,
   MatExpansionModule,
-  MatSidenavModule
+  MatSidenavModule,
+  MAT_DATE_FORMATS
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -49,6 +50,7 @@ import { PrintComponent } from './print/print.component';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { LoadingComponent } from './loading/loading.component';
 import { IngredientQuantityPipe } from './pipes/ingredient-quantity.pipe';
+import { DATE_FORMATS } from './config/date-formats';
 
 registerLocaleData(localeDa, 'da');
 
@@ -104,7 +106,11 @@ registerLocaleData(localeDa, 'da');
     IngredientService,
     UserService,
     DatePipe,
-    UpdaterService
+    UpdaterService,
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: DATE_FORMATS
+    }
   ],
   bootstrap: [AppComponent]
 })

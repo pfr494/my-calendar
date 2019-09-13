@@ -1,5 +1,6 @@
 export interface SimpleUser {
-  name: string;
   email: string;
+  userName: string;
+  birthDate: Date;
   pkuLimit: number;
 }

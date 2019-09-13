@@ -4,6 +4,8 @@ import { UserService } from '../services/user/user.service';
 import { Observable } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { SnackService } from '../services/snack.service';
+import { User } from '../models/user.interface';
+import { SimpleUser } from '../models/simple-user.interface';
 
 @Component({
   selector: 'app-profile',
@@ -12,24 +14,62 @@ import { SnackService } from '../services/snack.service';
 })
 export class ProfileComponent implements OnInit {
   pkuControl = new FormControl();
-  user$: Observable<any>;
+  birthDateControl = new FormControl();
+  userNameControl = new FormControl();
+  user$: Observable<SimpleUser>;
   loading: boolean;
 
-  constructor(public auth: AuthService, private user: UserService, private snack: SnackService) { }
+  constructor(public auth: AuthService, private userService: UserService, private snack: SnackService) { }
 
   ngOnInit() {
-    this.user$ = this.user.getUser();
+    this.user$ = this.userService.getUser();
   }
 
+  async saveInformation() {
+    if (this.userNameControl.dirty) {
+      this.updateUserName();
+    }
+    if (this.birthDateControl.dirty) {
+      this.updateBirthDate();
+    }
+    if (this.pkuControl.dirty) {
+      this.updateLimit();
+    }
+  }
+
+  async updateUserName() {
+    try {
+      this.loading = true;
+      await this.userService.updateUsername(this.userNameControl.value);
+      this.snack.showInfo(`Brugernavn sat til: ${this.userNameControl.value}`);
+    } finally {
+      this.loading = false;
+      this.userNameControl.markAsPristine();
+    }
+  }
+  async updateBirthDate() {
+    try {
+      this.loading = true;
+      await this.userService.updateBirthdate(this.birthDateControl.value);
+      this.snack.showInfo(`Fødselsdag sat til: ${this.birthDateControl.value}`);
+    } finally {
+      this.loading = false;
+      this.birthDateControl.markAsPristine();
+    }
+  }
   async updateLimit() {
     try {
       this.loading = true;
-      await this.user.updateUserPku(this.pkuControl.value);
-      this.snack.showInfo(`PKU tolerance opdateret til: ${this.pkuControl.value}`);
+      await this.userService.updateUserPku(this.pkuControl.value);
+      this.snack.showInfo(`PKU tolerance sat til: ${this.pkuControl.value}`);
     } finally {
       this.loading = false;
       this.pkuControl.markAsPristine();
     }
+  }
+
+  getDate(s: string) {
+    return new Date(s);
   }
 
   logout() {

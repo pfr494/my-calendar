@@ -4,7 +4,7 @@ import { Component, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { MealService } from '../services/meal/meal.service';
 import { DayMeal } from '../models/day-meal.interface';
 import { MatDatepicker } from '@angular/material';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { Unit } from '../models/unit.enum';
 import { isNullOrUndefined } from 'util';
 import { Subscription } from 'rxjs';
@@ -12,25 +12,31 @@ import * as moment from 'moment';
 import * as jsPDF from 'jspdf';
 import * as lo from 'lodash';
 import 'jspdf-autotable';
+import { SimpleUser } from '../models/simple-user.interface';
+import { UserService } from '../services/user/user.service';
 
 @Component({
   selector: 'app-print',
   templateUrl: './print.component.html',
   styleUrls: ['./print.component.scss'],
-  providers: [DatePipe]
+  providers: [DatePipe, DecimalPipe]
 })
 export class PrintComponent implements OnDestroy, AfterViewInit {
   @ViewChild('pickerFrom', { static: true }) pickerFrom: MatDatepicker<Date>;
   @ViewChild('pickerTo', { static: true }) pickerTo: MatDatepicker<Date>;
   subs: Subscription[] = [];
   mealsInPeriod: DayMeal[];
+  user: SimpleUser;
   dayMeals: DayMeal[];
 
   fromDate: Date;
   toDate: Date;
 
-  constructor(public mealService: MealService, private datePipe: DatePipe) {
-    this.subs = [this.mealService.getAllDayMeals().subscribe(m => this.setMeals(m))];
+  constructor(public mealService: MealService, private userService: UserService, private datePipe: DatePipe, private decimal: DecimalPipe) {
+    this.subs = [
+      this.mealService.getAllDayMeals().subscribe(m => this.setMeals(m)),
+      this.userService.getUser().subscribe(u => this.user = u)
+    ];
     this.toDate = new Date();
     this.fromDate = moment(this.toDate).subtract(7, 'days').toDate();
   }
@@ -80,22 +86,13 @@ export class PrintComponent implements OnDestroy, AfterViewInit {
         me.meal.name,
         me.date,
         me.consumedOnTime,
-        this.getQuantityAndUnitInMeal(me),
-        me.totalProtein.toString() + 'g',
-        me.totalPhenyl.toString() + 'mg'
+        this.decimal.transform(me.quantity, '0.0-2').toString() + ' ' + me.unit.toString(),
+        this.decimal.transform(me.totalProtein, '0.0-2').toString() + 'g',
+        this.decimal.transform(me.totalPhenyl, '0.0-2').toString() + 'mg'
       ];
       strings.push(toAdd);
     });
     return strings;
-  }
-
-  getQuantityAndUnitInMeal(me: DayMeal): string {
-    if (me.unit === Unit.STK) {
-      const totalQuantiy = lo.sum(me.meal.ingredients.map(i => i.quantity));
-      return `${me.quantity * totalQuantiy} ${me.meal.unit}`;
-    } else {
-      return `${me.quantity} ${me.meal.unit}`;
-    }
   }
 
   captureScreen() {
@@ -120,15 +117,27 @@ export class PrintComponent implements OnDestroy, AfterViewInit {
 
   generatePdfDoc() {
     const doc: any = new jsPDF();
+    doc.setFontSize(11);
+    doc.text(this.user.userName, 13, 15);
+    doc.text(this.datePipe.transform(new Date(this.user.birthDate), 'dd-MM-yyyy'), 13, 20);
+    // const str = 'Page ' + doc.page  + ' af ' +  this.totalPages;
+    // doc.text(str, 50, doc.internal.pageSize.height - 10); // key is the interal pageSize function
     doc.autoTable({
       head: [['Måltid', 'Dato', 'Tidspunkt', 'Mængde', 'Protein indhold', 'Phe indhold']],
       body: [
         ...this.mealsAsStringArrays
       ],
-      theme: 'grid'
+      startY: 25,
+      headStyles: {
+        fillColor: [103, 58, 183]
+      }
     });
     return doc;
   }
+
+  // get totalPages(): number {
+  //   return this.mealsAsStringArrays.length / 50 /*rows pr page*/;
+  // }
 
   getTime(ts: string): string {
     return ts ? `${ts.split(':')[0]}:${ts.split(':')[0]}` : '';

@@ -1,11 +1,22 @@
 <div class="profile-wrap">
-  <p>Bruger</p>
-  <p>{{(auth.currentUser$ | async)?.email}}</p>
-  <div style="display: flex; align-items: center;">
-    <mat-form-field>
-      <input matInput autocomplete="off" type="tel" [formControl]="pkuControl" placeholder="Opdater pku tolerance" [value]="(user$ | async)?.pkuLimit">
-    </mat-form-field>
-    <button mat-raised-button (click)="updateLimit()" [disabled]="!pkuControl.dirty" color="primary" style="margin-left: 8px">Gem</button>
+  <p>Email<br>{{(auth.currentUser$ | async)?.email}}</p>
+  <form #profileForm="ngForm">
+
+  </form>
+  <mat-form-field>
+    <input matInput autocomplete="off" type="text" [formControl]="userNameControl" placeholder="Ændre brugernavn" [value]="(user$ | async)?.userName">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [matDatepicker]="pickerBirth" [formControl]="birthDateControl" placeholder="Ændre fødselsdato" [value]="getDate((user$ | async)?.birthDate)">
+    <mat-datepicker-toggle matSuffix [for]="pickerBirth" class="toggle"></mat-datepicker-toggle>
+    <mat-datepicker #pickerBirth class="calendar"></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput autocomplete="off" type="tel" [formControl]="pkuControl" placeholder="Opdater Phe tolerance" [value]="(user$ | async)?.pkuLimit">
+  </mat-form-field>
+  <div style="display: flex; align-items: center; margin-bottom: 16px">
+    <button mat-raised-button (click)="saveInformation()" [disabled]="!(userNameControl.dirty || birthDateControl.dirty || pkuControl.dirty)"
+      color="primary" style="margin-right: 16px">Gem</button>
     <mat-spinner *ngIf="loading" [diameter]="20"></mat-spinner>
   </div>
   <a href="https://www.rigshospitalet.dk/afdelinger-og-klinikker/julianemarie/boerne-unge-klinikken/center-for-pku/inspiration/opskrifter/Sider/default.aspx?rhKeywords=Pku"
