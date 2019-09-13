@@ -4,8 +4,8 @@ import { UserService } from '../services/user/user.service';
 import { Observable } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { SnackService } from '../services/snack.service';
-import { User } from '../models/user.interface';
 import { SimpleUser } from '../models/simple-user.interface';
+import { UpdaterService } from '../services/updater/updater.service';
 
 @Component({
   selector: 'app-profile',
@@ -19,7 +19,7 @@ export class ProfileComponent implements OnInit {
   user$: Observable<SimpleUser>;
   loading: boolean;
 
-  constructor(public auth: AuthService, private userService: UserService, private snack: SnackService) { }
+  constructor(public auth: AuthService, private userService: UserService, private snack: SnackService, public updater: UpdaterService) { }
 
   ngOnInit() {
     this.user$ = this.userService.getUser();
@@ -70,6 +70,10 @@ export class ProfileComponent implements OnInit {
 
   getDate(s: string) {
     return new Date(s);
+  }
+
+  installUpdate() {
+    location.reload();
   }
 
   logout() {

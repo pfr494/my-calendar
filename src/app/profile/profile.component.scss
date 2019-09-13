@@ -15,4 +15,10 @@
     background-color: $primary;
     color: white;
   }
+  .check {
+    bottom: 16px;
+  }
+  .update {
+    background-color: $warn;
+  }
 }

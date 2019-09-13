@@ -17,10 +17,13 @@
   <div style="display: flex; align-items: center; margin-bottom: 16px">
     <button mat-raised-button (click)="saveInformation()" [disabled]="!(userNameControl.dirty || birthDateControl.dirty || pkuControl.dirty)"
       color="primary" style="margin-right: 16px">Gem</button>
-    <mat-spinner *ngIf="loading" [diameter]="20"></mat-spinner>
+    <mat-spinner *ngIf="loading" [diameter]="20" mode="indeterminate"></mat-spinner>
   </div>
   <a href="https://www.rigshospitalet.dk/afdelinger-og-klinikker/julianemarie/boerne-unge-klinikken/center-for-pku/inspiration/opskrifter/Sider/default.aspx?rhKeywords=Pku"
   >Se opskrifter fra rigshospitalet her</a>
-  <!-- <mat-progress-spinner [mode]="indeterminate" *ngIf="loading"></mat-progress-spinner> -->
   <button mat-raised-button (click)="logout()" class="logout">Log ud</button>
+  <div *ngIf="updater.enabled$ | async">
+    <button *ngIf="!(updater.updateAvailable$ | async)" (click)="updater.checkForUpdate()" class="logout check">Check for opdatering</button>
+    <button *ngIf="updater.updateAvailable$ | async" (click)="installUpdate()" class="logout check update">Installér opdatering</button>
+  </div>
 </div>

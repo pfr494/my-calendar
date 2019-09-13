@@ -1,7 +1,6 @@
 import { Injectable, ApplicationRef } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
-import { MatSnackBar } from '@angular/material';
-import { Subscription, interval, concat } from 'rxjs';
+import { Subscription, interval, concat, BehaviorSubject } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { SnackService } from '../snack.service';
 
@@ -9,10 +8,13 @@ import { SnackService } from '../snack.service';
   providedIn: 'root'
 })
 export class UpdaterService {
+  updateAvailable$ = new BehaviorSubject<boolean>(false);
+  enabled$ = new BehaviorSubject<boolean>(false);
   sub: Subscription;
 
   constructor(appRef: ApplicationRef, private swUpdate: SwUpdate, private snack: SnackService) {
     // Allow the app to stabilize first, before starting polling for updates with `interval()`.
+    this.enabled$.next(this.swUpdate.isEnabled);
 
     if (this.swUpdate.isEnabled) {
       const appIsStable$ = appRef.isStable.pipe(first(isStable => isStable === true));
@@ -36,5 +38,9 @@ export class UpdaterService {
 
   destroy() {
     if (this.sub) { this.sub.unsubscribe(); }
+  }
+
+  checkForUpdate(): Promise<void> {
+    return this.swUpdate.checkForUpdate();
   }
 }
