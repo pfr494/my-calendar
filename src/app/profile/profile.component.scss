@@ -11,12 +11,18 @@
   .logout {
     position: fixed;
     top: 54px;
-    right: 8px;
+    right: 16px;
     background-color: $primary;
     color: white;
   }
   .check {
+    top: auto;
     bottom: 16px;
+  }
+  .checking-spinner {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
   }
   .update {
     background-color: $warn;

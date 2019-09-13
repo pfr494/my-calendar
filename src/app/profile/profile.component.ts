@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../services/auth/auth.service';
 import { UserService } from '../services/user/user.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { SnackService } from '../services/snack.service';
 import { SimpleUser } from '../models/simple-user.interface';
@@ -12,17 +12,41 @@ import { UpdaterService } from '../services/updater/updater.service';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
+  subs: Subscription[] = [];
   pkuControl = new FormControl();
   birthDateControl = new FormControl();
   userNameControl = new FormControl();
   user$: Observable<SimpleUser>;
+  updateAvailable: boolean;
+  checking: boolean;
   loading: boolean;
+  birthDate: Date;
 
   constructor(public auth: AuthService, private userService: UserService, private snack: SnackService, public updater: UpdaterService) { }
 
   ngOnInit() {
     this.user$ = this.userService.getUser();
+    this.subs = [
+      this.user$.subscribe(u => this.birthDate = u.birthDate)
+    ];
+  }
+
+  ngOnDestroy() {
+    this.subs.forEach(s => s.unsubscribe());
+  }
+
+  async checkForUpdate() {
+    try {
+      this.checking = true;
+      await this.updater.checkForUpdate();
+      setTimeout(() => {
+        if (!this.updateAvailable) {
+          this.snack.showInfo('Du har allerede den nyeste version', 'OK');
+        }
+        this.checking = false;
+      }, 1000);
+    } finally {}
   }
 
   async saveInformation() {

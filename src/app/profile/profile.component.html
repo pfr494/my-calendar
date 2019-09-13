@@ -7,7 +7,7 @@
     <input matInput autocomplete="off" type="text" [formControl]="userNameControl" placeholder="Ændre brugernavn" [value]="(user$ | async)?.userName">
   </mat-form-field>
   <mat-form-field>
-    <input matInput [matDatepicker]="pickerBirth" [formControl]="birthDateControl" placeholder="Ændre fødselsdato" [value]="getDate((user$ | async)?.birthDate)">
+    <input matInput [matDatepicker]="pickerBirth" [formControl]="birthDateControl" placeholder="Ændre fødselsdato" [value]="birthDate">
     <mat-datepicker-toggle matSuffix [for]="pickerBirth" class="toggle"></mat-datepicker-toggle>
     <mat-datepicker #pickerBirth class="calendar"></mat-datepicker>
   </mat-form-field>
@@ -23,7 +23,10 @@
   >Se opskrifter fra rigshospitalet her</a>
   <button mat-raised-button (click)="logout()" class="logout">Log ud</button>
   <div *ngIf="updater.enabled$ | async">
-    <button *ngIf="!(updater.updateAvailable$ | async)" (click)="updater.checkForUpdate()" class="logout check">Check for opdatering</button>
-    <button *ngIf="updater.updateAvailable$ | async" (click)="installUpdate()" class="logout check update">Installér opdatering</button>
+    <mat-spinner *ngIf="checking" class="checking-spinner" [diameter]="20" mode="indeterminate"></mat-spinner>
+    <button mat-raised-button *ngIf="!(updater.updateAvailable$ | async)"
+      (click)="checkForUpdate()" class="logout check">Check for opdatering</button>
+    <button mat-raised-button *ngIf="updater.updateAvailable$ | async"
+      (click)="installUpdate()" class="logout check update">Installér opdatering</button>
   </div>
 </div>
