@@ -1,4 +1,4 @@
-
+@import '~src/styles/variables.scss';
 
 router-outlet {
   max-height: calc(100% - 48px);
@@ -17,8 +17,16 @@ router-outlet {
     padding: 0px 16px;
     width: 40%;
     min-width: 160px;
-    a {
-      margin: 0 0 16px 0;
-    }
   }
+}
+
+.nav-btn {
+  border-radius: 0;
+  width: calc(100% + 32px);
+  text-align: left;
+  margin: 0 -16px;
+}
+
+.active {
+  color: $primary;
 }

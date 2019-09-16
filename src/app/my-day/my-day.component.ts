@@ -143,7 +143,7 @@ export class MyDayComponent implements OnInit, OnDestroy {
         totalProtein: this.getProteinInMeal(dm.meal, this.getRundedQuantity(dm.quantity)),
         unit: dm.unit,
         quantity: this.getRundedQuantity(dm.quantity),
-        consumedOnTime: new Date().toTimeString().split(' ')[0],
+        consumedOnTime: dm.consumedOnTime,
         uid: dm.uid
       } as DayMeal;
       await this.mealService.updateDayMeal(m);

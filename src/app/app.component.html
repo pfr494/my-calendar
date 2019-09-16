@@ -3,11 +3,11 @@
   <mat-sidenav mode="over" position="start" (openedChange)="sidenavOpen = $event">
     <div class="menu-content">
       <h2>Menu</h2>
-      <a routerLink="myday" (click)="sidenav.close()">Min dag</a>
-      <a routerLink="profile" (click)="sidenav.close()">Min profil</a>
-      <a routerLink="meal" (click)="sidenav.close()">Opret måltid</a>
-      <a routerLink="convert" (click)="sidenav.close()">Omregner</a>
-      <a routerLink="print" (click)="sidenav.close()">Print</a>
+      <button class="nav-btn" mat-button routerLink="myday" (click)="sidenav.close()" routerLinkActive="active">Min dag</button>
+      <button class="nav-btn" mat-button routerLink="profile" (click)="sidenav.close()" routerLinkActive="active">Min profil</button>
+      <button class="nav-btn" mat-button routerLink="meal" (click)="sidenav.close()" routerLinkActive="active">Opret måltid</button>
+      <button class="nav-btn" mat-button routerLink="convert" (click)="sidenav.close()" routerLinkActive="active">Omregner</button>
+      <button class="nav-btn" mat-button routerLink="print" (click)="sidenav.close()" routerLinkActive="active">Print</button>
     </div>
   </mat-sidenav>
   <mat-sidenav-content>

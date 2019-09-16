@@ -118,8 +118,8 @@ export class PrintComponent implements OnDestroy, AfterViewInit {
   generatePdfDoc() {
     const doc: any = new jsPDF();
     doc.setFontSize(11);
-    doc.text(this.user.userName, 13, 15);
-    doc.text(`Fødselsdato: ${this.datePipe.transform(new Date(this.user.birthDate), 'dd-MM-yyyy')}`, 13, 20);
+    doc.text(`Navn: ${!!this.user.userName ? this.user.userName : this.user.email}`, 13, 15);
+    doc.text(`Fødselsdato: ${!!this.user.birthDate ? this.datePipe.transform(new Date(this.user.birthDate), 'dd-MM-yyyy') : ''}`, 13, 20);
     // const str = 'Page ' + doc.page  + ' af ' +  this.totalPages;
     // doc.text(str, 50, doc.internal.pageSize.height - 10); // key is the interal pageSize function
     doc.autoTable({
