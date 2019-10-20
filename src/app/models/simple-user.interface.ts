@@ -3,4 +3,5 @@ export interface SimpleUser {
   userName: string;
   birthDate: Date;
   pkuLimit: number;
+  admin: boolean;
 }

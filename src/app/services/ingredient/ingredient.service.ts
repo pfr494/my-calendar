@@ -15,12 +15,17 @@ export class IngredientService {
     return this.db.list(`users/${this.authService.currentUser.uid}/ingredients`).valueChanges() as Observable<Ingredient[]>;
   }
 
-  async createIngredient(ingredient: Ingredient): Promise<any> {
+  getGlobalIngredients(): Observable<Ingredient[]> {
+    return this.db.list(`ingredients`).valueChanges() as Observable<Ingredient[]>;
+  }
+
+  async createIngredient(ingredient: Ingredient, global?: boolean): Promise<any> {
     const i = {
       ...ingredient,
       uid: this.db.createPushId()
     };
-    return this.db.object(`users/${this.authService.currentUser.uid}/ingredients/${i.uid}`).set(i);
+    const path = global ? `ingredients/${i.uid}` : `users/${this.authService.currentUser.uid}/ingredients/${i.uid}`;
+    return this.db.object(path).set(i);
   }
 
   async deleteIngredient(ingredient: Ingredient): Promise<any> {

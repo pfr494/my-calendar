@@ -4,6 +4,7 @@ import { Ingredient } from '../models/ingredient.interface';
 import { SnackService } from '../services/snack.service';
 import { Unit } from '../models/unit.enum';
 import { NgForm } from '@angular/forms';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-add-ingredient',
@@ -19,9 +20,12 @@ export class AddIngredientComponent implements OnChanges {
   protein: number;
   unit: Unit = Unit.G;
   loading: boolean;
+  isGlobalIngredient: boolean;
 
   units = [Unit.G, Unit.ML];
-  constructor(private ingredient: IngredientService, private snack: SnackService) { }
+  constructor(private ingredient: IngredientService, private snack: SnackService, private location: Location) {
+    this.isGlobalIngredient = this.location.path().includes('global-meal');
+  }
 
   ngOnChanges(c: SimpleChanges) {
     if (c.initialValue && c.initialValue.currentValue) {
@@ -43,7 +47,7 @@ export class AddIngredientComponent implements OnChanges {
         phenyl: this.phenyl,
         unit: this.unit
       } as Ingredient;
-      await this.ingredient.createIngredient(toAdd);
+      await this.ingredient.createIngredient(toAdd, this.isGlobalIngredient);
       this.snack.showInfo('Madvare oprettet! :D', 'OK');
       this.form.resetForm();
       this.ingredientCreated.emit(toAdd);

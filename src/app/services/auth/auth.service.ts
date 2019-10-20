@@ -37,11 +37,6 @@ export class AuthService {
     return this.afAuth.authState;
   }
 
-  // Returns
-  get currentUserObservable(): any {
-    return this.afAuth.authState;
-  }
-
   // Returns current user UID
   get currentUserId(): string {
     return this.authenticated ? this.authState.uid : '';
@@ -52,52 +47,33 @@ export class AuthService {
     return this.authState ? this.authState.email : '';
   }
 
-  // Anonymous User
-  get currentUserAnonymous(): boolean {
-    return this.authenticated ? this.authState.isAnonymous : false;
-  }
-
-  // Returns current user display name or Guest
-  get currentUserDisplayName(): string {
-    if (!this.authState) {
-      return 'Guest';
-    } else if (this.currentUserAnonymous) {
-      return 'Anonymous';
-    } else {
-      return this.authState.displayName || this.authState.email;
-    }
-  }
-
   googleLogin() {
     const provider = new firebase.auth.GoogleAuthProvider();
     return this.socialSignIn(provider);
   }
 
-  private socialSignIn(provider) {
+  private async socialSignIn(provider) {
     return this.afAuth.auth.signInWithPopup(provider)
       .then((credential) => {
         this.authState = credential.user;
         this.updateUserData();
-      })
-      .catch(error => console.log(error));
+      });
   }
 
-  emailSignUp(email: string, password: string) {
+  async emailSignUp(email: string, password: string) {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((credential) => {
         this.authState = credential.user;
         this.updateUserData();
-      })
-      .catch(error => console.log(error));
+      });
   }
 
-  emailLogin(email: string, password: string) {
+  async emailLogin(email: string, password: string) {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then((credential) => {
         this.authState = credential.user;
         this.updateUserData();
-      })
-      .catch(error => console.log(error));
+      });
   }
 
   async resetPassword(email: string) {

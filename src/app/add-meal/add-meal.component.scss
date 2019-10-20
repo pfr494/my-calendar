@@ -1,4 +1,4 @@
-
+@import '~src/styles/variables';
 
 .meal-wrap {
   width: calc(100% - 32px);
@@ -61,4 +61,6 @@
   transform: translateY(100px);
 }
 
-
+.warn {
+  color: $warn;
+}

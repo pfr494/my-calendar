@@ -6,6 +6,7 @@
       <button class="nav-btn" mat-button routerLink="myday" (click)="sidenav.close()" routerLinkActive="active">Min dag</button>
       <button class="nav-btn" mat-button routerLink="profile" (click)="sidenav.close()" routerLinkActive="active">Min profil</button>
       <button class="nav-btn" mat-button routerLink="meal" (click)="sidenav.close()" routerLinkActive="active">Opret måltid</button>
+      <button *ngIf="isAdmin$ | async" class="nav-btn" mat-button routerLink="global-meal" (click)="sidenav.close()" routerLinkActive="active">Opret Globalt måltid</button>
       <button class="nav-btn" mat-button routerLink="convert" (click)="sidenav.close()" routerLinkActive="active">Omregner</button>
       <button class="nav-btn" mat-button routerLink="print" (click)="sidenav.close()" routerLinkActive="active">Print</button>
     </div>

@@ -7,7 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 const START_PAGE = 'myday';
 
-class UserInfo {
+interface UserInfo {
   email: string;
   password: string;
 }
@@ -32,7 +32,10 @@ export class SignInComponent implements OnInit {
       'google',
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/googleLogo.svg')
     );
-    this.userInfo = new UserInfo();
+    this.userInfo = {
+      email: null,
+      password: null
+    };
   }
 
   ngOnInit() {
@@ -40,7 +43,9 @@ export class SignInComponent implements OnInit {
       if (isLoggedIn) {
         this.ngZone.run(() => {
           const route = this.route.snapshot.queryParams.returnUrl;
-          this.router.navigate([route]);
+          if (route) {
+            this.router.navigate([route]);
+          }
         });
       }
     });
@@ -59,11 +64,13 @@ export class SignInComponent implements OnInit {
   login() {
     this.authService.emailLogin(this.userInfo.email, this.userInfo.password)
       .then(() => {
-        console.log('Sign in: ' + this.userInfo.email + ' ' + this.userInfo.password);
-        this.snackBar.showInfo('Bruger med email: ' + this.authService.currentUserMail + ' blev logget ind', 'Yay!');
         this.ngZone.run(() => {
           this.router.navigate([START_PAGE]);
         });
+        this.snackBar.showInfo('Bruger med email: ' + this.authService.currentUserMail + ' blev logget ind', 'Yay!');
+      })
+      .catch((err) => {
+        this.snackBar.showError(err.message, 'Nay!');
       });
   }
 
@@ -74,9 +81,8 @@ export class SignInComponent implements OnInit {
           this.router.navigate([START_PAGE]);
         });
         this.snackBar.showInfo('Bruger med email: ' + this.authService.currentUserMail + ' blev logget ind', 'Yay!');
-      }).catch((error) => {
-        console.log(error);
-        this.router.navigate(['/login']);
+      }).catch((err) => {
+        this.snackBar.showError(err.message, 'Nay!');
       });
   }
 }

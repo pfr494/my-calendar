@@ -27,6 +27,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AuthService } from './services/auth/auth.service';
 import { AuthGuard } from './services/auth/auth-guard.service';
+import { AdminGuard } from './services/auth/admin-guard.service';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
@@ -102,6 +103,7 @@ registerLocaleData(localeDa, 'da');
   providers: [
     AuthService,
     AuthGuard,
+    AdminGuard,
     MealService,
     IngredientService,
     UserService,

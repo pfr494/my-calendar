@@ -28,8 +28,8 @@
         </tr>  
         <tr *ngFor="let m of mealsInPeriod">
           <td>{{m.meal?.name}}</td>
-          <td>{{m.date}}</td>
-          <td>{{getTime(m.consumedOnTime)}}</td>
+          <td>{{m.date | date:'dd-MM-yyyy'}}</td>
+          <td>{{m.consumedOnTime}}</td>
           <td>{{m.quantity | number:'0.00'}} {{m.unit}}</td>
           <td>{{m.totalProtein | number:'0.00'}} g</td>
           <td>{{m.totalPhenyl | number:'0.00'}} mg</td>

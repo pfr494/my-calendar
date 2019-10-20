@@ -6,6 +6,7 @@ import { FormControl } from '@angular/forms';
 import { SnackService } from '../services/snack.service';
 import { SimpleUser } from '../models/simple-user.interface';
 import { UpdaterService } from '../services/updater/updater.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
@@ -26,7 +27,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   constructor(public auth: AuthService, private userService: UserService, private snack: SnackService, public updater: UpdaterService) { }
 
   ngOnInit() {
-    this.user$ = this.userService.getUser();
+    this.user$ = this.userService.currentUser$.pipe(filter(u => !!u));
     this.subs = [
       this.user$.subscribe(u => this.birthDate = u.birthDate)
     ];

@@ -8,14 +8,16 @@ import { AddIngredientComponent } from './add-ingredient/add-ingredient.componen
 import { PkuConverterComponent } from './pku-converter/pku-converter.component';
 import { PrintComponent } from './print/print.component';
 import { MyDayComponent } from './my-day/my-day.component';
+import { AdminGuard } from './services/auth/admin-guard.service';
 
 const routes: Routes = [
-  // { path: 'overview', pathMatch: 'full', component: OverviewComponent, canActivate: [AuthGuard] },
+  { path: '', pathMatch: 'full', redirectTo: 'myday' },
   { path: 'myday', pathMatch: 'full', component: MyDayComponent, canActivate: [AuthGuard] },
   { path: 'convert', pathMatch: 'full', component: PkuConverterComponent, canActivate: [AuthGuard] },
   { path: 'profile', pathMatch: 'full', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'print', pathMatch: 'full', component: PrintComponent, canActivate: [AuthGuard] },
   { path: 'meal', pathMatch: 'full', component: AddMealComponent, canActivate: [AuthGuard] },
+  { path: 'global-meal', pathMatch: 'full', component: AddMealComponent, canActivate: [AdminGuard], },
   { path: 'ingredient', pathMatch: 'full', component: AddIngredientComponent, canActivate: [AuthGuard] },
   { path: 'login', pathMatch: 'full', component: SignInComponent },
   { path: '**', redirectTo: 'myday' },

@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
-import { Observable, BehaviorSubject, Subscribable, Subscription } from 'rxjs';
+import { Observable, BehaviorSubject, Subscription } from 'rxjs';
 import { Meal } from 'src/app/models/meal.interface';
 import { AuthService } from '../auth/auth.service';
 import { DayMeal } from 'src/app/models/day-meal.interface';
-import { DatePipe } from '@angular/common';
-import { filter } from 'minimatch';
-import * as moment from 'moment';
+import { getFormattedDate } from 'src/app/config/date-formats';
 
 @Injectable({
   providedIn: 'root'
@@ -26,16 +24,20 @@ export class MealService {
     this.s = this.getMyMealsOnDate(d).subscribe(v => this.selectedDateMeal$.next(v));
   }
 
-  constructor(private db: AngularFireDatabase, private auth: AuthService, private datePipe: DatePipe) {
+  constructor(private db: AngularFireDatabase, private auth: AuthService) {
     this.selectedDate = new Date();
+  }
+
+  getGlobalMeals(): Observable<Meal[]> {
+    return this.db.list(`meals`).valueChanges() as Observable<Meal[]>;
   }
 
   getMeals(): Observable<Meal[]> {
     return this.db.list(`users/${this.auth.currentUser.uid}/meals`).valueChanges() as Observable<Meal[]>;
   }
 
-  getMyMealsOnDate(date: Date = this.selectedDate): Observable<DayMeal[]> {
-    const d = this.datePipe.transform(date, 'dd-MM-yyyy');
+  getMyMealsOnDate(date: Date): Observable<DayMeal[]> {
+    const d = getFormattedDate(date);
     return this.db.list(`users/${this.auth.currentUser.uid}/daymeals/${d}`).valueChanges() as Observable<DayMeal[]>;
   }
 
@@ -44,33 +46,31 @@ export class MealService {
   }
 
   getDayMealsInPeriod(dateFrom: Date, dateTo: Date): Observable<DayMeal[]> {
-    return this.db.list(`users/${this.auth.currentUser.uid}/daymeals`).valueChanges() as Observable<DayMeal[]>;
-    // .pipe(
-    //   filter((dm: DayMeal[]) => moment(dm.date).isAfter(moment(dateFrom).subtract(1, 'days')))),
-    //   filter(dm => moment(dm.date).isBefore(moment(dateTo).add(1, 'days'))) 
-    // ) as Observable<DayMeal[]>;
+    return this.db.list(`users/${this.auth.currentUser.uid}/daymeals`,
+      ref => ref.orderByKey().startAt(getFormattedDate(dateFrom)).endAt(getFormattedDate(dateTo))
+    ).valueChanges() as Observable<DayMeal[]>;
   }
 
-  async addMeal(meal: Meal): Promise<any> {
+  async addMeal(meal: Meal, global?: boolean): Promise<any> {
     const m = {
       ...meal,
       uid: this.db.createPushId()
     };
-    return this.db.object(`users/${this.auth.currentUser.uid}/meals/${m.uid}`).set(m);
+    const path = global ? `meals/${m.uid}` : `users/${this.auth.currentUser.uid}/meals/${m.uid}`;
+    return this.db.object(path).set(m);
   }
-
 
   async deleteMeal(meal: Meal): Promise<any> {
     return this.db.object(`users/${this.auth.currentUser.uid}/meals/${meal.uid}`).remove();
   }
 
   async updateDayMeal(meal: DayMeal, date: Date = this.selectedDate): Promise<any> {
-    const d = this.datePipe.transform(date, 'dd-MM-yyyy');
+    const d = getFormattedDate(date);
     return this.db.object(`users/${this.auth.currentUser.uid}/daymeals/${d}/${meal.uid}`).set(meal);
   }
 
   async addMealOnDate(meal: DayMeal, date: Date = this.selectedDate): Promise<any> {
-    const d = this.datePipe.transform(date, 'dd-MM-yyyy');
+    const d = getFormattedDate(date);
     const m = {
       ...meal,
       date: d,
@@ -80,7 +80,7 @@ export class MealService {
   }
 
   async removeMealOnDate(meal: DayMeal, date: Date = this.selectedDate): Promise<any> {
-    const d = this.datePipe.transform(date, 'dd-MM-yyyy');
+    const d = getFormattedDate(date);
     return this.db.object(`users/${this.auth.currentUser.uid}/daymeals/${d}/${meal.uid}`).remove();
   }
 }

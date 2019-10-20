@@ -1,6 +1,7 @@
 <div class="meal-wrap" id="meal-wrap">
   <div style="width: 100%">
-    <form #mealForm="ngForm" class="meal-form">
+      <form #mealForm="ngForm" class="meal-form">
+      <p class="warn" *ngIf="isGlobalMeal">OBS: Dette måltid vil blive tilgængeligt for alle brugere!</p>
       <div style='display: flex; align-items: center'>
         <mat-form-field>
           <input type="text" name="mealName" [(ngModel)]="meal.name" matInput placeholder="Navn" autocomplete="off" required>
@@ -32,12 +33,22 @@
         <mat-form-field (click)="togglePanelIfEmpty()">
           <input type="text" autocomplete="off" placeholder="Indtast madvare" matInput [matAutocomplete]="auto" [formControl]="ingredientControl">
           <mat-autocomplete [panelWidth]="300" autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
-            <mat-option *ngFor="let ingredient of filteredIngredientOptions | async" [value]="ingredient">
-              <button mat-icon-button (click)="deleteIngredient(ingredient)" style="margin-right: 8px">
-                <mat-icon>delete</mat-icon>
-              </button>
-              {{ingredient?.name}}
-            </mat-option>
+            <mat-optgroup label="Mine ingredienser">
+              <mat-option *ngFor="let ingredient of filteredIngredientOptions | async" [value]="ingredient">
+                <button mat-icon-button (click)="deleteIngredient(ingredient)" style="margin-right: 8px">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                {{ingredient?.name}}
+              </mat-option>
+            </mat-optgroup>
+            <mat-optgroup label="Delte ingredienser">
+              <mat-option *ngFor="let ingredient of filteredGlobalIngredientOptions | async" [value]="ingredient">
+                <button *ngIf="isGlobalMeal" mat-icon-button (click)="deleteIngredient(ingredient)" style="margin-right: 8px">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                {{ingredient?.name}}
+              </mat-option>
+            </mat-optgroup>
           </mat-autocomplete>
         </mat-form-field>
         <mat-form-field style="margin-left: 8px;">
@@ -52,6 +63,7 @@
           <mat-icon *ngIf="createIngredient">keyboard_arrow_up</mat-icon>
         </button>
       </div>
+      <p class="warn" *ngIf="createIngredient && isGlobalMeal">OBS: Denne madvare vil blive tilgængelig for alle brugere!</p>
       <app-add-ingredient *ngIf="createIngredient"
         style="width: 100%"
         [initialValue]="ingredientControl.value"

@@ -5,15 +5,13 @@ import { MealService } from '../services/meal/meal.service';
 import { DayMeal } from '../models/day-meal.interface';
 import { MatDatepicker } from '@angular/material';
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { Unit } from '../models/unit.enum';
 import { isNullOrUndefined } from 'util';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
 import * as jsPDF from 'jspdf';
-import * as lo from 'lodash';
-import 'jspdf-autotable';
 import { SimpleUser } from '../models/simple-user.interface';
 import { UserService } from '../services/user/user.service';
+import 'jspdf-autotable';
 
 @Component({
   selector: 'app-print',
@@ -33,12 +31,16 @@ export class PrintComponent implements OnDestroy, AfterViewInit {
   toDate: Date;
 
   constructor(public mealService: MealService, private userService: UserService, private datePipe: DatePipe, private decimal: DecimalPipe) {
-    this.subs = [
-      this.mealService.getAllDayMeals().subscribe(m => this.setMeals(m)),
-      this.userService.getUser().subscribe(u => this.user = u)
-    ];
     this.toDate = new Date();
     this.fromDate = moment(this.toDate).subtract(7, 'days').toDate();
+    const from = moment(this.fromDate).subtract(1, 'days').toDate();
+    const to = moment(this.toDate).add(1, 'days').toDate();
+    this.subs = [
+      // this.mealService.getAllDayMeals().subscribe(m => this.setMeals(m)),
+      // this.mealService.getAllDayMeals().subscribe(m => this.setMeals(m)),
+      this.userService.currentUser$.subscribe(u => this.user = u),
+      this.mealService.getDayMealsInPeriod(from, to).subscribe(m => this.setMeals(m))
+    ];
   }
 
   ngAfterViewInit() {
@@ -46,11 +48,11 @@ export class PrintComponent implements OnDestroy, AfterViewInit {
     this.pickerTo.touchUi = true;
     this.subs.push(this.pickerFrom._selectedChanged.subscribe((d) => {
       this.fromDate = d;
-      this.setMealsInPeriod();
+      // this.setMealsInPeriod();
     }));
     this.subs.push(this.pickerTo._selectedChanged.subscribe((d) => {
       this.toDate = d;
-      this.setMealsInPeriod();
+      // this.setMealsInPeriod();
     }));
   }
 
@@ -64,15 +66,16 @@ export class PrintComponent implements OnDestroy, AfterViewInit {
       flatMeals = [...flatMeals, ...Object.values(d)];
     });
     this.dayMeals = flatMeals.filter(d => !isNullOrUndefined(d.date));
-    this.setMealsInPeriod();
+    this.mealsInPeriod = this.dayMeals;
+    // this.setMealsInPeriod();
   }
 
-  setMealsInPeriod() {
-    const from = moment(this.fromDate).subtract(1, 'days');
-    const to = moment(this.toDate).add(1, 'days');
-    this.mealsInPeriod = this.fromDate && this.toDate ?
-    this.dayMeals.filter(dm => this.stringToDate(String(dm.date)).isAfter(from) && this.stringToDate(String(dm.date)).isBefore(to)) : [];
-  }
+  // setMealsInPeriod() {
+  //   const from = moment(this.fromDate).subtract(1, 'days');
+  //   const to = moment(this.toDate).add(1, 'days');
+  //   this.mealsInPeriod = this.fromDate && this.toDate ?
+  //   this.dayMeals.filter(dm => moment(dm.date).isAfter(from) && moment(dm.date).isBefore(to)) : [];
+  // }
 
   stringToDate(dateString: string /*dd-MM-yyyy*/): moment.Moment {
     const parts = dateString.split('-');
@@ -85,7 +88,7 @@ export class PrintComponent implements OnDestroy, AfterViewInit {
       const toAdd = [
         me.meal.name,
         me.date,
-        this.getTime(me.consumedOnTime),
+        me.consumedOnTime,
         this.decimal.transform(me.quantity, '0.0-2').toString() + ' ' + me.unit.toString(),
         this.decimal.transform(me.totalProtein, '0.0-2').toString() + ' ' + 'g',
         this.decimal.transform(me.totalPhenyl, '0.0-2').toString() + ' ' + 'mg'
@@ -110,8 +113,8 @@ export class PrintComponent implements OnDestroy, AfterViewInit {
         text: `pku-udskrift${this.datePipe.transform(this.mealService.selectedDate, 'dd-MM-yyyy')}.pdf`,
         url,
       })
-      .then(() => console.log('Successful share'))
-      .catch((error) => console.log('Error sharing', error));
+        .then(() => console.log('Successful share'))
+        .catch((error) => console.log('Error sharing', error));
     }
   }
 
@@ -138,8 +141,4 @@ export class PrintComponent implements OnDestroy, AfterViewInit {
   // get totalPages(): number {
   //   return this.mealsAsStringArrays.length / 50 /*rows pr page*/;
   // }
-
-  getTime(ts: string): string {
-    return ts ? `${ts.split(':')[0]}:${ts.split(':')[0]}` : '';
-  }
 }

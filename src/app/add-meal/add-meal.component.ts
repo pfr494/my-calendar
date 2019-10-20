@@ -22,9 +22,11 @@ export class AddMealComponent implements OnInit, OnDestroy {
   ingredientControl = new FormControl();
   private subs: Subscription[];
   ingredientOptions: Ingredient[] = [];
+  globalIngredientOptions: Ingredient[] = [];
   filteredIngredientOptions: Observable<Ingredient[]>;
+  filteredGlobalIngredientOptions: Observable<Ingredient[]>;
   actionsVisible: boolean;
-
+  isGlobalMeal: boolean;
 
   quantity: number;
   ingredient: Ingredient;
@@ -45,12 +47,18 @@ export class AddMealComponent implements OnInit, OnDestroy {
     private location: Location) { }
 
   ngOnInit() {
+    this.isGlobalMeal = this.location.path().includes('global-meal');
     this.subs = [
-      this.ingredientService.getIngredients().subscribe(i => this.ingredientOptions = i)
+      this.ingredientService.getIngredients().subscribe(i => this.ingredientOptions = i),
+      this.ingredientService.getGlobalIngredients().subscribe(i => this.globalIngredientOptions = i),
     ];
     this.filteredIngredientOptions = this.ingredientControl.valueChanges.pipe(
       startWith(''),
-      map(value => this._filter(value))
+      map(value => this._filter(value, this.ingredientOptions))
+    );
+    this.filteredGlobalIngredientOptions = this.ingredientControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value, this.globalIngredientOptions))
     );
 
     setTimeout(() => {
@@ -59,12 +67,12 @@ export class AddMealComponent implements OnInit, OnDestroy {
 
   }
 
-  private _filter(value: string | Ingredient): Ingredient[] {
+  private _filter(value: string | Ingredient, collection: Ingredient[]): Ingredient[] {
     if (!value) {
-      return this.ingredientOptions;
+      return collection;
     } else {
       const filterValue = typeof value === 'string' ? value.toLowerCase() : value.name;
-      return this.ingredientOptions.filter((ingredient: Ingredient) => ingredient.name.toLowerCase().indexOf(filterValue) === 0);
+      return collection.filter((ingredient: Ingredient) => ingredient.name.toLowerCase().indexOf(filterValue) === 0);
     }
   }
 
@@ -98,7 +106,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
         phenylPer100: this.phenylPer100,
         proteinPer100: this.proteinPer100
       } as Meal;
-      await this.mealService.addMeal(m);
+      await this.mealService.addMeal(m, this.isGlobalMeal);
       this.meal.ingredients = [];
       this.form.resetForm();
       this.snack.showInfo('Måltid oprettet, yay! :p', 'OK');
