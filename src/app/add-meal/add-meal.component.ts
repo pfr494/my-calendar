@@ -153,14 +153,6 @@ export class AddMealComponent implements OnInit, OnDestroy {
     return this.ingredientControl.value;
   }
 
-  // get phenylPer100(): number {
-  //   return this.totalPhenyl / (this.totalQuantityInMealIngredients(this.meal) / 100);
-  // }
-
-  // get proteinPer100(): number {
-  //   return this.totalProtein / (this.totalQuantityInMealIngredients(this.meal) / 100);
-  // }
-
   get canAdd(): boolean {
     return this.selectedIngredient && typeof this.selectedIngredient !== 'string' && !!this.quantity;
   }
@@ -169,7 +161,11 @@ export class AddMealComponent implements OnInit, OnDestroy {
     return Number(String(this.quantity).replace(',', '.'));
   }
 
-  // totalQuantityInMealIngredients(meal: Meal): number {
-  //   return lo.sum(meal.ingredients.map(ing => ing.quantity));
-  // }
+  get totalPhenyl(): number {
+    return totalPhenylInMealIngredients(this.meal.ingredients);
+  }
+
+  get totalProtein(): number {
+    return totalProteinInMealIngredients(this.meal.ingredients);
+  }
 }
