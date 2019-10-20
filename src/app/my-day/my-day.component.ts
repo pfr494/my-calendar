@@ -12,8 +12,6 @@ import { FormControl, NgForm } from '@angular/forms';
 import { Unit } from '../models/unit.enum';
 import * as lo from 'lodash';
 import { getFormattedTime } from '../config/date-formats';
-import { isNullOrUndefined } from 'util';
-import { isNull } from '@angular/compiler/src/output/output_ast';
 import { Ingredient } from '../models/ingredient.interface';
 import { IngredientService } from '../services/ingredient/ingredient.service';
 
@@ -30,15 +28,11 @@ export class MyDayComponent implements OnInit, OnDestroy {
   dailyMeals: DayMeal[] = [];
   mealOptions: Meal[] = [];
   globalMealOptions: Meal[] = [];
-  ingredientOptions: Ingredient[] = [];
-  globalIngredientOptions: Ingredient[] = [];
   filteredMealOptions: Observable<Meal[]>;
   filteredGlobalMealOptions: Observable<Meal[]>;
-  filteredIngredientOptions: Observable<Meal[]>;
-  filteredGlobalIngredientOptions: Observable<Meal[]>;
   quantity: number;
   unit = Unit.STK;
-  selectedMeal: Meal;
+  selectedMeal: any;
   mealsVisible: boolean;
   isAdmin: boolean;
 
@@ -63,23 +57,9 @@ export class MyDayComponent implements OnInit, OnDestroy {
       }),
       this.mealService.getMeals().subscribe((m: Meal[]) => this.mealOptions = m),
       this.mealService.getGlobalMeals().subscribe((m: Meal[]) => this.globalMealOptions = m),
-      this.ingredientService.getIngredients().subscribe((i: Ingredient[]) => this.ingredientOptions = i),
-      this.ingredientService.getGlobalIngredients().subscribe((i: Ingredient[]) => this.globalIngredientOptions = i),
       this.mealService.selectedDateMeal$.subscribe((m: DayMeal[]) => this.dailyMeals = m),
       this.mealControl.valueChanges.subscribe((v) => {
-        if (v && typeof v === 'object' && v.ingredients && v.ingredients.length) {
-          this.selectedMeal = v;
-        } else if (v && typeof v === 'object' && v.protein) {
-          this.selectedMeal = {
-            name: v.name,
-            ingredients: [v],
-            totalPhenyl: v.phenyl,
-            totalProtein: v.protein,
-            unit: v.unit
-          } as Meal;
-        } else {
-          this.selectedMeal = null;
-        }
+        this.selectedMeal = v && typeof v === 'object' ? v : null;
       })
     ];
     this.filteredMealOptions = this.mealControl.valueChanges.pipe(
@@ -89,14 +69,6 @@ export class MyDayComponent implements OnInit, OnDestroy {
     this.filteredGlobalMealOptions = this.mealControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value, this.globalMealOptions))
-    );
-    this.filteredIngredientOptions = this.mealControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value, this.ingredientOptions))
-    );
-    this.filteredGlobalIngredientOptions = this.mealControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value, this.globalIngredientOptions))
     );
 
     setTimeout(() => {

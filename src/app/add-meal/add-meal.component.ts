@@ -11,6 +11,7 @@ import { Meal } from '../models/meal.interface';
 import { Unit } from '../models/unit.enum';
 import { Location } from '@angular/common';
 import * as lo from 'lodash';
+import { getProteinPer100g, getPhenylPer100g, totalPhenylInMealIngredients, totalProteinInMealIngredients } from './meal-utils';
 
 @Component({
   selector: 'app-add-meal',
@@ -101,10 +102,10 @@ export class AddMealComponent implements OnInit, OnDestroy {
       this.loading = true;
       const m = {
         ...this.meal,
-        totalPhenyl: this.totalPhenyl,
-        totalProtein: this.totalProtein,
-        phenylPer100: this.phenylPer100,
-        proteinPer100: this.proteinPer100
+        totalPhenyl: totalPhenylInMealIngredients(this.meal.ingredients),
+        totalProtein: totalProteinInMealIngredients(this.meal.ingredients),
+        phenylPer100: getPhenylPer100g(totalPhenylInMealIngredients(this.meal.ingredients), this.meal),
+        proteinPer100: getProteinPer100g(totalProteinInMealIngredients(this.meal.ingredients), this.meal)
       } as Meal;
       await this.mealService.addMeal(m, this.isGlobalMeal);
       this.meal.ingredients = [];
@@ -152,21 +153,13 @@ export class AddMealComponent implements OnInit, OnDestroy {
     return this.ingredientControl.value;
   }
 
-  get phenylPer100(): number {
-    return this.totalPhenyl / (this.totalQuantityInMealIngredients(this.meal) / 100);
-  }
+  // get phenylPer100(): number {
+  //   return this.totalPhenyl / (this.totalQuantityInMealIngredients(this.meal) / 100);
+  // }
 
-  get proteinPer100(): number {
-    return this.totalProtein / (this.totalQuantityInMealIngredients(this.meal) / 100);
-  }
-
-  get totalPhenyl(): number {
-    return lo.sum(this.meal.ingredients.map(i =>  i.ingredient.phenyl * (i.quantity / 100)));
-  }
-
-  get totalProtein(): number {
-    return lo.sum(this.meal.ingredients.map(i => i.ingredient.protein * (i.quantity / 100)));
-  }
+  // get proteinPer100(): number {
+  //   return this.totalProtein / (this.totalQuantityInMealIngredients(this.meal) / 100);
+  // }
 
   get canAdd(): boolean {
     return this.selectedIngredient && typeof this.selectedIngredient !== 'string' && !!this.quantity;
@@ -176,7 +169,7 @@ export class AddMealComponent implements OnInit, OnDestroy {
     return Number(String(this.quantity).replace(',', '.'));
   }
 
-  totalQuantityInMealIngredients(meal: Meal): number {
-    return lo.sum(meal.ingredients.map(ing => ing.quantity));
-  }
+  // totalQuantityInMealIngredients(meal: Meal): number {
+  //   return lo.sum(meal.ingredients.map(ing => ing.quantity));
+  // }
 }

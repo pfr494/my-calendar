@@ -72,19 +72,6 @@
                 {{meal?.name}}
               </mat-option>
             </mat-optgroup>
-            <mat-optgroup label="Mine ingredienser" *ngIf="(filteredIngredientOptions | async).length">
-              <mat-option *ngFor="let ingredient of filteredIngredientOptions | async" [value]="ingredient">
-                <button mat-icon-button (click)="deleteIngredient(ingredient)" style="margin-right: 8px">
-                  <mat-icon>delete</mat-icon>
-                </button>
-                {{ingredient?.name}}
-              </mat-option>
-            </mat-optgroup>
-            <mat-optgroup label="Delte Ingredienser" *ngIf="(filteredGlobalIngredientOptions | async).length">
-              <mat-option *ngFor="let ingredient of filteredGlobalIngredientOptions | async" [value]="ingredient">
-                {{ingredient?.name}}
-              </mat-option>
-            </mat-optgroup>
           </mat-autocomplete>
         </mat-form-field>
         <mat-form-field style="margin-left: 8px;">
